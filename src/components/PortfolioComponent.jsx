@@ -71,9 +71,9 @@ class PortfolioComponent extends Component {
                             }
                             <td></td>
                             <td></td>
-                            <td><b>{Math.round(this.state.beginPrice)}</b></td>
-                            <td><b>{Math.round(this.state.value)}</b></td>
                             <td></td>
+                            <td><b>{Math.round(this.state.value)}</b></td>
+                            <td><b>{Math.round(this.state.beginPrice)}</b></td>
                             <td><b>{getTextYield(this.state.yield)}</b></td>
                         </tbody>
                     </table>

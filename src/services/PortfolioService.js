@@ -10,6 +10,11 @@ class PortfolioService {
     getPortfolioById(id){
         return axios.get(PORTFOLIO_API_BASE_URL+"dto/portfolio-investments/id/"+id);
     }
+
+    createPortfolio(portfolioCreateDto){
+        return axios.post(PORTFOLIO_API_BASE_URL, portfolioCreateDto);
+    }
+
     updatePortfolioPrices(id){
         return axios.get(SCRAP_API_BASE_URL+'portfolio/'+id);
     }

@@ -4,7 +4,7 @@ import { sort } from '../services/tablesort';
 import { getTextYield } from '../services/utils.js';
 
 
-class ListPortfolioComponent extends Component {
+class PortfolioListComponent extends Component {
 
     constructor(props) {
         super(props)
@@ -12,6 +12,11 @@ class ListPortfolioComponent extends Component {
         this.state = {
             portfolios: []
         }
+        this.addPortfolio = this.addPortfolio.bind(this);
+    }
+
+    addPortfolio(){
+        this.props.history.push("/add-portfolio");
     }
 
     componentDidMount(){
@@ -28,6 +33,9 @@ class ListPortfolioComponent extends Component {
         return (
             <div>
                 <h2 className="text-center">Portfolio List</h2>
+                <div className="row">
+                    <button className="btn btn-primary" onClick={this.addPortfolio}>+</button>
+                </div>
                 <div className="row">
                     <table className="table table-striped table-bordered table-sortable">
                         <thead>      
@@ -63,4 +71,4 @@ class ListPortfolioComponent extends Component {
     }
 }
 
-export default ListPortfolioComponent;
+export default PortfolioListComponent;

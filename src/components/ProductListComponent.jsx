@@ -5,7 +5,7 @@ import { sortTableByColumn, sort } from '../services/tablesort.js';
 
 
 
-class ListProductComponent extends Component {
+class ProductListComponent extends Component {
 
     constructor(props) {
         super(props)
@@ -73,7 +73,7 @@ class ListProductComponent extends Component {
                     <table id="ProductsTable" className="table table-striped table-bordered table-sortable">
                         <thead>      
                             <tr>
-                                <th>Id</th>
+                                {/* <th>Id</th> */}
                                 <th>Name</th>
                                 {/* <th>Metal</th> */}
                                 <th>Grams</th>
@@ -89,7 +89,7 @@ class ListProductComponent extends Component {
                                 this.state.products.map(
                                     product =>
                                     <tr key = {product.id}>
-                                        <td>{product.id}</td>
+                                        {/* <td>{product.id}</td> */}
                                         <td><a href={"http://localhost:3000/product/"+product.id}>{product.name}</a></td>
                                         {/* <td>{product.metal}</td> */}
                                         <td  align="center">{Math.round(product.grams*100)/100}</td>
@@ -110,4 +110,4 @@ class ListProductComponent extends Component {
     }
 }
 
-export default ListProductComponent;
+export default ProductListComponent;

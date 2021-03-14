@@ -1,13 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch}from 'react-router-dom';
-import ListPortfolioComponent from './components/ListPortfolioComponent';
+import PortfolioListComponent from './components/PortfolioListComponent';
 import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
 import PortfolioComponent from './components/PortfolioComponent';
 import ProductComponent from './components/ProductComponent';
-import ListProductComponent from './components/ListProductComponent';
+import ProductListComponent from './components/ProductListComponent';
 import HomeComponent from './components/HomeComponent';
+import PortfolioCreateComponent from './components/PortfolioCreateComponent';
 
 function App() {
   return (
@@ -18,12 +19,13 @@ function App() {
                 <Switch>
                     <Route path = "/" exact component={HomeComponent}></Route>
 
-                    <Route path = "/portfolios" component={ListPortfolioComponent}></Route>
                     <Route path = "/portfolio/:id" component={PortfolioComponent}></Route>
-
-                    <Route path = "/products" component={ListProductComponent}></Route>
-                    <Route path = "/products/:metal" component={ListProductComponent}></Route>
+                    <Route path = "/portfolios" component={PortfolioListComponent}></Route>
+                    <Route path = "/add-portfolio" component={PortfolioCreateComponent}></Route>
+                  
                     <Route path = "/product/:id" component={ProductComponent}></Route>
+                    <Route path = "/products" component={ProductListComponent}></Route>
+                    <Route path = "/products/:metal" component={ProductListComponent}></Route>
                 </Switch>
             </div>
             {/* <FooterComponent /> */}
