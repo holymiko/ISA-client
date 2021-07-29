@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PortfolioService from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
 import { getTextYield } from '../services/utils.js';
-
+import ReactDOM from 'react-dom';
 
 class PortfolioListComponent extends Component {
 
@@ -29,6 +29,26 @@ class PortfolioListComponent extends Component {
         sort();
     }
 
+    eventListener(portfolio){
+        PortfolioService.scrapByPortfolio(portfolio.id).then(()=>{
+            this.componentDidMount()
+            this.render()
+        })
+    }
+
+    makeTableRow(portfolio){
+        return (
+                <tr className="tableRow" key = {portfolio.id} >
+                    <td><a href={"http://localhost:3000/portfolio/"+portfolio.id}>{portfolio.owner}</a></td>
+                    <td align="right">{Math.round(portfolio.beginPrice)}</td>
+                    <td align="right">{Math.round(portfolio.value)}</td>
+                    <td align="center">{getTextYield(portfolio.yield)}</td>
+                    <td align="center">{portfolio.investmentIds.length}</td>
+                    <td align="center"><button id="update" className="button-row" onClick = { ()=>{this.eventListener(portfolio)} }>Update</button> </td>
+                </tr>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -52,15 +72,9 @@ class PortfolioListComponent extends Component {
                         <tbody>
                             {
                                 this.state.portfolios.map(
-                                    portfolio =>
-                                    <tr key = {portfolio.id}>
-                                            <td><a href={"http://localhost:3000/portfolio/"+portfolio.id}>{portfolio.owner}</a></td>
-                                            <td align="right">{Math.round(portfolio.beginPrice)}</td>
-                                            <td align="right">{Math.round(portfolio.value)}</td>
-                                            <td align="center">{getTextYield(portfolio.yield)}</td>
-                                            <td align="center">{portfolio.investmentIds.length}</td>
-                                            <td align="center"><button className="button-row" onClick = { ()=> PortfolioService.updatePortfolioPrices(portfolio.id)}>Update</button> </td>
-                                    </tr>
+                                    (portfolio) => {
+                                        return(this.makeTableRow(portfolio))
+                                    }
                                 )
                             }
                         </tbody>

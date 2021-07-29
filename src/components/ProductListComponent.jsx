@@ -79,7 +79,7 @@ class ProductListComponent extends Component {
                                 <th>Grams</th>
                                 <th>Price</th>
                                 <th>Redemption</th>
-                                <th>Split</th>
+                                <th>Spread</th>
                                 <th>Price/Gram</th>
                             </tr>
                         </thead>
@@ -93,12 +93,46 @@ class ProductListComponent extends Component {
                                         <td><a href={"http://localhost:3000/product/"+product.id}>{product.name}</a></td>
                                         {/* <td>{product.metal}</td> */}
                                         <td  align="center">{Math.round(product.grams*100)/100}</td>
+
                                         <td align="right" width="10%">
-                                            {numberWithSpaces(Math.round(product.latestPrice.price))}
+                                            {product.latestPrices.map(
+                                                price => 
+                                                    <div>
+                                                        {numberWithSpaces(Math.round(price.price))}
+                                                    </div>
+                                            )}
                                         </td>
-                                        <td align="right">{numberWithSpaces(Math.round(product.latestPrice.redemption))}</td>
-                                        <td>{Math.round(product.latestPrice.split*1_000_000)/1_000_000}</td>
-                                        <td>{Math.round(product.latestPrice.pricePerGram*10_000)/10_000}</td>
+
+                                        <td align="right">
+                                            {product.latestPrices.map(
+                                                price => 
+                                                    <div>
+                                                        {numberWithSpaces(Math.round(price.redemption))}
+                                                    </div>
+                                            )}
+                                        </td>
+
+                                        <td>
+                                            {product.latestPrices.map(
+                                                price => 
+                                                    <div>
+                                                        {Math.round(
+                                                            (price.redemption / price.price)
+                                                        *1_000_000)/1_000_000}
+                                                    </div>
+                                            )}
+                                        </td>
+
+                                        <td>
+                                            {product.latestPrices.map(
+                                                price => 
+                                                    <div>
+                                                        {Math.round(
+                                                            (price.price / product.grams)
+                                                        *10_000)/10_000}
+                                                    </div>
+                                            )}
+                                        </td>
                                     </tr>
                                 )
                             }

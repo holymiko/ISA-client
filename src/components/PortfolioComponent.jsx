@@ -48,8 +48,8 @@ class PortfolioComponent extends Component {
                                 <th>Product</th>
                                 <th>Buy Date</th>
                                 <th>Actual Price</th>
-                                <th>Redemption</th>
                                 <th>Buy Price</th>
+                                <th>Redemption</th>
                                 <th>Yield</th>
                             </tr>
                         </thead>
@@ -63,17 +63,18 @@ class PortfolioComponent extends Component {
                                                 {investment.product.name}</a></td>
                                             <td>{investment.beginDate.replaceAll("-","_")}</td>
                                             <td>{priceWithSpaces(investment.product.latestPrice.price)}</td>
-                                            <td>{priceWithSpaces(investment.product.latestPrice.redemption)}</td>
                                             <td>{priceWithSpaces(investment.beginPrice)}</td>
-                                            <td>{getTextYield( investment.yield )}</td>
+                                        <td>{priceWithSpaces(investment.product.latestPrice.redemption)}</td>
+                                        <td>{getTextYield( investment.yield )}</td>
                                     </tr>
                                 )
                             }
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><b>{Math.round(this.state.value)}</b></td>
                             <td><b>{Math.round(this.state.beginPrice)}</b></td>
+
+                            <td><b>{Math.round(this.state.value)}</b></td>
                             <td><b>{getTextYield(this.state.yield)}</b></td>
                         </tbody>
                     </table>

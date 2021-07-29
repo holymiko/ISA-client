@@ -14,7 +14,7 @@ class ProductComponent extends Component {
             metal: '',
             name: '',
             grams: '',
-            link: '',
+            links: [],
             latestPrice: '',
             prices: []
         }
@@ -27,7 +27,7 @@ class ProductComponent extends Component {
                 metal: product.metal,
                 name: product.name,
                 grams: product.grams,
-                link: product.link.link,
+                links: product.links,
                 latestPrice: product.latestPrice,
                 prices: product.prices
             });
@@ -37,6 +37,7 @@ class ProductComponent extends Component {
     componentDidUpdate(){
         sort();
     }
+    
 
     render() {
         return (
@@ -46,12 +47,16 @@ class ProductComponent extends Component {
                 <div>Product: {this.state.name}</div>
                 <div>Metal: {this.state.metal}</div>
                 <div>Grams: {this.state.grams}</div>
-                <div>Link: <a href={this.state.link}>{this.state.link}</a></div>
+                <div>Links: 
+                    {this.state.links.map(link => <div><a href={link.link}>{link.link}</a></div>)}
+                </div>
+                
                 <div className="row">
                     <table className="table table-striped table-bordered table-sortable">
                         <thead>
                             <tr>
                                 <th>Date Time</th>
+                                <th>Dealer</th>
                                 <th>Price</th>
                                 <th>Redemption</th>
                                 <th>Split</th>
@@ -65,10 +70,11 @@ class ProductComponent extends Component {
                                     price =>
                                     <tr key = {price.id}>
                                             <td>{price.dateTime.replaceAll("-","_")}</td>
+                                            <td>{price.dealer}</td>
                                             <td>{price.price}</td>
                                             <td>{price.redemption}</td>
-                                            <td>{price.split}</td>
-                                            <td>{price.pricePerGram}</td>
+                                            <td>{price.redemption/price.price}</td>
+                                            <td>{price.price/this.state.grams}</td>
                                     </tr>
                                 )
                             }
