@@ -59,13 +59,41 @@ class PortfolioComponent extends Component {
                                 this.state.investments.map(
                                     investment =>
                                     <tr key = {investment.id}>
-                                            <td><a href={"http://localhost:3000/product/"+investment.product.id}>
-                                                {investment.product.name}</a></td>
-                                            <td>{investment.beginDate.replaceAll("-","_")}</td>
-                                            <td>{priceWithSpaces(investment.product.latestPrice.price)}</td>
-                                            <td>{priceWithSpaces(investment.beginPrice)}</td>
-                                        <td>{priceWithSpaces(investment.product.latestPrice.redemption)}</td>
-                                        <td>{getTextYield( investment.yield )}</td>
+                                        <td>
+                                            <a href={"http://localhost:3000/product/"+investment.product.id}>
+                                                {investment.product.name}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {investment.beginDate.replaceAll("-","_")}
+                                        </td>
+                                        <td>
+                                            {investment.product.latestPrices
+                                            .map(
+                                                price => 
+                                                    <div>
+                                                        {priceWithSpaces(price.price)}
+                                                    </div>
+                                            )}
+                                        </td>
+                                        <td>
+                                            {priceWithSpaces(investment.beginPrice)}
+                                        </td>
+                                        <td>
+                                            {investment.product.latestPrices
+                                            .filter(
+                                                price => investment.dealer !== price.dealer
+                                            )
+                                            .map(
+                                                price => 
+                                                    <div>
+                                                        {priceWithSpaces(price.redemption)}
+                                                    </div>
+                                            )}
+                                        </td>
+                                        <td>
+                                            {getTextYield(investment.yield)}
+                                        </td>
                                     </tr>
                                 )
                             }

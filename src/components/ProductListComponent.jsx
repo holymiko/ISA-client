@@ -90,9 +90,15 @@ class ProductListComponent extends Component {
                                     product =>
                                     <tr key = {product.id}>
                                         {/* <td>{product.id}</td> */}
-                                        <td><a href={"http://localhost:3000/product/"+product.id}>{product.name}</a></td>
+                                        <td>
+                                            <a href={"http://localhost:3000/product/"+product.id}>
+                                                {product.name}
+                                            </a>
+                                        </td>
                                         {/* <td>{product.metal}</td> */}
-                                        <td  align="center">{Math.round(product.grams*100)/100}</td>
+                                        <td  align="center">
+                                            {Math.round(product.grams*100)/100}
+                                        </td>
 
                                         <td align="right" width="10%">
                                             {product.latestPrices.map(
