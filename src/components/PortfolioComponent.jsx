@@ -46,6 +46,7 @@ class PortfolioComponent extends Component {
                         <thead>
                             <tr>
                                 <th>Product</th>
+                                <th>Dealer</th>
                                 <th>Buy Date</th>
                                 <th>Actual Price</th>
                                 <th>Buy Price</th>
@@ -65,6 +66,9 @@ class PortfolioComponent extends Component {
                                             </a>
                                         </td>
                                         <td>
+                                            {investment.dealer}
+                                        </td>
+                                        <td>
                                             {investment.beginDate.replaceAll("-","_")}
                                         </td>
                                         <td>
@@ -82,7 +86,7 @@ class PortfolioComponent extends Component {
                                         <td>
                                             {investment.product.latestPrices
                                             .filter(
-                                                price => investment.dealer !== price.dealer
+                                                price => investment.dealer === price.dealer
                                             )
                                             .map(
                                                 price => 

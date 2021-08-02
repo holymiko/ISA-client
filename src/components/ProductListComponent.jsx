@@ -68,7 +68,10 @@ class ProductListComponent extends Component {
         return (
             <div>
                 <h2 className="text-center">Product List</h2>
-                <button className="button-top" onClick = { ()=> ProductService.scrapByMetal(this.state.products[0].metal)}>Update All</button>
+                <button className="button-top" onClick = { 
+                    () => ProductService.scrapByMetal(this.state.products[0].metal)}>
+                        Update All
+                </button>
                 <div className="row">
                     <table id="ProductsTable" className="table table-striped table-bordered table-sortable">
                         <thead>      

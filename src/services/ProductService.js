@@ -23,12 +23,15 @@ class ProductService {
     getPalladiumProductsAsDTO(){
         return axios.get(PRODUCT_API_BASE_URL+"dto/metal/palladium");
     }
+    // getProductByIdAsDTO(id){
+    //     return axios.get(PRODUCT_API_BASE_URL+"dto/id/"+id);
+    // }
+
+
     getProductById(id){
         return axios.get(PRODUCT_API_BASE_URL+"id/"+id);
     }
-    getProductByIdAsDTO(id){
-        return axios.get(PRODUCT_API_BASE_URL+"dto/id/"+id);
-    }
+
 
     ////////// SCRAP
 

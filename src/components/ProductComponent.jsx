@@ -48,7 +48,15 @@ class ProductComponent extends Component {
                 <div>Metal: {this.state.metal}</div>
                 <div>Grams: {this.state.grams}</div>
                 <div>Links: 
-                    {this.state.links.map(link => <div><a href={link.link}>{link.link}</a></div>)}
+                    {this.state.links.map(
+                        link => 
+                            <div>
+                                <a href={link}>
+                                    {link}
+                                </a>
+                            </div>
+                        )
+                    }
                 </div>
                 
                 <div className="row">
