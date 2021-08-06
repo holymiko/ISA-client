@@ -28,7 +28,7 @@ class PortfolioComponent extends Component {
                     owner: portfolio.owner,
                     beginPrice: portfolio.beginPrice,
                     value: portfolio.value,
-                    yield: portfolio.yi,
+                    yield: portfolio.yield,
                     investments: portfolio.investments
                 });
             }
