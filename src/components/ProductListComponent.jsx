@@ -125,9 +125,7 @@ class ProductListComponent extends Component {
                                             {product.latestPrices.map(
                                                 price => 
                                                     <div>
-                                                        {Math.round(
-                                                            (price.redemption / price.price)
-                                                        *1_000_000)/1_000_000}
+                                                        {Math.round((price.spread)*1_000_000)/1_000_000}
                                                     </div>
                                             )}
                                         </td>
@@ -136,9 +134,7 @@ class ProductListComponent extends Component {
                                             {product.latestPrices.map(
                                                 price => 
                                                     <div>
-                                                        {Math.round(
-                                                            (price.price / product.grams)
-                                                        *10_000)/10_000}
+                                                        {Math.round((price.pricePerGram)*10_000)/10_000}
                                                     </div>
                                             )}
                                         </td>

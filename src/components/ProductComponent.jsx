@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import PortfolioService from '../services/PortfolioService';
 import ProductService from '../services/ProductService';
 import { sort } from '../services/tablesort';
-import { getTextYield, numberWithSpaces } from '../services/utils.js';
 
 class ProductComponent extends Component {
 
@@ -81,8 +79,8 @@ class ProductComponent extends Component {
                                             <td>{price.dealer}</td>
                                             <td>{price.price}</td>
                                             <td>{price.redemption}</td>
-                                            <td>{price.redemption/price.price}</td>
-                                            <td>{price.price/this.state.grams}</td>
+                                            <td>{price.spread}</td>
+                                            <td>{price.pricePerGram}</td>
                                     </tr>
                                 )
                             }

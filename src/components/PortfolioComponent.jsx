@@ -18,18 +18,24 @@ class PortfolioComponent extends Component {
         }
     }
 
+
+
     componentDidMount(){
-        PortfolioService.getPortfolioById(this.state.id).then((res) => {
-            let portfolio = res.data;
-            this.setState({ 
-                owner: portfolio.owner,
-                beginPrice: portfolio.beginPrice,
-                value: portfolio.value,
-                yield: portfolio.yield,
-                investments: portfolio.investments
-            });
-        });
+        PortfolioService.getPortfolioById(this.state.id).then(
+            (res) => {
+                let portfolio = res.data;
+                this.setState({ 
+                    owner: portfolio.owner,
+                    beginPrice: portfolio.beginPrice,
+                    value: portfolio.value,
+                    yield: portfolio.yi,
+                    investments: portfolio.investments
+                });
+            }
+        );
     }
+
+
 
     componentDidUpdate(){
         sort();
@@ -72,8 +78,7 @@ class PortfolioComponent extends Component {
                                             {investment.beginDate.replaceAll("-","_")}
                                         </td>
                                         <td>
-                                            {investment.product.latestPrices
-                                            .map(
+                                            {investment.product.latestPrices.map(
                                                 price => 
                                                     <div>
                                                         {priceWithSpaces(price.price)}
@@ -105,7 +110,6 @@ class PortfolioComponent extends Component {
                             <td></td>
                             <td></td>
                             <td><b>{Math.round(this.state.beginPrice)}</b></td>
-
                             <td><b>{Math.round(this.state.value)}</b></td>
                             <td><b>{getTextYield(this.state.yield)}</b></td>
                         </tbody>

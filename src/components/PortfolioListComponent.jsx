@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PortfolioService from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
 import { getTextYield } from '../services/utils.js';
-import ReactDOM from 'react-dom';
 
 class PortfolioListComponent extends Component {
 
@@ -20,9 +19,11 @@ class PortfolioListComponent extends Component {
     }
 
     componentDidMount(){
-        PortfolioService.getPortfolios().then((res) => {
-            this.setState({portfolios: res.data});
-        });
+        PortfolioService.getPortfolios().then(
+            (res) => {
+                this.setState({portfolios: res.data});
+            }
+        );
     }
 
     componentDidUpdate(){
