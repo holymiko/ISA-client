@@ -52,11 +52,12 @@ class PortfolioComponent extends Component {
                         <thead>
                             <tr>
                                 <th>Product</th>
-                                <th>Dealer</th>
-                                <th>Buy Date</th>
                                 <th>Actual Price</th>
+                                <th>Buy Dealer</th>
+                                <th>Buy Date</th>
                                 <th>Buy Price</th>
-                                <th>Redemption</th>
+                                <th>Best Redemption</th>
+                                <th>Best Redemption Dealer</th>
                                 <th>Yield</th>
                             </tr>
                         </thead>
@@ -72,33 +73,28 @@ class PortfolioComponent extends Component {
                                             </a>
                                         </td>
                                         <td>
+                                            {investment.product.latestPrice.price/*s.map(
+                                                price => 
+                                                    <div>
+                                                        {priceWithSpaces(price.price)}
+                                                    </div>
+                                                    )*/
+                                            }
+                                        </td>
+                                        <td>
                                             {investment.dealer}
                                         </td>
                                         <td>
                                             {investment.beginDate.replaceAll("-","_")}
                                         </td>
                                         <td>
-                                            {investment.product.latestPrices.map(
-                                                price => 
-                                                    <div>
-                                                        {priceWithSpaces(price.price)}
-                                                    </div>
-                                            )}
-                                        </td>
-                                        <td>
                                             {priceWithSpaces(investment.beginPrice)}
                                         </td>
                                         <td>
-                                            {investment.product.latestPrices
-                                            .filter(
-                                                price => investment.dealer === price.dealer
-                                            )
-                                            .map(
-                                                price => 
-                                                    <div>
-                                                        {priceWithSpaces(price.redemption)}
-                                                    </div>
-                                            )}
+                                            {priceWithSpaces(investment.product.latestPrice.redemption)}
+                                        </td>
+                                        <td>
+                                            {investment.product.latestPrice.dealer}
                                         </td>
                                         <td>
                                             {getTextYield(investment.yield)}

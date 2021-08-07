@@ -44,7 +44,7 @@ class PortfolioListComponent extends Component {
                     <td align="right">{Math.round(portfolio.beginPrice)}</td>
                     <td align="right">{Math.round(portfolio.value)}</td>
                     <td align="center">{getTextYield(portfolio.yield)}</td>
-                    <td align="center">{portfolio.investmentIds.length}</td>
+                    <td align="center">{portfolio.investmentCount}</td>
                     <td align="center"><button id="update" className="button-row" onClick = { ()=>{this.eventListener(portfolio)} }>Update</button> </td>
                 </tr>
         )
