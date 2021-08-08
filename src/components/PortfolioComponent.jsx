@@ -18,8 +18,6 @@ class PortfolioComponent extends Component {
         }
     }
 
-
-
     componentDidMount(){
         PortfolioService.getPortfolioById(this.state.id).then(
             (res) => {
@@ -73,14 +71,14 @@ class PortfolioComponent extends Component {
                                             </a>
                                         </td>
                                         <td>
-                                            {investment.product.latestPrice.price/*s.map(
+                                            {investment.product.latestPrices.map(
                                                 price => 
                                                     <div>
                                                         {priceWithSpaces(price.price)}
                                                     </div>
-                                                    )*/
+                                                    )
                                             }
-                                        </td>
+                                        </td>   
                                         <td>
                                             {investment.dealer}
                                         </td>
