@@ -66,12 +66,12 @@ class PortfolioComponent extends Component {
                                     investment =>
                                     <tr key = {investment.id}>
                                         <td>
-                                            <a href={"http://localhost:3000/product/"+investment.product.id}>
-                                                {investment.product.name}
+                                            <a href={"http://localhost:3000/product/"+investment.productDTO.id}>
+                                                {investment.productDTO.name}
                                             </a>
                                         </td>
                                         <td>
-                                            {investment.product.latestPrices.map(
+                                            {investment.productDTO.latestPrices.map(
                                                 price => 
                                                     <div>
                                                         {priceWithSpaces(price.price)}
@@ -89,10 +89,10 @@ class PortfolioComponent extends Component {
                                             {priceWithSpaces(investment.beginPrice)}
                                         </td>
                                         <td>
-                                            {priceWithSpaces(investment.product.latestPrice.redemption)}
+                                            {priceWithSpaces(investment.productDTO.latestPrice.redemption)}
                                         </td>
                                         <td>
-                                            {investment.product.latestPrice.dealer}
+                                            {investment.productDTO.latestPrice.dealer}
                                         </td>
                                         <td>
                                             {getTextYield(investment.yield)}
