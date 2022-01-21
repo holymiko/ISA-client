@@ -14,7 +14,8 @@ class PortfolioComponent extends Component {
             beginPrice: '',
             value: '',
             yield: '',
-            investments: []
+            investmentsMetal: [],
+            investmentsStock: []
         }
     }
 
@@ -27,7 +28,8 @@ class PortfolioComponent extends Component {
                     beginPrice: portfolio.beginPrice,
                     value: portfolio.value,
                     yield: portfolio.yield,
-                    investments: portfolio.investments
+                    investmentsMetal: portfolio.investmentsMetal,
+                    investmentsStock: portfolio.investmentsStock
                 });
             }
         );
@@ -62,7 +64,7 @@ class PortfolioComponent extends Component {
     
                         <tbody>
                             {
-                                this.state.investments.map(
+                                this.state.investmentsMetal.map(
                                     investment =>
                                     <tr key = {investment.id}>
                                         <td>
@@ -101,6 +103,55 @@ class PortfolioComponent extends Component {
                                 )
                             }
                             <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{Math.round(this.state.beginPrice)}</b></td>
+                            <td><b>{Math.round(this.state.value)}</b></td>
+                            <td><b>{getTextYield(this.state.yield)}</b></td>
+                        </tbody>
+                    </table>
+                </div>
+                <div className="row">
+                    <table className="table table-striped table-bordered table-sortable">
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Buy Date</th>
+                                <th>Buy Price</th>
+                                <th>Amount</th>
+                                <th>Previous Close</th>
+                                <th>Yield</th>
+                            </tr>
+                        </thead>
+    
+                        <tbody>
+                            {
+                                this.state.investmentsStock.map(
+                                    investment =>
+                                    <tr key = {investment.id}>
+                                        <td>
+                                            <a href={"http://localhost:3000/stock/"+investment.stockDTO.id}>
+                                                {investment.stockDTO.name}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {investment.beginDate.replaceAll("-","_")}
+                                        </td>
+                                        <td>
+                                            {investment.beginPrice}
+                                        </td>
+                                        <td>
+                                            {investment.amount}
+                                        </td>   
+                                        <td>
+                                            {investment.stockDTO.previousClose}
+                                        </td>   
+                                        <td>
+                                            {getTextYield(investment.yield)}
+                                        </td>
+                                    </tr>
+                                )
+                            }
                             <td></td>
                             <td></td>
                             <td><b>{Math.round(this.state.beginPrice)}</b></td>
