@@ -17,15 +17,15 @@ function App() {
             <HeaderComponent />
             <div className="container">
                 <Switch>
-                    <Route path = "/" exact component={HomeComponent}></Route>
+                    <Route path = "/" exact component={HomeComponent}/>
 
-                    <Route path = "/portfolio/:id" component={PortfolioComponent}></Route>
-                    <Route path = "/portfolios" component={PortfolioListComponent}></Route>
-                    <Route path = "/add-portfolio" component={PortfolioCreateComponent}></Route>
+                    <Route path = "/portfolio/:id" component={PortfolioComponent}/>
+                    <Route path = "/portfolios" component={PortfolioListComponent}/>
+                    <Route path = "/add-portfolio" component={PortfolioCreateComponent}/>
                   
-                    <Route path = "/product/:id" component={ProductComponent}></Route>
-                    <Route path = "/products" component={ProductListComponent}></Route>
-                    <Route path = "/products/:metal" component={ProductListComponent}></Route>
+                    <Route path = "/product/:id" component={ProductComponent}/>
+                    <Route path = "/products" component={ProductListComponent}/>
+                    <Route path = "/products/:metal" component={ProductListComponent}/>
                 </Switch>
             </div>
             {/* <FooterComponent /> */}
