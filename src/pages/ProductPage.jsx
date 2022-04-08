@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ProductService from '../services/ProductService';
 import { sort } from '../services/tablesort';
+import {PageTitle} from "../components/PageTitle";
 
-class ProductComponent extends Component {
+class ProductPage extends Component {
 
     constructor(props) {
         super(props)
@@ -39,8 +40,8 @@ class ProductComponent extends Component {
 
     render() {
         return (
-            <div>
-                <h2 className="text-center">Product</h2>
+            <>
+                <PageTitle>Product</PageTitle>
                 <div>Id: {this.state.id}</div>
                 <div>Product: {this.state.name}</div>
                 <div>Metal: {this.state.metal}</div>
@@ -87,9 +88,9 @@ class ProductComponent extends Component {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </>
         );
     }
 }
 
-export default ProductComponent;
+export default ProductPage;

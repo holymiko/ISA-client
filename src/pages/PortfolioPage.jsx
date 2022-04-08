@@ -3,7 +3,7 @@ import PortfolioService from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
 import { getTextYield, priceWithSpaces } from '../services/utils.js';
 
-class PortfolioComponent extends Component {
+class PortfolioPage extends Component {
 
     constructor(props) {
         super(props)
@@ -165,4 +165,4 @@ class PortfolioComponent extends Component {
     }
 }
 
-export default PortfolioComponent;
+export default PortfolioPage;

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import ProductService from '../services/ProductService';
 import { numberWithSpaces } from '../services/utils.js';
-import { sortTableByColumn, sort } from '../services/tablesort.js';
+import { sort } from '../services/tablesort.js';
+import {ButtonBlue} from "../components/ButtonBlue";
+import {BoxRow} from "../components/BoxRow";
+import {PageTitle} from "../components/PageTitle";
 
 
 
-class ProductListComponent extends Component {
+class ProductListPage extends Component {
 
     constructor(props) {
         super(props)
@@ -66,12 +69,15 @@ class ProductListComponent extends Component {
 
     render() {
         return (
-            <div>
-                <h2 className="text-center">Product List</h2>
-                <button className="button-top" onClick = { 
-                    () => ProductService.scrapByMetal(this.state.products[0].metal)}>
+            <>
+                <PageTitle>Product List</PageTitle>
+                <BoxRow sx={{justifyContent: 'flex-end'}}>
+                    <ButtonBlue onClick = {
+                        () => ProductService.scrapByMetal(this.state.products[0].metal)}>
                         Update All
-                </button>
+                    </ButtonBlue>
+                </BoxRow>
+
                 <div className="row">
                     <table id="ProductsTable" className="table table-striped table-bordered table-sortable">
                         <thead>      
@@ -144,9 +150,9 @@ class ProductListComponent extends Component {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </>
         );
     }
 }
 
-export default ProductListComponent;
+export default ProductListPage;

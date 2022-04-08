@@ -75,16 +75,6 @@
   background-position: center;
 }
 
-.button-top {
-  align-items: right;
-  width: 10%;
-  background-color:coral;
-  background-position: center;
-  border-radius: 4px;
-  transform: translateX(850%);
-  margin-bottom: 2%;
-}
-
 .home-div{
   background-color: chartreuse;
   padding-top: 10%;

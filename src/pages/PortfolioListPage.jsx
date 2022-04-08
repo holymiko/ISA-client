@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import PortfolioService from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
 import { getTextYield } from '../services/utils.js';
+import {PageTitle} from '../components/PageTitle.tsx';
+import AddIcon from '@mui/icons-material/Add';
+import {ButtonBlue} from "../components/ButtonBlue";
+import {BoxRow} from "../components/BoxRow";
 
-class PortfolioListComponent extends Component {
+class PortfolioListPage extends Component {
 
     constructor(props) {
         super(props)
@@ -52,11 +56,11 @@ class PortfolioListComponent extends Component {
 
     render() {
         return (
-            <div>
-                <h2 className="text-center">Portfolio List</h2>
-                <div className="row">
-                    <button className="btn btn-primary" onClick={this.addPortfolio}>+</button>
-                </div>
+            <>
+                <PageTitle>Portfolio List</PageTitle>
+                <BoxRow>
+                  <ButtonBlue onClick={this.addPortfolio} startIcon={<AddIcon/>}>add portfolio</ButtonBlue>
+                </BoxRow>
                 <div className="row">
                     <table className="table table-striped table-bordered table-sortable">
                         <thead>      
@@ -81,9 +85,9 @@ class PortfolioListComponent extends Component {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </>
         );
     }
 }
 
-export default PortfolioListComponent;
+export default PortfolioListPage;

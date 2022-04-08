@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PortfolioService from '../services/PortfolioService';
 import ProductService from '../services/ProductService';
+import {PageTitle} from "../components/PageTitle";
 
-class PortfolioCreateComponent extends Component {
+class PortfolioCreatePage extends Component {
     constructor(props) {
         super(props)
 
@@ -54,7 +55,7 @@ class PortfolioCreateComponent extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">
-                            <h3 className="text-center">Add Portfolio</h3>
+                            <PageTitle>Add Portfolio</PageTitle>
                             <div className="card-body">
                                 <form>
                                     <div className="form-group">
@@ -82,4 +83,4 @@ class PortfolioCreateComponent extends Component {
     }
 }
 
-export default PortfolioCreateComponent;
+export default PortfolioCreatePage;

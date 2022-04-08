@@ -2,19 +2,47 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2419c1ff-a45f-4abf-805a-52e2bdd285ac" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/PortfolioComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PortfolioComponent.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PortfolioListComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PortfolioListComponent.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/PortfolioService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/PortfolioService.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/BoxRow.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ButtonBlue.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PageTitle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FooterComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FooterComponent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HeaderComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomeComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PortfolioComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PortfolioCreateComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioCreatePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PortfolioListComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ProductComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ProductListComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductListPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1q3qUK70SO7YLHOCKwrGCt6fntB" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -24,7 +52,16 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ScrapApp_server" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\components" />
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
@@ -49,10 +86,34 @@
       <updated>1616318636383</updated>
       <workItem from="1616318638694" duration="21000" />
       <workItem from="1621452318769" duration="9705000" />
+      <workItem from="1649362126712" duration="8002000" />
     </task>
+    <task id="LOCAL-00001" summary="Idea suggestions impl">
+      <created>1649362332011</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1649362332011</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Idea suggestions impl" />
+    <option name="LAST_COMMIT_MESSAGE" value="Idea suggestions impl" />
   </component>
 </project>
