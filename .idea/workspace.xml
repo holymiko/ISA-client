@@ -2,22 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2419c1ff-a45f-4abf-805a-52e2bdd285ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/BoxRow.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ButtonBlue.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PageTitle.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FooterComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FooterComponent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HeaderComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HomeComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PortfolioComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PortfolioCreateComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioCreatePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PortfolioListComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ProductComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ProductListComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductListPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,6 +97,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Idea suggestions impl" />

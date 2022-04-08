@@ -66,7 +66,7 @@ class ProductPage extends Component {
                                 <th>Dealer</th>
                                 <th>Price</th>
                                 <th>Redemption</th>
-                                <th>Split</th>
+                                <th>Spread</th>
                                 <th>Price/Gram</th>
                             </tr>
                         </thead>
