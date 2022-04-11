@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PortfolioService from '../services/PortfolioService';
-import ProductService from '../services/ProductService';
+import PortfolioService, {createPortfolio} from '../services/PortfolioService';
 import {PageTitle} from "../components/PageTitle";
+import {getAllProductsAsDTO} from "../services/ProductService";
 
 class PortfolioCreatePage extends Component {
     constructor(props) {
@@ -22,13 +22,13 @@ class PortfolioCreatePage extends Component {
         e.preventDefault();
         console.log("Save employ");
         console.log( JSON.stringify( this.state.investmentIds ));
-        PortfolioService.createPortfolio({owner: this.state.owner, investmentIds: this.state.investmentIds}).then(res => {
-            this.props.history.push('/portfolios');
+        createPortfolio({owner: this.state.owner, investmentIds: this.state.investmentIds}).then(res => {
+            this.props.history.push('/portfolio');
         });
     }
 
     cancel() {
-        this.props.history.push("/portfolios");
+        this.props.history.push("/portfolio");
     }
 
     changeIdsHandler = (event) => {
@@ -44,7 +44,7 @@ class PortfolioCreatePage extends Component {
     }
 
     componentDidMount() {
-        ProductService.getAllProductsAsDTO().then((res) => {
+        getAllProductsAsDTO().then((res) => {
             this.setState({products: res.data});
         });
     }

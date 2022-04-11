@@ -8,19 +8,19 @@ export const HeaderComponent = () => {
                         <h3><a className="App-header-button" href={'http://localhost:3000/'} >Precious metals</a></h3>
                     </div>
                     <div className="navbar-brand">
-                        <a className="App-header-button" href={"http://localhost:3000/portfolios/"} >Portfolios</a>
+                        <a className="App-header-button" href={"http://localhost:3000/portfolio/"} >Portfolios</a>
                     </div>
                     <div className="navbar-brand">
-                        <a className="App-header-button" href={'http://localhost:3000/products/gold'} >Gold</a>
+                        <a className="App-header-button" href={'http://localhost:3000/product/gold'} >Gold</a>
                     </div>
                     <div className="navbar-brand">
-                        <a className="App-header-button" href={'http://localhost:3000/products/silver'} >Silver</a>
+                        <a className="App-header-button" href={'http://localhost:3000/product/silver'} >Silver</a>
                     </div>
                     <div className="navbar-brand">
-                        <a className="App-header-button" href={'http://localhost:3000/products/platinum'} >Platinum</a>
+                        <a className="App-header-button" href={'http://localhost:3000/product/platinum'} >Platinum</a>
                     </div>
                     <div className="navbar-brand">
-                        <a className="App-header-button" href={'http://localhost:3000/products/palladium'} >Palladium</a>
+                        <a className="App-header-button" href={'http://localhost:3000/product/palladium'} >Palladium</a>
                     </div>
                 </nav>
             </header>

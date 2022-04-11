@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PortfolioService from '../services/PortfolioService';
+import PortfolioService, {getPortfolios, scrapByPortfolio} from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
 import { getTextYield } from '../services/utils.js';
 import {PageTitle} from '../components/PageTitle.tsx';
@@ -19,11 +19,11 @@ class PortfolioListPage extends Component {
     }
 
     addPortfolio(){
-        this.props.history.push("/add-portfolio");
+        this.props.history.push("/portfolio/add");
     }
 
     componentDidMount(){
-        PortfolioService.getPortfolios().then(
+        getPortfolios().then(
             (res) => {
                 this.setState({portfolios: res.data});
             }
@@ -35,7 +35,7 @@ class PortfolioListPage extends Component {
     }
 
     eventListener(portfolio){
-        PortfolioService.scrapByPortfolio(portfolio.id).then(()=>{
+        scrapByPortfolio(portfolio.id).then(()=>{
             this.componentDidMount()
             this.render()
         })

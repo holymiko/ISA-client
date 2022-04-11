@@ -1,24 +1,16 @@
-import axios from 'axios';
+import {api} from "./api";
 
-const BASE = "http://localhost:8080/api/v2/";
-const SCRAP_URL = "scrap/";
-const PORTFOLIO_URL = "portfolio/";
-
-class PortfolioService {
-    getPortfolios(){
-        return axios.get(BASE + PORTFOLIO_URL + "dto/1");
-    }
-    getPortfolioById(id){
-        return axios.get(BASE + PORTFOLIO_URL + "dto/4/id/"+id);
-    }
-
-    createPortfolio(portfolioCreateDto){
-        return axios.post(BASE + PORTFOLIO_URL, portfolioCreateDto);
-    }
-
-    scrapByPortfolio(portfolioId){
-        return axios.get(BASE + SCRAP_URL + PORTFOLIO_URL + portfolioId);
-    }
+export const getPortfolios = () => {
+    return api.get( 'portfolio/dto/1');
+}
+export const getPortfolioById = (id) => {
+    return api.get( 'portfolio/dto/4/id/' + id);
 }
 
-export default new PortfolioService()
+export const createPortfolio = (portfolioCreateDto) => {
+    return api.post( 'portfolio/', portfolioCreateDto);
+}
+
+export const scrapByPortfolio = (portfolioId) => {
+    return api.get( 'scrap/portfolio/' + portfolioId);
+}

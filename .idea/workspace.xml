@@ -2,8 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2419c1ff-a45f-4abf-805a-52e2bdd285ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/NotFound.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/HomePage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/ProductService.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/api.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/Price.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/Product.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/util/compare.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/util/parse.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/HomePage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioCreatePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioCreatePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductListPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductListPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/PortfolioService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/PortfolioService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/ProductService.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,14 +57,20 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/util" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="ts.external.directory.path" value="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\util" />
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\services" />
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\types" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\components" />
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src" />
     </key>
   </component>
@@ -73,6 +98,8 @@
       <workItem from="1616318638694" duration="21000" />
       <workItem from="1621452318769" duration="9705000" />
       <workItem from="1649362126712" duration="8002000" />
+      <workItem from="1649598997072" duration="6081000" />
+      <workItem from="1649618051995" duration="21562000" />
     </task>
     <task id="LOCAL-00001" summary="Idea suggestions impl">
       <created>1649362332011</created>
@@ -81,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649362332011</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="bug fix">
+      <created>1649433064917</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1649433064917</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -101,6 +135,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Idea suggestions impl" />
-    <option name="LAST_COMMIT_MESSAGE" value="Idea suggestions impl" />
+    <MESSAGE value="bug fix" />
+    <MESSAGE value="routing" />
+    <option name="LAST_COMMIT_MESSAGE" value="routing" />
   </component>
 </project>

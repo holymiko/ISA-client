@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PortfolioService from '../services/PortfolioService';
+import PortfolioService, {getPortfolioById} from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
 import { getTextYield, priceWithSpaces } from '../services/utils.js';
 
@@ -20,7 +20,7 @@ class PortfolioPage extends Component {
     }
 
     componentDidMount(){
-        PortfolioService.getPortfolioById(this.state.id).then(
+        getPortfolioById(this.state.id).then(
             (res) => {
                 let portfolio = res.data;
                 this.setState({ 
