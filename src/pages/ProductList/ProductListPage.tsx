@@ -14,19 +14,20 @@ import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
 import {productListColumns} from "./productListColumns";
 import Box from "@mui/material/Box";
+import {useParams} from "react-router-dom";
 
 
 export const ProductListPage = () =>  {
 
+    const { metal } = useParams();
     const [products, setProducts] = useState<Product[]>([])
     const [title, setTitle] = useState<string>('All Products')
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setLoading(true)
-        switch (window.location.pathname) {
+        switch (metal) {
             case '/product':
-            case '/product/':
                 getAllProductsAsDTO().then((res) => {
                     setProducts(res.data);
                     setLoading(false)
@@ -34,8 +35,7 @@ export const ProductListPage = () =>  {
                 setTitle('All Products')
                 break;
 
-            case '/product/gold':
-            case '/product/gold/':
+            case 'gold':
                 getGoldProductsAsDTO().then((res) => {
                     setProducts(res.data);
                     setLoading(false)
@@ -43,8 +43,7 @@ export const ProductListPage = () =>  {
                 setTitle('Golden products')
                 break;
 
-            case '/product/silver':
-            case '/product/silver/':
+            case 'silver':
                 getSilverProductsAsDTO().then((res) => {
                     setProducts(res.data);
                     setLoading(false)
@@ -52,8 +51,7 @@ export const ProductListPage = () =>  {
                 setTitle('Silver products')
                 break;
 
-            case '/product/platinum':
-            case '/product/platinum/':
+            case 'platinum':
                 getPlatinumProductsAsDTO().then((res) => {
                     setProducts(res.data);
                     setLoading(false)
@@ -61,8 +59,7 @@ export const ProductListPage = () =>  {
                 setTitle('Platinum products')
                 break;
 
-            case '/product/palladium':
-            case '/product/palladium/':
+            case 'palladium':
                 getPalladiumProductsAsDTO().then((res) => {
                     setProducts(res.data);
                     setLoading(false)
@@ -70,7 +67,7 @@ export const ProductListPage = () =>  {
                 setTitle('Palladium products')
                 break;
         }
-    }, [])
+    }, [metal])
 
     return (
         <Box sx={{ pt: '3rem' }}>

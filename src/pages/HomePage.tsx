@@ -1,14 +1,15 @@
 import {BoxColumn} from "../components/BoxColumn";
+import {Link} from "react-router-dom";
 
 export const HomePage = () => {
         return (
             <BoxColumn sx={{ height: '31rem', pt: '3rem'}}>
                 <h1 className="home-h1">
-                    <a href={"http://localhost:3000/product/"}>Products</a>
+                    <Link to={"/product"}>Products</Link>
                 </h1>
                 
                 <h1 className="home-h1">
-                    <a href={"http://localhost:3000/portfolio/"}>Portfolios</a>
+                    <Link to={"/portfolio"}>Portfolios</Link>
                 </h1>
             </BoxColumn>
         );
