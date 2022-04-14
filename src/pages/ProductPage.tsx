@@ -73,7 +73,7 @@ export const ProductPage = () =>  {
 
             getProductById(productId).then((res) => {
 
-              const prices: Price[] = res.latestPrices
+              // const prices: Price[] = res.latestPrices
 
               // Set hooks
               // setTotalItems(res.totalItems)

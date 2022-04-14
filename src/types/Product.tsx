@@ -7,5 +7,5 @@ export interface Product {
   grams: number,
   links?: string[],
   latestPrices: Price[],
-  prices: Price[],
+  prices?: Price[],
 }

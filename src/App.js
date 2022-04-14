@@ -9,13 +9,13 @@ import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
 import {NotFound} from "./components/NotFound";
 import {HomePage} from "./pages/HomePage";
-import {ProductListPage} from "./pages/ProductListPage";
+import {ProductListPage} from "./pages/ProductList/ProductListPage";
 
 function App() {
     return (
-        <>
+        <div>
             <HeaderComponent />
-            <Box sx={{width: '1', px: '12rem', pb: '3rem'}}>
+            <Box sx={{width: '100%', px: '12rem', pb: '3rem', height: '1'}}>
                 <Router>
                     <Switch>
                         <Route exact path = "/" component={HomePage}/>
@@ -23,13 +23,13 @@ function App() {
                         <Route path = "/portfolio/add/" component={PortfolioCreatePage}/>
                         <Route path = "/portfolio/:id" component={PortfolioPage}/>
                         <Route path = "/product/id/:id" component={ProductPage} />
-                        <Route path = "/product/dto/" component={ProductListPage}/>
+                        <Route path = "/product" component={ProductListPage}/>
                         <Route path = "/product/:metal" component={ProductListPage}/>
                         <Route component={NotFound}/>
                     </Switch>
                 </Router>
             </Box>
-        </>
+        </div>
     );
 }
 

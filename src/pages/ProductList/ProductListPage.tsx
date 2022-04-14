@@ -1,58 +1,19 @@
 import React, {Component, useEffect, useState} from 'react';
-import { numberWithSpaces } from '../services/utils.js';
-import { sort } from '../services/tablesort.js';
-import {ButtonBlue} from "../components/ButtonBlue";
-import {BoxRow} from "../components/BoxRow";
-import {PageTitle} from "../components/PageTitle";
+import { numberWithSpaces } from '../../services/utils.js';
+import {ButtonBlue} from "../../components/ButtonBlue";
+import {BoxRow} from "../../components/BoxRow";
+import {PageTitle} from "../../components/PageTitle";
 import {
     getAllProductsAsDTO,
     getGoldProductsAsDTO,
     getPalladiumProductsAsDTO,
     getPlatinumProductsAsDTO,
     getSilverProductsAsDTO, scrapByMetal
-} from "../services/ProductService";
-import {Product} from "../types/Product";
+} from "../../services/ProductService";
+import {Product} from "../../types/Product";
 import {DataGrid, GridColDef, GridValueGetterParams} from "@mui/x-data-grid";
-import Typography from "@mui/material/Typography";
+import {productListColumns} from "./productListColumns";
 
-// Table columns
-const columns: GridColDef[] = [
-    {
-        field: 'name',
-        headerName: 'Name',
-        description: "",
-        width: 140,
-        flex: 1,
-        renderCell: (params: GridValueGetterParams<any, Product>) => (
-          <a href={"http://localhost:3000/product/id/"+params.row.id}>{params.row.name}</a>
-        )
-    },
-    {
-        field: 'grams',
-        headerName: 'Grams',
-        description: "",
-        width: 140,
-        flex: 1,
-        valueGetter: (params: GridValueGetterParams<any, Product>) => `${Math.round(params.row.grams*100)/100}`
-    },
-    {
-        field: 'price',
-        headerName: 'Price',
-        description: "",
-        width: 30,
-        flex: 1,
-        renderCell: (params: GridValueGetterParams<any, Product>) => (
-              <div>
-                  {params.row.latestPrices.map(
-                        price =>
-                              <Typography>
-                                  {numberWithSpaces(Math.round(price.price))}
-                              </Typography>
-                  )}
-              </div>
-        )
-    },
-]
 
 export const ProductListPage = () =>  {
 
@@ -115,13 +76,17 @@ export const ProductListPage = () =>  {
             </BoxRow>
 
             <div style={{ height: 400, width: '100%' }}>
+                <div style={{ display: 'flex', height: '100%' }}>
+                    <div style={{ flexGrow: 1 }}>
                 <DataGrid
                   sx={{borderColor: "white"}}
                   rows={products}
-                  columns={columns}
-                  checkboxSelection
+                  columns={productListColumns}
                   loading={loading}
+                  checkboxSelection={false}
                 />
+                    </div></div>
+
             </div>
 
             <div className="row">
