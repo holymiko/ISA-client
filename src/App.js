@@ -15,7 +15,7 @@ function App() {
     return (
         <div>
             <HeaderComponent />
-            <Box sx={{width: '100%', px: '12rem', pb: '3rem', height: '1'}}>
+            <Box sx={{width: '100%', px: '4rem', pb: '3rem', height: '1'}}>
                 <Router>
                     <Switch>
                         <Route exact path = "/" component={HomePage}/>

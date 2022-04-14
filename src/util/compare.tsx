@@ -1,5 +1,3 @@
-
-// TODO Typescript
 import {Price} from "../types/Price";
 
 export function compareStringAsNumber(a: string, b: string ) {
@@ -12,30 +10,26 @@ export function compareStringAsNumber(a: string, b: string ) {
   return 0;
 }
 
-export function compareByLatest(a: Price, b: Price ) {
-  if ( a.price < b.price ){
-    return -1;
-  }
-  if ( a.price > b.price ){
-    return 1;
-  }
-  return 0;
+/**
+ * ASC Highest selling price. Zero placed on button.
+ * @param a
+ * @param b
+ */
+export function compareByPrice(a: Price, b: Price ) {
+  if (a.redemption === 0) return 1;
+  if (b.redemption === 0) return -1;
+  return a.price < b.price
+            ? -1
+            : a.price > b.price ? 1 : 0;
 }
 
-export function compareByRedemption(a: Price, b: Price ) {
-
-
-  if ( a.redemption > b.redemption ){
-    if ( a.redemption === 0){
-      return 1;
-    }
-    return -1;
-  }
-  if ( a.redemption < b.redemption ){
-    if ( b.redemption === 0){
-      return -1;
-    }
-    return 1;
-  }
-  return 0;
+/**
+ * DCS Highest Redemption. Zero placed on button
+ * @param a
+ * @param b
+ */
+export function compareByRedemption(a: Price, b: Price ): number {
+  return a.redemption > b.redemption
+            ? -1 :
+            a.redemption < b.redemption ? 1 : 0
 }

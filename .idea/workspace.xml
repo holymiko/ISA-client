@@ -2,37 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2419c1ff-a45f-4abf-805a-52e2bdd285ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/BoxColumn.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/ZLATAKY.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/bessergold1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/bessergoldDe2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/bessergoldDe3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/bessergoldDe4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/bessergoldDe5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/origin/BESSERGOLD_CZ.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/origin/bessegoldDe.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/origin/germany.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/origin/silverum.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/origin/silverum2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/origin/zlataky1 - Copy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/silverum1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/zlataky1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/zlataky3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/zlataky4 - Copy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/zlataky4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo/zlataky5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/types/dealer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/util/getImage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/util/normatProductName.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PageTitle.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PageTitle.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ProductListPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ProductPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/Price.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/Price.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/Product.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/Product.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/utils.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/compare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/compare.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,18 +55,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\util" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\img\logo" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\img\logo\origin" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\components" />
-      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\util" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\services" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\util" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\img\logo" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\img" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src" />
       <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\img\logo" />
-      <recent name="C:\Users\mikol\IdeaProjects\Investment Scraper App\InvestmentScraperApp_client\src\util" />
     </key>
   </component>
   <component name="RunManager">
@@ -116,7 +95,8 @@
       <workItem from="1649362126712" duration="8002000" />
       <workItem from="1649598997072" duration="6081000" />
       <workItem from="1649618051995" duration="21877000" />
-      <workItem from="1649887983175" duration="12799000" />
+      <workItem from="1649887983175" duration="13380000" />
+      <workItem from="1649929192236" duration="11720000" />
     </task>
     <task id="LOCAL-00001" summary="Idea suggestions impl">
       <created>1649362332011</created>
@@ -139,7 +119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649644789516</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="usage of img logos">
+      <created>1649901408401</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1649901408403</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,6 +150,7 @@
     <MESSAGE value="bug fix" />
     <MESSAGE value="routing" />
     <MESSAGE value="routing, DataGrid" />
-    <option name="LAST_COMMIT_MESSAGE" value="routing, DataGrid" />
+    <MESSAGE value="usage of img logos" />
+    <option name="LAST_COMMIT_MESSAGE" value="usage of img logos" />
   </component>
 </project>

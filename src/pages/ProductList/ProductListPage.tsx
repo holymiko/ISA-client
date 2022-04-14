@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useState} from 'react';
-import { numberWithSpaces } from '../../services/utils.js';
+import React, {useEffect, useState} from 'react';
+import { numberWithSpaces } from '../../util/utils';
 import {ButtonBlue} from "../../components/ButtonBlue";
 import {BoxRow} from "../../components/BoxRow";
 import {PageTitle} from "../../components/PageTitle";
@@ -11,13 +11,15 @@ import {
     getSilverProductsAsDTO, scrapByMetal
 } from "../../services/ProductService";
 import {Product} from "../../types/Product";
-import {DataGrid, GridColDef, GridValueGetterParams} from "@mui/x-data-grid";
+import {DataGrid} from "@mui/x-data-grid";
 import {productListColumns} from "./productListColumns";
+import Box from "@mui/material/Box";
 
 
 export const ProductListPage = () =>  {
 
     const [products, setProducts] = useState<Product[]>([])
+    const [title, setTitle] = useState<string>('All Products')
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -29,6 +31,7 @@ export const ProductListPage = () =>  {
                     setProducts(res.data);
                     setLoading(false)
                 });
+                setTitle('All Products')
                 break;
 
             case '/product/gold':
@@ -37,6 +40,7 @@ export const ProductListPage = () =>  {
                     setProducts(res.data);
                     setLoading(false)
                 });
+                setTitle('Golden products')
                 break;
 
             case '/product/silver':
@@ -45,6 +49,7 @@ export const ProductListPage = () =>  {
                     setProducts(res.data);
                     setLoading(false)
                 });
+                setTitle('Silver products')
                 break;
 
             case '/product/platinum':
@@ -53,6 +58,7 @@ export const ProductListPage = () =>  {
                     setProducts(res.data);
                     setLoading(false)
                 });
+                setTitle('Platinum products')
                 break;
 
             case '/product/palladium':
@@ -61,13 +67,14 @@ export const ProductListPage = () =>  {
                     setProducts(res.data);
                     setLoading(false)
                 });
+                setTitle('Palladium products')
                 break;
         }
     }, [])
 
     return (
-        <>
-            <PageTitle>Product List</PageTitle>
+        <Box sx={{ pt: '3rem' }}>
+            <PageTitle>{title}</PageTitle>
             <BoxRow sx={{justifyContent: 'flex-end'}}>
                 <ButtonBlue onClick = {
                     () => scrapByMetal(products[0].metal)}>
@@ -75,19 +82,20 @@ export const ProductListPage = () =>  {
                 </ButtonBlue>
             </BoxRow>
 
-            <div style={{ height: 400, width: '100%' }}>
-                <div style={{ display: 'flex', height: '100%' }}>
+            <Box sx={{ height: 650, width: '100%', mb: '3rem' }}>
+                <Box sx={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
-                <DataGrid
-                  sx={{borderColor: "white"}}
-                  rows={products}
-                  columns={productListColumns}
-                  loading={loading}
-                  checkboxSelection={false}
-                />
-                    </div></div>
+                        <DataGrid
+                          sx={{borderColor: "white"}}
+                          rows={products}
+                          columns={productListColumns}
+                          loading={loading}
+                          checkboxSelection={false}
+                        />
+                    </div>
+                </Box>
 
-            </div>
+            </Box>
 
             <div className="row">
                 <table id="ProductsTable" className="table table-striped table-bordered table-sortable">
@@ -161,6 +169,6 @@ export const ProductListPage = () =>  {
                     </tbody>
                 </table>
             </div>
-        </>
+        </Box>
     );
 }

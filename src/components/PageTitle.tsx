@@ -10,7 +10,7 @@ export const PageTitle = (props: TitleProps) => {
             sx={{
                 ...props.sx,
                 textAlign: 'center',
-                my: '3rem',
+                mb: '1rem',
             }}
             variant='h4'
             component='h4'

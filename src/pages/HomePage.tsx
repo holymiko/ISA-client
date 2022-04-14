@@ -2,7 +2,7 @@ import {BoxColumn} from "../components/BoxColumn";
 
 export const HomePage = () => {
         return (
-            <BoxColumn sx={{backgroundColor: 'chartreuse', height: '31rem', pt: '3rem'}}>
+            <BoxColumn sx={{ height: '31rem', pt: '3rem'}}>
                 <h1 className="home-h1">
                     <a href={"http://localhost:3000/product/"}>Products</a>
                 </h1>

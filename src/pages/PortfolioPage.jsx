@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PortfolioService, {getPortfolioById} from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
-import { getTextYield, priceWithSpaces } from '../services/utils.js';
+import { getTextYield, priceWithSpaces } from '../util/utils.tsx';
 
 class PortfolioPage extends Component {
 

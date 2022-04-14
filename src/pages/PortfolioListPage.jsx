@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PortfolioService, {getPortfolios, scrapByPortfolio} from '../services/PortfolioService';
 import { sort } from '../services/tablesort';
-import { getTextYield } from '../services/utils.js';
+import { getTextYield } from '../util/utils.tsx';
 import {PageTitle} from '../components/PageTitle.tsx';
 import AddIcon from '@mui/icons-material/Add';
 import {ButtonBlue} from "../components/ButtonBlue";
