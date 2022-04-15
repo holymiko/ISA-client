@@ -3,12 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2419c1ff-a45f-4abf-805a-52e2bdd285ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioCreatePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AddPortfolioPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/PortfolioListPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PortfolioListPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/PortfolioService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/PortfolioService.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/Product.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/Product.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/compare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/compare.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649983158884</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="portfolio routing + React refactor">
+      <created>1649985614810</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1649985614811</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +176,7 @@
     <MESSAGE value="routing" />
     <MESSAGE value="routing to ALl product + time" />
     <MESSAGE value="routing to ALl product + priceDateTime" />
-    <option name="LAST_COMMIT_MESSAGE" value="routing to ALl product + priceDateTime" />
+    <MESSAGE value="portfolio routing + React refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="portfolio routing + React refactor" />
   </component>
 </project>

@@ -12,7 +12,6 @@ const pricesMinWidth = 40;
 const pricesMaxWidth = 110;
 
 export const productListColumns: GridColDef[] = [
-
   {
     field: 'metal',
     headerName: 'Metal',
@@ -57,11 +56,11 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 80,
     flex: 1,
     sortComparator: compareStringAsNumber,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => `${Math.round(params.row.grams*100)/100}`
+    valueGetter: (params: GridValueGetterParams<any, Product>) => `${Math.round(params.row.grams*100)/100} g`
   },
   {
     field: 'price',
-    headerName: 'Best Price Kč',
+    headerName: 'Best Price',
     headerAlign: 'right',
     align: 'right',
     minWidth: 180,
@@ -69,10 +68,12 @@ export const productListColumns: GridColDef[] = [
     flex: 1,
     sortComparator: compareStringAsNumber,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
-      Math.round(
-            params.row.latestPrices.sort(compareByPrice)[0]?.price
-        )
+      `${numberWithSpaces(
+        Math.round(
+            params.row.bestPrice?.price!
+        ))} Kč`
     )
+
   },
   {
     field: 'dealerPrice',
@@ -89,7 +90,7 @@ export const productListColumns: GridColDef[] = [
   },
   {
     field: 'redemption',
-    headerName: 'Best Redemption Kč',
+    headerName: 'Best Redemption',
     headerAlign: 'right',
     description: "",
     minWidth: 180,
@@ -100,8 +101,8 @@ export const productListColumns: GridColDef[] = [
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
       `${numberWithSpaces(
         Math.round(
-          params.row.latestPrices.sort(compareByRedemption)[0]?.redemption
-        ))}`
+          params.row.bestRedemption?.redemption!
+        ))} Kč`
     )
   },
   {
@@ -115,6 +116,40 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     renderCell: (params: GridValueGetterParams<any, Product>) => (
       <img src={getImage(params.row.latestPrices.sort(compareByRedemption)[0]?.dealer)} alt='' />
+    )
+  },
+  {
+    field: 'Best spread',
+    headerName: 'Best Spread',
+    headerAlign: 'right',
+    description: "",
+    minWidth: 130,
+    maxWidth: 130,
+    align: 'right',
+    flex: 1,
+    sortComparator: compareStringAsNumber,
+    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+      `${ params.row.bestRedemption?.price != undefined && params.row.bestPrice?.price != undefined && params.row.bestPrice?.price != 0
+            ? Math.round((params.row.bestRedemption?.redemption / params.row.bestPrice?.price)*10_000)/100
+            : 0
+        } %`
+    )
+  },
+  {
+    field: 'pricePerGram',
+    headerName: 'Price / Gram',
+    headerAlign: 'right',
+    description: "",
+    minWidth: 120,
+    maxWidth: 120,
+    align: 'right',
+    flex: 1,
+    sortComparator: compareStringAsNumber,
+    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+      `${ params.row.bestPrice?.price != undefined
+            ? Math.round((params.row.bestPrice?.price! / params.row.grams)*100)/100
+            : '-'
+        } Kč/g`
     )
   },
 

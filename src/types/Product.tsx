@@ -8,5 +8,7 @@ export interface Product {
   form: string;
   links?: string[],
   latestPrices: Price[],
+  bestPrice?: Price,
+  bestRedemption?: Price,
   prices?: Price[],
 }

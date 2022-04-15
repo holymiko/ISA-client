@@ -1,13 +1,12 @@
 import {Price} from "../types/Price";
 
 export function compareStringAsNumber(a: string, b: string ) {
-  if ( parseInt(a) < parseInt(b) ){
-    return -1;
-  }
-  if ( parseInt(a) > parseInt(b) ){
-    return 1;
-  }
-  return 0;
+  a = a.replaceAll('Kč','').trim();
+  b = b.replaceAll('Kč', '').trim();
+  b = b.replaceAll(' ', '').trim();
+  a = a.replaceAll(' ','').trim();
+
+  return compareByPrice2(parseInt(a), parseInt(b))
 }
 
 /**
@@ -16,11 +15,15 @@ export function compareStringAsNumber(a: string, b: string ) {
  * @param b
  */
 export function compareByPrice(a: Price, b: Price ) {
-  if (a.redemption === 0) return 1;
-  if (b.redemption === 0) return -1;
-  return a.price < b.price
-            ? -1
-            : a.price > b.price ? 1 : 0;
+  return compareByPrice2(a.price, b.price)
+}
+
+export function compareByPrice2(a: number, b: number ) {
+  if (a === 0) return 1;
+  if (b === 0) return -1;
+  return a < b
+    ? -1
+    : a > b ? 1 : 0;
 }
 
 /**

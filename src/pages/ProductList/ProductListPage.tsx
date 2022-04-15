@@ -16,6 +16,7 @@ import {productListColumns} from "./productListColumns";
 import Box from "@mui/material/Box";
 import {Link, useParams} from "react-router-dom";
 import moment from 'moment';
+import {compareByPrice, compareByRedemption} from "../../util/compare";
 
 
 export const ProductListPage = () =>  {
@@ -30,7 +31,14 @@ export const ProductListPage = () =>  {
         switch (metal) {
             case 'all':
                 getAllProductsAsDTO().then((res) => {
-                    setProducts(res.data);
+                    const products: Product[] = res.data;
+                    products.forEach(
+                      product => {
+                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
+                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+                      }
+                    )
+                    setProducts(products);
                     setLoading(false)
                 });
                 setTitle('All Products')
@@ -38,7 +46,14 @@ export const ProductListPage = () =>  {
 
             case 'gold':
                 getGoldProductsAsDTO().then((res) => {
-                    setProducts(res.data);
+                    const products: Product[] = res.data;
+                    products.forEach(
+                      product => {
+                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
+                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+                      }
+                    )
+                    setProducts(products);
                     setLoading(false)
                 });
                 setTitle('Golden products')
@@ -46,7 +61,14 @@ export const ProductListPage = () =>  {
 
             case 'silver':
                 getSilverProductsAsDTO().then((res) => {
-                    setProducts(res.data);
+                    const products: Product[] = res.data;
+                    products.forEach(
+                      product => {
+                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
+                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+                      }
+                    )
+                    setProducts(products);
                     setLoading(false)
                 });
                 setTitle('Silver products')
@@ -54,7 +76,14 @@ export const ProductListPage = () =>  {
 
             case 'platinum':
                 getPlatinumProductsAsDTO().then((res) => {
-                    setProducts(res.data);
+                    const products: Product[] = res.data;
+                    products.forEach(
+                      product => {
+                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
+                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+                      }
+                    )
+                    setProducts(products);
                     setLoading(false)
                 });
                 setTitle('Platinum products')
@@ -62,7 +91,14 @@ export const ProductListPage = () =>  {
 
             case 'palladium':
                 getPalladiumProductsAsDTO().then((res) => {
-                    setProducts(res.data);
+                    const products: Product[] = res.data;
+                    products.forEach(
+                      product => {
+                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
+                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+                      }
+                    )
+                    setProducts(products);
                     setLoading(false)
                 });
                 setTitle('Palladium products')
