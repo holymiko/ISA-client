@@ -3,13 +3,13 @@ import React from "react";
 import {Route, Routes, Navigate} from 'react-router-dom';
 import {HeaderComponent} from "./components/HeaderComponent";
 import PortfolioPage from "./pages/PortfolioPage";
-import PortfolioListPage from "./pages/PortfolioListPage";
-import PortfolioCreatePage from "./pages/PortfolioCreatePage";
+import AddPortfolioPage from "./pages/AddPortfolioPage";
 import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
 import {NotFound} from "./components/NotFound";
 import {HomePage} from "./pages/HomePage";
 import {ProductListPage} from "./pages/ProductList/ProductListPage";
+import {PortfolioListPage} from "./pages/PortfolioListPage";
 
 function App() {
     return (
@@ -19,9 +19,9 @@ function App() {
                 <Routes>
                     <Route index element={<HomePage/>} />
                     <Route path="portfolio">
-                        <Route path="all" element={<PortfolioListPage/>}/>
-                        <Route path="add" element={<PortfolioCreatePage/>}/>
-                        <Route path="id" element={<PortfolioPage/>}/>
+                        <Route index element={<PortfolioListPage/>}/>
+                        <Route path="add" element={<AddPortfolioPage/>}/>
+                        <Route path=":id" element={<PortfolioPage/>}/>
                     </Route>
                     <Route path = "product">
                         <Route index element={<ProductListPage/>}/>

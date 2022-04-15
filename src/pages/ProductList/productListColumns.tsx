@@ -117,4 +117,5 @@ export const productListColumns: GridColDef[] = [
       <img src={getImage(params.row.latestPrices.sort(compareByRedemption)[0]?.dealer)} alt='' />
     )
   },
+
 ]

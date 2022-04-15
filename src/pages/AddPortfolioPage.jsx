@@ -3,7 +3,7 @@ import PortfolioService, {createPortfolio} from '../services/PortfolioService';
 import {PageTitle} from "../components/PageTitle";
 import {getAllProductsAsDTO} from "../services/ProductService";
 
-class PortfolioCreatePage extends Component {
+class AddPortfolioPage extends Component {
     constructor(props) {
         super(props)
 
@@ -83,4 +83,4 @@ class PortfolioCreatePage extends Component {
     }
 }
 
-export default PortfolioCreatePage;
+export default AddPortfolioPage;

@@ -9,7 +9,7 @@ export const HeaderComponent = () => {
                         <h3><Link className="App-header-button" to={'/'} >Precious metals</Link></h3>
                     </div>
                     <div className="navbar-brand">
-                        <Link className="App-header-button" to={"/portfolio/"}>Portfolios</Link>
+                        <Link className="App-header-button" to={"/portfolio"}>Portfolios</Link>
                     </div>
                     <div className="navbar-brand">
                         <Link className="App-header-button" to={'/product/gold'}>Gold</Link>
