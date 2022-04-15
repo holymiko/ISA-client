@@ -1,10 +1,12 @@
 import {Price} from "../types/Price";
 
 export function compareStringAsNumber(a: string, b: string ) {
+  a = a.replaceAll('%','').trim();
+  b = b.replaceAll('%', '').trim();
   a = a.replaceAll('Kč','').trim();
   b = b.replaceAll('Kč', '').trim();
-  b = b.replaceAll(' ', '').trim();
   a = a.replaceAll(' ','').trim();
+  b = b.replaceAll(' ', '').trim();
 
   return compareByPrice2(parseInt(a), parseInt(b))
 }

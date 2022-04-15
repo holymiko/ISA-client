@@ -11,6 +11,11 @@ import {Link} from "react-router-dom";
 const pricesMinWidth = 40;
 const pricesMaxWidth = 110;
 
+/* TODO
+    Add column for each price signifying price is up to date. Green check / Red cross
+    Place this column between price and logo
+    Add variable defining the freshness of price (amount of time to be up to date)
+*/
 export const productListColumns: GridColDef[] = [
   {
     field: 'metal',
@@ -38,8 +43,8 @@ export const productListColumns: GridColDef[] = [
     field: 'name',
     headerName: 'Name',
     description: "",
-    minWidth: 520,
-    maxWidth: 520,
+    minWidth: 400,
+    maxWidth: 400,
     flex: 1,
     renderCell: (params: GridValueGetterParams<any, Product>) => (
       <Link to={"/product/id/"+params.row.id}>
