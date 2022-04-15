@@ -5,11 +5,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HeaderComponent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/ProductListPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProductList/productListColumns.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/Price.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/Price.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/Product.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/Product.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/normatProductName.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/formatProductName.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649901408403</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="routing">
+      <created>1649965686826</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1649965686827</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,9 +161,9 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Idea suggestions impl" />
     <MESSAGE value="bug fix" />
-    <MESSAGE value="routing" />
     <MESSAGE value="routing, DataGrid" />
     <MESSAGE value="usage of img logos" />
-    <option name="LAST_COMMIT_MESSAGE" value="usage of img logos" />
+    <MESSAGE value="routing" />
+    <option name="LAST_COMMIT_MESSAGE" value="routing" />
   </component>
 </project>

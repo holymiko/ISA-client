@@ -5,14 +5,36 @@ import {compareByPrice, compareByRedemption, compareStringAsNumber} from "../../
 
 import {getImage} from "../../util/getImage";
 import {numberWithSpaces} from "../../util/utils";
-import {formatProductName} from "../../util/normatProductName";
+import {formatProductName} from "../../util/formatProductName";
+import {Link} from "react-router-dom";
 
 const pricesMinWidth = 40;
 const pricesMaxWidth = 110;
 
 export const productListColumns: GridColDef[] = [
 
-
+  {
+    field: 'metal',
+    headerName: 'Metal',
+    description: "",
+    minWidth: 80,
+    maxWidth: 80,
+    flex: 1,
+    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+        `${params.row.metal}`
+    )
+  },
+  {
+    field: 'form',
+    headerName: 'Form',
+    description: "",
+    minWidth: 120,
+    maxWidth: 120,
+    flex: 1,
+    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+        `${params.row.form}`
+    )
+  },
   {
     field: 'name',
     headerName: 'Name',
@@ -21,8 +43,9 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 520,
     flex: 1,
     renderCell: (params: GridValueGetterParams<any, Product>) => (
-      // Change to react-router-dom Link
-      <a href={"http://localhost:3000/product/id/"+params.row.id}>{ params.row.name != undefined ? formatProductName(params.row.name) : "undefined"}</a>
+      <Link to={"/product/id/"+params.row.id}>
+        {params.row.name != undefined ? formatProductName(params.row.name) : "undefined"}
+      </Link>
     )
   },
   {

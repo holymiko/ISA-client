@@ -5,7 +5,7 @@ export const HomePage = () => {
         return (
             <BoxColumn sx={{ height: '31rem', pt: '3rem'}}>
                 <h1 className="home-h1">
-                    <Link to={"/product"}>Products</Link>
+                    <Link to={"/product/all"}>Products</Link>
                 </h1>
                 
                 <h1 className="home-h1">

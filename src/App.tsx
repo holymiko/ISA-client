@@ -19,9 +19,9 @@ function App() {
                 <Routes>
                     <Route index element={<HomePage/>} />
                     <Route path="portfolio">
-                        <Route index element={<PortfolioListPage/>}/>
-                        <Route path="portfolio/add/" element={<PortfolioCreatePage/>}/>
-                        <Route path="portfolio/:id" element={<PortfolioPage/>}/>
+                        <Route path="all" element={<PortfolioListPage/>}/>
+                        <Route path="add" element={<PortfolioCreatePage/>}/>
+                        <Route path="id" element={<PortfolioPage/>}/>
                     </Route>
                     <Route path = "product">
                         <Route index element={<ProductListPage/>}/>

@@ -14,7 +14,8 @@ import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
 import {productListColumns} from "./productListColumns";
 import Box from "@mui/material/Box";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import moment from 'moment';
 
 
 export const ProductListPage = () =>  {
@@ -27,7 +28,7 @@ export const ProductListPage = () =>  {
     useEffect(() => {
         setLoading(true)
         switch (metal) {
-            case '/product':
+            case 'all':
                 getAllProductsAsDTO().then((res) => {
                     setProducts(res.data);
                     setLoading(false)
@@ -103,7 +104,9 @@ export const ProductListPage = () =>  {
                             {/* <th>Metal</th> */}
                             <th>Grams</th>
                             <th>Price</th>
+                            <th>Price Time</th>
                             <th>Redemption</th>
+                            <th>Redemption Time</th>
                             <th>Spread</th>
                             <th>Price/Gram</th>
                         </tr>
@@ -116,9 +119,9 @@ export const ProductListPage = () =>  {
                                 <tr key = {product.id}>
                                     {/* <td>{product.id}</td> */}
                                     <td>
-                                        <a href={"http://localhost:3000/product/id/"+product.id}>
+                                        <Link to={"/product/id/"+product.id}>
                                             {product.name}
-                                        </a>
+                                        </Link>
                                     </td>
                                     {/* <td>{product.metal}</td> */}
                                     <td  align="center">
@@ -134,12 +137,24 @@ export const ProductListPage = () =>  {
                                         )}
                                     </td>
 
+                                    <td align="right" width="10%">
+                                        {product.latestPrices.map(
+                                          price =>  <div> {moment(price.priceDateTime).format('LT')} </div>
+                                        )}
+                                    </td>
+
                                     <td align="right">
                                         {product.latestPrices.map(
                                             price =>
                                                 <div>
                                                     {numberWithSpaces(Math.round(price.redemption))}
                                                 </div>
+                                        )}
+                                    </td>
+
+                                    <td align="right" width="10%">
+                                        {product.latestPrices.map(
+                                          price => <div> {moment(price.redemptionDateTime).format('LT')} </div>
                                         )}
                                     </td>
 

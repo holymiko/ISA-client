@@ -5,6 +5,7 @@ export interface Product {
   metal: string,
   name?: string,
   grams: number,
+  form: string;
   links?: string[],
   latestPrices: Price[],
   prices?: Price[],
