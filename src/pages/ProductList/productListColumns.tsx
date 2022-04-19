@@ -8,8 +8,41 @@ import {numberWithSpaces} from "../../util/utils";
 import {formatProductName} from "../../util/formatProductName";
 import {Link} from "react-router-dom";
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
+import ErrorIcon from '@mui/icons-material/Error';
+import {Price} from "../../types/Price";
+
 const pricesMinWidth = 40;
 const pricesMaxWidth = 110;
+const freshnessMinuteLimit = 60;
+
+
+const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean) => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes()-freshnessMinuteLimit);
+
+  if(prices === undefined || prices.length === 0) {
+    return <ErrorIcon/>
+  }
+
+  const freshPrices: number = isRedemptionPrice
+    ? prices.filter(
+      x => d.getTime() < new Date(x.redemptionDateTime).getTime()
+    ).length
+    : prices.filter(
+      x => d.getTime() < new Date(x.priceDateTime).getTime()
+    ).length
+
+  if(freshPrices === prices.length) {
+    return <CheckCircleIcon sx={{color: 'green'}}/>
+  } else if(freshPrices === 0) {
+    return <CancelIcon sx={{color: 'red'}}/>
+  } else {
+    return <DoNotDisturbOnIcon sx={{color: 'orange'}}/>
+  }
+};
 
 /* TODO
     Add column for each price signifying price is up to date. Green check / Red cross
@@ -81,6 +114,20 @@ export const productListColumns: GridColDef[] = [
 
   },
   {
+    field: 'priceFreshness',
+    headerName: 'Freshness',
+    headerAlign: 'center',
+    align: 'center',
+    minWidth: 80,
+    maxWidth: 80,
+    flex: 1,
+    renderCell: (params: GridValueGetterParams<any, Product>) => (
+      <>
+        {getPriceFreshness(params.row.latestPrices, false)}
+      </>
+    )
+  },
+  {
     field: 'dealerPrice',
     headerName: 'Dealer Best Price',
     description: "",
@@ -108,6 +155,19 @@ export const productListColumns: GridColDef[] = [
         Math.round(
           params.row.bestRedemption?.redemption!
         ))} Kč`
+    )
+  },
+  {
+    field: 'redemptionFreshness',
+    headerName: 'Freshness',
+    headerAlign: 'center',
+    align: 'center',
+    maxWidth: 80,
+    flex: 1,
+    renderCell: (params: GridValueGetterParams<any, Product>) => (
+      <>
+        {getPriceFreshness(params.row.latestPrices, true)}
+      </>
     )
   },
   {
