@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PortfolioService, {createPortfolio} from '../services/PortfolioService';
+import {createPortfolio} from '../services/PortfolioService';
 import {PageTitle} from "../components/PageTitle";
-import {getAllProductsAsDTO} from "../services/ProductService";
+import {getProductsAsDTO} from "../services/ProductService";
 
 class AddPortfolioPage extends Component {
     constructor(props) {
@@ -44,7 +44,7 @@ class AddPortfolioPage extends Component {
     }
 
     componentDidMount() {
-        getAllProductsAsDTO().then((res) => {
+        getProductsAsDTO(undefined).then((res) => {
             this.setState({products: res.data});
         });
     }

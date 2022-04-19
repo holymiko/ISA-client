@@ -1,12 +1,14 @@
 
 export function formatProductName(name: string): string {
 
+  name = name.replaceAll(/\d+\s*,\s*\d+\s*g/g, '').trim()
   name = name.replaceAll(/\d+\s*x\s*\d+\s*g/g, '').trim()
   name = name.replaceAll(/\d+\s*g/g, '').trim()
   name = name.replaceAll(/\d+,\d+g/g, '').trim()
   name = name.replaceAll(/\d+\s*Kg/ig, '').trim()
 
   name = name.replaceAll(/\(trojsk[áé] unce\)/ig, '').trim()
+  name = name.replaceAll(/\(trojských uncí\)/ig, '').trim()
   name = name.replaceAll(/investiční/ig, '').trim()
 
   name = name.replaceAll(/zlat[ýá]/ig, '').trim()

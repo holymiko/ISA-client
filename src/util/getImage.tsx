@@ -7,8 +7,8 @@ import logoBessegoldDe from "../img/logo/bessergoldDe5.png"
 export const getImage = (dealer: Dealer) => {
   switch (dealer) {
     case Dealer.BESSERGOLD_CZ: return logo;
-    case Dealer.Zlataky: return logoZlataky;
-    case Dealer.Silverum: return logoSilverum;
+    case Dealer.ZLATAKY: return logoZlataky;
+    case Dealer.SILVERUM: return logoSilverum;
     case Dealer.BESSERGOLD_DE: return logoBessegoldDe;
     default: return "";
   }

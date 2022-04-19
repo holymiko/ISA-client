@@ -3,13 +3,7 @@ import { numberWithSpaces } from '../../util/utils';
 import {ButtonBlue} from "../../components/ButtonBlue";
 import {BoxRow} from "../../components/BoxRow";
 import {PageTitle} from "../../components/PageTitle";
-import {
-    getAllProductsAsDTO,
-    getGoldProductsAsDTO,
-    getPalladiumProductsAsDTO,
-    getPlatinumProductsAsDTO,
-    getSilverProductsAsDTO, scrapByMetal
-} from "../../services/ProductService";
+import {getProductsAsDTO} from "../../services/ProductService";
 import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
 import {productListColumns} from "./productListColumns";
@@ -17,10 +11,10 @@ import Box from "@mui/material/Box";
 import {Link, useParams} from "react-router-dom";
 import moment from 'moment';
 import {compareByPrice, compareByRedemption} from "../../util/compare";
+import {scrapByParams} from "../../services/ScrapService";
 
 
 export const ProductListPage = () =>  {
-
     const { metal } = useParams();
     const [products, setProducts] = useState<Product[]>([])
     const [title, setTitle] = useState<string>('All Products')
@@ -28,81 +22,19 @@ export const ProductListPage = () =>  {
 
     useEffect(() => {
         setLoading(true)
-        switch (metal) {
-            case 'all':
-                getAllProductsAsDTO().then((res) => {
-                    const products: Product[] = res.data;
-                    products.forEach(
-                      product => {
-                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
-                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
-                      }
-                    )
-                    setProducts(products);
-                    setLoading(false)
-                });
-                setTitle('All Products')
-                break;
-
-            case 'gold':
-                getGoldProductsAsDTO().then((res) => {
-                    const products: Product[] = res.data;
-                    products.forEach(
-                      product => {
-                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
-                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
-                      }
-                    )
-                    setProducts(products);
-                    setLoading(false)
-                });
-                setTitle('Golden products')
-                break;
-
-            case 'silver':
-                getSilverProductsAsDTO().then((res) => {
-                    const products: Product[] = res.data;
-                    products.forEach(
-                      product => {
-                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
-                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
-                      }
-                    )
-                    setProducts(products);
-                    setLoading(false)
-                });
-                setTitle('Silver products')
-                break;
-
-            case 'platinum':
-                getPlatinumProductsAsDTO().then((res) => {
-                    const products: Product[] = res.data;
-                    products.forEach(
-                      product => {
-                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
-                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
-                      }
-                    )
-                    setProducts(products);
-                    setLoading(false)
-                });
-                setTitle('Platinum products')
-                break;
-
-            case 'palladium':
-                getPalladiumProductsAsDTO().then((res) => {
-                    const products: Product[] = res.data;
-                    products.forEach(
-                      product => {
-                          product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
-                          product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
-                      }
-                    )
-                    setProducts(products);
-                    setLoading(false)
-                });
-                setTitle('Palladium products')
-                break;
+        getProductsAsDTO(metal).then((res) => {
+            const products: Product[] = res.data;
+            products.forEach(
+              product => {
+                  product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
+                  product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+              }
+            )
+            setProducts(products);
+            setLoading(false)
+        });
+        if(metal !== undefined) {
+            setTitle(metal.substring(0, 1).toUpperCase() + metal.substring(1)+' products')
         }
     }, [metal])
 
@@ -111,7 +43,7 @@ export const ProductListPage = () =>  {
             <PageTitle>{title}</PageTitle>
             <BoxRow sx={{justifyContent: 'flex-end'}}>
                 <ButtonBlue onClick = {
-                    () => scrapByMetal(products[0].metal)}>
+                    () => scrapByParams(undefined, undefined, metal, undefined)}>
                     Update All
                 </ButtonBlue>
             </BoxRow>
