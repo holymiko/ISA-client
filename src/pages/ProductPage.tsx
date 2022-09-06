@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useState} from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import React, {useEffect, useState} from 'react';
+import { DataGrid, GridColDef} from '@mui/x-data-grid';
 import {getProductById} from "../services/ProductService";
 import {Price} from "../types/Price";
 import {getIdFromUrl} from "../util/parse";
@@ -56,8 +56,6 @@ const columns: GridColDef[]  = [
 
 export const ProductPage = () =>  {
 
-        const pageSize = 5;
-
         // Hooks declaration
         const [rows, setRows] = useState<Price[]>([]);
         const [product, setProduct] = useState<Product>();
@@ -81,7 +79,7 @@ export const ProductPage = () =>  {
               setRows([]);
               setLoading(false);
             });
-        }, []);
+        }, [productId]);
 
         return (
           <>

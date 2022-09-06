@@ -39,7 +39,7 @@ export const ProductListPage = () =>  {
     }, [metal])
 
     return (
-        <Box sx={{ pt: '3rem' }}>
+        <Box>
             <PageTitle>{title}</PageTitle>
             <BoxRow sx={{justifyContent: 'flex-end'}}>
                 <ButtonBlue onClick = {
@@ -48,7 +48,7 @@ export const ProductListPage = () =>  {
                 </ButtonBlue>
             </BoxRow>
 
-            <Box sx={{ height: 650, width: '100%', mb: '3rem' }}>
+            <Box sx={{ height: 700, width: '100%', mb: '6rem' }}>
                 <Box sx={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid
@@ -60,7 +60,6 @@ export const ProductListPage = () =>  {
                         />
                     </div>
                 </Box>
-
             </Box>
 
             <div className="row">

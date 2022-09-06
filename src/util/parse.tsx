@@ -6,5 +6,5 @@ export function getIdFromUrl( pathname: string ): number {
   }
 
   const stringId = pathname.split('/').pop()
-  return stringId != undefined ? +stringId : -1
+  return stringId !== undefined ? +stringId : -1
 }

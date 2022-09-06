@@ -1,4 +1,4 @@
-import {GridColDef, GridValueGetterParams} from "@mui/x-data-grid";
+import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
 import {Product} from "../../types/Product";
 import React from "react";
 import {compareByPrice, compareByRedemption, compareStringAsNumber} from "../../util/compare";
@@ -14,10 +14,7 @@ import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import ErrorIcon from '@mui/icons-material/Error';
 import {Price} from "../../types/Price";
 
-const pricesMinWidth = 40;
-const pricesMaxWidth = 110;
 const freshnessMinuteLimit = 60;
-
 
 const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean) => {
   const d = new Date();
@@ -50,17 +47,17 @@ const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean
     Add variable defining the freshness of price (amount of time to be up to date)
 */
 export const productListColumns: GridColDef[] = [
-  {
-    field: 'metal',
-    headerName: 'Metal',
-    description: "",
-    minWidth: 80,
-    maxWidth: 80,
-    flex: 1,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => (
-        `${params.row.metal}`
-    )
-  },
+  // {
+  //   field: 'metal',
+  //   headerName: 'Metal',
+  //   description: "",
+  //   minWidth: 80,
+  //   maxWidth: 80,
+  //   flex: 1,
+  //   valueGetter: (params: GridValueGetterParams<any, Product>) => (
+  //       `${params.row.metal}`
+  //   )
+  // },
   {
     field: 'form',
     headerName: 'Form',
@@ -79,9 +76,9 @@ export const productListColumns: GridColDef[] = [
     minWidth: 400,
     maxWidth: 400,
     flex: 1,
-    renderCell: (params: GridValueGetterParams<any, Product>) => (
+    renderCell: (params: GridRenderCellParams<Product>) => (
       <Link to={"/product/id/"+params.row.id}>
-        {params.row.name != undefined ? formatProductName(params.row.name) : "undefined"}
+        {params.row.name !== undefined ? formatProductName(params.row.name) : "undefined"}
       </Link>
     )
   },
@@ -118,10 +115,10 @@ export const productListColumns: GridColDef[] = [
     headerName: 'Freshness',
     headerAlign: 'center',
     align: 'center',
-    minWidth: 80,
-    maxWidth: 80,
+    minWidth: 60,
+    maxWidth: 60,
     flex: 1,
-    renderCell: (params: GridValueGetterParams<any, Product>) => (
+    renderCell: (params: GridRenderCellParams<Product>) => (
       <>
         {getPriceFreshness(params.row.latestPrices, false)}
       </>
@@ -129,20 +126,20 @@ export const productListColumns: GridColDef[] = [
   },
   {
     field: 'dealerPrice',
-    headerName: 'Dealer Best Price',
+    headerName: 'Best Price Dealer',
     description: "",
     minWidth: 130,
     maxWidth: 130,
     // align: 'center',
     flex: 1,
     sortable: false,
-    renderCell: (params: GridValueGetterParams<any, Product>) => (
+    renderCell: (params: GridRenderCellParams<Product>) => (
       <img src={getImage(params.row.latestPrices.sort(compareByPrice)[0]?.dealer)} alt='' />
     )
   },
   {
     field: 'redemption',
-    headerName: 'Best Redemption',
+    headerName: 'Best Buyout',
     headerAlign: 'right',
     description: "",
     minWidth: 180,
@@ -162,9 +159,10 @@ export const productListColumns: GridColDef[] = [
     headerName: 'Freshness',
     headerAlign: 'center',
     align: 'center',
-    maxWidth: 80,
+    minWidth: 60,
+    maxWidth: 60,
     flex: 1,
-    renderCell: (params: GridValueGetterParams<any, Product>) => (
+    renderCell: (params: GridRenderCellParams<Product>) => (
       <>
         {getPriceFreshness(params.row.latestPrices, true)}
       </>
@@ -172,15 +170,15 @@ export const productListColumns: GridColDef[] = [
   },
   {
     field: 'dealerRedemption',
-    headerName: 'Dealer Best Redemption',
+    headerName: 'Best Buyout dealer',
     description: "",
     minWidth: 180,
     maxWidth: 180,
     // align: 'center',
     flex: 1,
     sortable: false,
-    renderCell: (params: GridValueGetterParams<any, Product>) => (
-      <img src={getImage(params.row.latestPrices.sort(compareByRedemption)[0]?.dealer)} alt='' />
+    renderCell: (params: GridRenderCellParams<Product>) => (
+      <img src={getImage(params.row.latestPrices.sort(compareByRedemption)[0]?.dealer)} alt=''/>
     )
   },
   {
@@ -194,7 +192,7 @@ export const productListColumns: GridColDef[] = [
     flex: 1,
     sortComparator: compareStringAsNumber,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
-      `${ params.row.bestRedemption?.price != undefined && params.row.bestPrice?.price != undefined && params.row.bestPrice?.price != 0
+      `${ params.row.bestRedemption?.price !== undefined && params.row.bestPrice?.price !== undefined && params.row.bestPrice?.price !== 0
             ? Math.round((params.row.bestRedemption?.redemption / params.row.bestPrice?.price)*10_000)/100
             : 0
         } %`
@@ -211,7 +209,7 @@ export const productListColumns: GridColDef[] = [
     flex: 1,
     sortComparator: compareStringAsNumber,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
-      `${ params.row.bestPrice?.price != undefined
+      `${ params.row.bestPrice?.price !== undefined
             ? Math.round((params.row.bestPrice?.price! / params.row.grams)*100)/100
             : '-'
         } Kč/g`
