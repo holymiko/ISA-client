@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { numberWithSpaces } from '../../util/utils';
 import {ButtonBlue} from "../../components/ButtonBlue";
 import {BoxRow} from "../../components/BoxRow";
 import {PageTitle} from "../../components/PageTitle";
@@ -8,8 +7,7 @@ import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
 import {productListColumns} from "./productListColumns";
 import Box from "@mui/material/Box";
-import {Link, useParams} from "react-router-dom";
-import moment from 'moment';
+import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
 import {scrapByParams} from "../../services/ScrapService";
 
@@ -42,8 +40,8 @@ export const ProductListPage = () =>  {
         <Box>
             <PageTitle>{title}</PageTitle>
             <BoxRow sx={{justifyContent: 'flex-end'}}>
-                <ButtonBlue onClick = {
-                    () => scrapByParams(undefined, undefined, metal, undefined)}>
+                <ButtonBlue
+                  onClick = {() => scrapByParams(undefined, undefined, metal, undefined)}>
                     Update All
                 </ButtonBlue>
             </BoxRow>
@@ -61,93 +59,6 @@ export const ProductListPage = () =>  {
                     </div>
                 </Box>
             </Box>
-
-            <div className="row">
-                <table id="ProductsTable" className="table table-striped table-bordered table-sortable">
-                    <thead>
-                        <tr>
-                            {/* <th>Id</th> */}
-                            <th>Name</th>
-                            {/* <th>Metal</th> */}
-                            <th>Grams</th>
-                            <th>Price</th>
-                            <th>Price Time</th>
-                            <th>Redemption</th>
-                            <th>Redemption Time</th>
-                            <th>Spread</th>
-                            <th>Price/Gram</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {
-                            products.map(
-                                product =>
-                                <tr key = {product.id}>
-                                    {/* <td>{product.id}</td> */}
-                                    <td>
-                                        <Link to={"/product/id/"+product.id}>
-                                            {product.name}
-                                        </Link>
-                                    </td>
-                                    {/* <td>{product.metal}</td> */}
-                                    <td  align="center">
-                                        {Math.round(product.grams*100)/100}
-                                    </td>
-
-                                    <td align="right" width="10%">
-                                        {product.latestPrices.map(
-                                            price =>
-                                                <div>
-                                                    {numberWithSpaces(Math.round(price.price))}
-                                                </div>
-                                        )}
-                                    </td>
-
-                                    <td align="right" width="10%">
-                                        {product.latestPrices.map(
-                                          price =>  <div> {moment(price.priceDateTime).format('LT')} </div>
-                                        )}
-                                    </td>
-
-                                    <td align="right">
-                                        {product.latestPrices.map(
-                                            price =>
-                                                <div>
-                                                    {numberWithSpaces(Math.round(price.redemption))}
-                                                </div>
-                                        )}
-                                    </td>
-
-                                    <td align="right" width="10%">
-                                        {product.latestPrices.map(
-                                          price => <div> {moment(price.redemptionDateTime).format('LT')} </div>
-                                        )}
-                                    </td>
-
-                                    <td>
-                                        {product.latestPrices.map(
-                                            price =>
-                                                <div>
-                                                    {Math.round((price.spread)*1_000_000)/1_000_000}
-                                                </div>
-                                        )}
-                                    </td>
-
-                                    <td>
-                                        {product.latestPrices.map(
-                                            price =>
-                                                <div>
-                                                    {Math.round((price.pricePerGram)*10_000)/10_000}
-                                                </div>
-                                        )}
-                                    </td>
-                                </tr>
-                            )
-                        }
-                    </tbody>
-                </table>
-            </div>
         </Box>
     );
 }

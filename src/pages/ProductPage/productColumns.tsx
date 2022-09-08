@@ -1,5 +1,5 @@
 import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
-import {compareStringAsDate, compareStringAsNumber} from "../../util/compare";
+import {compareStringAsDate, compareByPrice1} from "../../util/compare";
 import {Price} from "../../types/Price";
 import {getDealerImage} from "../../util/getImage";
 import moment from "moment/moment";
@@ -56,7 +56,7 @@ export const productColumns: GridColDef[]  = [
     maxWidth: 130,
     align: 'right',
     flex: 1,
-    sortComparator: compareStringAsNumber,
+    sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Price>) => (
       `${ Math.round(params.row.spread*10_000)/100 } %`
     )
@@ -70,7 +70,7 @@ export const productColumns: GridColDef[]  = [
     maxWidth: 120,
     align: 'right',
     flex: 1,
-    sortComparator: compareStringAsNumber,
+    sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Price>) => (
       `${ Math.round(params.row.pricePerGram*100)/100 } Kč/g`
     )

@@ -1,7 +1,7 @@
 import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
 import {Product} from "../../types/Product";
 import React from "react";
-import {compareByPrice, compareByRedemption, compareStringAsNumber} from "../../util/compare";
+import {compareByPrice, compareByRedemption, compareByPrice1, compareBySpread} from "../../util/compare";
 import {getDealerImage, getFormImage} from "../../util/getImage";
 import {numberWithSpaces} from "../../util/utils";
 import {formatProductName} from "../../util/formatProductName";
@@ -89,7 +89,7 @@ export const productListColumns: GridColDef[] = [
     minWidth: 80,
     maxWidth: 80,
     flex: 1,
-    sortComparator: compareStringAsNumber,
+    sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Product>) => `${Math.round(params.row.grams*100)/100} g`
   },
   {
@@ -100,7 +100,7 @@ export const productListColumns: GridColDef[] = [
     minWidth: 170,
     maxWidth: 170,
     flex: 1,
-    sortComparator: compareStringAsNumber,
+    sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
       `${numberWithSpaces(
         Math.round(
@@ -145,7 +145,7 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 180,
     align: 'right',
     flex: 1,
-    sortComparator: compareStringAsNumber,
+    sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
       `${numberWithSpaces(
         Math.round(
@@ -190,12 +190,12 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 160,
     align: 'right',
     flex: 1,
-    sortComparator: compareStringAsNumber,
-    renderCell: (params: GridRenderCellParams<Product>) => (
-      <b>{ params.row.bestRedemption?.price !== undefined && params.row.bestPrice?.price !== undefined && params.row.bestPrice?.price !== 0
+    sortComparator: compareBySpread,
+    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+      `${ params.row.bestRedemption?.price !== undefined && params.row.bestPrice?.price !== undefined && params.row.bestPrice?.price !== 0
             ? Math.round((params.row.bestRedemption?.redemption / params.row.bestPrice?.price)*10_000)/100
             : 0
-      } %</b>
+      } %`
     )
   },
   {
@@ -207,7 +207,7 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 120,
     align: 'right',
     flex: 1,
-    sortComparator: compareStringAsNumber,
+    sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
       `${ params.row.bestPrice?.price !== undefined
             ? Math.round((params.row.bestPrice?.price! / params.row.grams)*100)/100
