@@ -13,7 +13,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import {useNavigate} from "react-router-dom";
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 export const SidebarISA = (props: any) => {
   const navigate = useNavigate();

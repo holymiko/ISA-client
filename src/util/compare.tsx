@@ -1,4 +1,5 @@
 import {Price} from "../types/Price";
+import moment from "moment";
 
 export function compareStringAsNumber(a: string, b: string ) {
   a = a.replaceAll('%','').trim();
@@ -9,6 +10,10 @@ export function compareStringAsNumber(a: string, b: string ) {
   b = b.replaceAll(' ', '').trim();
 
   return compareByPrice2(parseInt(a), parseInt(b))
+}
+
+export function compareStringAsDate(a: string, b: string ) {
+  return moment(moment(a).format()).isBefore(moment(b).format()) ? 1 : -1;
 }
 
 /**

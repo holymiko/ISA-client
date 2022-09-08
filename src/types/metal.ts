@@ -1,6 +1,6 @@
 export enum Metal {
-  GOLD = "Gold",
-  SILVER = "Silver",
-  PLATINUM = "Platinum",
-  PALLADIUM = "Palladium"
+  GOLD = "GOLD",
+  SILVER = "SILVER",
+  PLATINUM = "PLATINUM",
+  PALLADIUM = "PALLADIUM"
 }

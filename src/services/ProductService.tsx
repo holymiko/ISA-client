@@ -10,7 +10,7 @@ export const getProductsAsDTO = (metal: string|undefined) => {
 }
 
 export const getProductById = async (productId: number): Promise<Product> => {
-    const { data } = await api.get<Product>('product/dto/id/' + productId);
+    const { data } = await api.get<Product>('product/id/' + productId);
     return data;
 };
 

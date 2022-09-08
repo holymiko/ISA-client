@@ -3,11 +3,11 @@ import React from "react";
 import {Route, Routes, Navigate} from 'react-router-dom';
 import PortfolioPage from "./pages/PortfolioPage";
 import AddPortfolioPage from "./pages/AddPortfolioPage";
-import ProductPage from "./pages/ProductPage";
+import {ProductPage} from "./pages/ProductPage/ProductPage";
 import Box from "@mui/material/Box";
 import {NotFound} from "./components/NotFound";
 import {HomePage} from "./pages/HomePage";
-import {ProductListPage} from "./pages/ProductList/ProductListPage";
+import {ProductListPage} from "./pages/ProductListPage/ProductListPage";
 import {PortfolioListPage} from "./pages/PortfolioListPage";
 
 export const RouterRoot = () => {
