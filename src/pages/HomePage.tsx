@@ -1,16 +1,17 @@
 import {BoxColumn} from "../components/BoxColumn";
 import {Link} from "react-router-dom";
+import {PageTitle} from "../components/PageTitle";
 
 export const HomePage = () => {
-        return (
-            <BoxColumn sx={{ height: '31rem', pt: '3rem'}}>
-                <h1 className="home-h1">
-                    <Link to={"/product/all"}>Products</Link>
-                </h1>
-                
-                <h1 className="home-h1">
-                    <Link to={"/portfolio"}>Portfolios</Link>
-                </h1>
-            </BoxColumn>
-        );
+    return (
+        <BoxColumn sx={{ height: '31rem', pt: '3rem'}}>
+            <PageTitle>
+                <Link to={"/product/all"}>Products</Link>
+            </PageTitle>
+
+            <PageTitle>
+                <Link to={"/portfolio"}>Portfolios</Link>
+            </PageTitle>
+        </BoxColumn>
+    );
 }

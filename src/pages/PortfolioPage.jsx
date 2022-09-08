@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PortfolioService, {getPortfolioById} from '../services/PortfolioService';
-import { sort } from '../services/tablesort';
 import { getTextYield, priceWithSpaces } from '../util/utils.tsx';
+import {PageTitle} from "../components/PageTitle";
 
 class PortfolioPage extends Component {
 
@@ -35,16 +35,10 @@ class PortfolioPage extends Component {
         );
     }
 
-
-
-    componentDidUpdate(){
-        sort();
-    }
-
     render() {
         return (
             <div>
-                <h2 className="text-center">Portfolio</h2>
+                <PageTitle>Portfolio</PageTitle>
                 <div>Id: {this.state.id}</div>
                 <div>Owner: {this.state.owner}</div>
                 <div className="row">
