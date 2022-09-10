@@ -6,50 +6,124 @@ import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
 import Box from "@mui/material/Box";
 import {productColumns} from "./productColumns";
+import {CartesianGrid, Legend, Line, Tooltip, XAxis, YAxis, LineChart, AreaChart, Area} from "recharts";
+import {Price} from "../../types/Price";
+import moment from "moment/moment";
+import {Dealer} from "../../types/dealer";
+import {BoxChart} from "../../components/BoxChart";
+
+
+const setData = (prices: Price[]) => {
+    return prices.map((price) => {
+        if(price.price === 0) return;
+        switch (price.dealer) {
+            case Dealer.BESSERGOLD_CZ: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Bessergold": price.price
+            }
+            case Dealer.BESSERGOLD_DE: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Bessergold DE": price.price
+            }
+            case Dealer.ZLATAKY: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Zlataky": price.price
+            }
+            case Dealer.SILVERUM: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Silverum": price.price
+            }
+        }
+    })
+}
+
+const setData2 = (prices: Price[]) => {
+    return prices.map((price) => {
+        if(price.price === 0) return;
+        switch (price.dealer) {
+            case Dealer.BESSERGOLD_CZ: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Bessergold": [price.price, price.redemption]
+            }
+            case Dealer.BESSERGOLD_DE: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Bessergold DE": [price.price, price.redemption]
+            }
+            case Dealer.ZLATAKY: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Zlataky": [price.price, price.redemption]
+            }
+            case Dealer.SILVERUM: return {
+                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
+                "Silverum": [price.price, price.redemption]
+            }
+        }
+    })
+}
 
 export const ProductPage = () => {
 
     // Hooks declaration
-    const [rows, setRows] = useState<any[]>([]);
+    const [rows, setRows] = useState<Price[]>([]);
     const [product, setProduct] = useState<Product>();
     const [loading, setLoading] = useState<boolean>(true);
+    const [chartData, setChartData] = useState<any>([]);
+    const [areaChartData, setAreaChartData] = useState<any>([]);
+
     // const [totalItems, setTotalItems] = useState<number>(0);
     // const [currentPage, setCurrentPage] = useState<number>(1);
 
     const productId: number = getIdFromUrl(window.location.pathname);
 
-    // TODO Refactor or Remove
     useEffect(() => {
         // setLoading(true)
 
         getProductById(productId).then((res) => {
-
-          // const prices: Price[] = res.latestPrices
-
-          // Set hooks
-          // setTotalItems(res.totalItems)
-          setProduct(res);
-          setRows(res.prices!);
-          setLoading(false);
+            // setTotalItems(res.totalItems)
+            setProduct(res);
+            setRows(res.prices!);
+            setChartData(
+                setData(res.prices!)
+            )
+            setAreaChartData(
+                setData2(res.prices!)
+            )
+            setLoading(false);
         });
     }, [productId]);
 
     return (
         <Box>
             <PageTitle>{product?.name}</PageTitle>
-            <div>Metal: {product?.metal}</div>
-            <div>Grams: {product?.grams}</div>
-            <Box>Links:
-              <Box sx={{ml: "1rem"}}>
-                {product?.links?.map(
-                    link =>
-                        <div>
-                            <a href={link}>{link}</a>
-                        </div>
-                    )
-                }
-              </Box>
-            </Box>
+
+            <BoxChart>
+                <LineChart width={1450} height={500} data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="dateTime" />
+                    <YAxis type="number" domain={['auto', 'auto']}/>
+                    <Tooltip />
+                    <Legend />
+                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold" stroke="red" />
+                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold DE" stroke="green" />
+                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Zlataky" stroke="orange" />
+                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Silverum" stroke="blue" />
+                </LineChart>
+            </BoxChart>
+
+            <BoxChart>
+                <AreaChart width={1450} height={500} data={areaChartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="dateTime" />
+                    <YAxis type="number" domain={['auto', 'auto']}/>
+                    <Tooltip />
+                    <Legend />
+                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold" stroke="red" />
+                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold DE" stroke="green" />
+                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Zlataky" stroke="orange" />
+                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Silverum" stroke="blue" />
+                </AreaChart>
+            </BoxChart>
+
 
             <Box sx={{ height: 527, width: '100%', mt: "1rem"}}>
                 <DataGrid
@@ -78,6 +152,18 @@ export const ProductPage = () => {
                   //     row: styles.rows
                   // }}
                 />
+            </Box>
+
+            <Box sx={{mt: "1rem"}}>Links:
+                <Box sx={{ml: "1rem"}}>
+                    {product?.links?.map(
+                        link =>
+                            <div>
+                                <a href={link}>{link}</a>
+                            </div>
+                    )
+                    }
+                </Box>
             </Box>
         </Box>
     );

@@ -7,7 +7,6 @@ export interface BoxExtendingProps extends BoxProps {
 /**
  * Wraps components in column.
  * Has a 1rem gap between items.
- * Example use: AddPatient.Preferences
  * @param props
  * @constructor
  */
