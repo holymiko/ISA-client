@@ -39,29 +39,13 @@ const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean
   }
 };
 
-/* TODO
-    Add column for each price signifying price is up to date. Green check / Red cross
-    Place this column between price and logo
-    Add variable defining the freshness of price (amount of time to be up to date)
-*/
 export const productListColumns: GridColDef[] = [
-  // {
-  //   field: 'metal',
-  //   headerName: 'Metal',
-  //   description: "",
-  //   minWidth: 80,
-  //   maxWidth: 80,
-  //   flex: 1,
-  //   valueGetter: (params: GridValueGetterParams<any, Product>) => (
-  //       `${params.row.metal}`
-  //   )
-  // },
   {
     field: 'form1',
     headerName: 'Form',
     description: "",
-    minWidth: 70,
-    maxWidth: 70,
+    minWidth: 65,
+    maxWidth: 65,
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
@@ -72,8 +56,8 @@ export const productListColumns: GridColDef[] = [
     field: 'name',
     headerName: 'Name',
     description: "",
-    minWidth: 340,
-    maxWidth: 340,
+    minWidth: 330,
+    maxWidth: 330,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
       <Link to={"/product/id/"+params.row.id}>
@@ -86,19 +70,31 @@ export const productListColumns: GridColDef[] = [
     headerName: 'Grams',
     headerAlign: 'right',
     align: 'right',
-    minWidth: 80,
-    maxWidth: 80,
+    minWidth: 78,
+    maxWidth: 78,
     flex: 1,
     sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Product>) => `${Math.round(params.row.grams*100)/100} g`
+  },
+  {
+    field: '#',
+    headerName: '#',
+    headerAlign: 'center',
+    description: 'Number of sellers',
+    align: 'center',
+    minWidth: 57,
+    maxWidth: 57,
+    disableColumnMenu: true,
+    flex: 1,
+    valueGetter: (params: GridValueGetterParams<any, Product>) => `${params.row.latestPrices.length}`
   },
   {
     field: 'price',
     headerName: 'Best Price',
     headerAlign: 'right',
     align: 'right',
-    minWidth: 170,
-    maxWidth: 170,
+    minWidth: 150,
+    maxWidth: 150,
     flex: 1,
     sortComparator: compareByPrice1,
     valueGetter: (params: GridValueGetterParams<any, Product>) => (
@@ -111,9 +107,11 @@ export const productListColumns: GridColDef[] = [
   {
     field: 'priceFreshness',
     headerName: 'Freshness',
+    description: 'Price freshness indicator',
     headerAlign: 'center',
     align: 'center',
     sortable: false,
+    disableColumnMenu: true,
     minWidth: 50,
     maxWidth: 50,
     flex: 1,
@@ -127,8 +125,8 @@ export const productListColumns: GridColDef[] = [
     field: 'dealerPrice',
     headerName: 'Best Price Dealer',
     description: "",
-    minWidth: 130,
-    maxWidth: 130,
+    minWidth: 160,
+    maxWidth: 160,
     // align: 'center',
     sortable: false,
     flex: 1,
@@ -141,8 +139,8 @@ export const productListColumns: GridColDef[] = [
     headerName: 'Best Buyout',
     headerAlign: 'right',
     description: "",
-    minWidth: 180,
-    maxWidth: 180,
+    minWidth: 140,
+    maxWidth: 140,
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
@@ -156,11 +154,13 @@ export const productListColumns: GridColDef[] = [
   {
     field: 'redemptionFreshness',
     headerName: 'Freshness',
+    description: 'Buyout freshness indicator',
     headerAlign: 'center',
     align: 'center',
     minWidth: 50,
     maxWidth: 50,
     sortable: false,
+    disableColumnMenu: true,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
       <>
@@ -172,8 +172,8 @@ export const productListColumns: GridColDef[] = [
     field: 'dealerRedemption',
     headerName: 'Best Buyout dealer',
     description: "",
-    minWidth: 140,
-    maxWidth: 140,
+    minWidth: 170,
+    maxWidth: 170,
     // align: 'center',
     sortable: false,
     flex: 1,
@@ -186,8 +186,8 @@ export const productListColumns: GridColDef[] = [
     headerName: 'Best Spread',
     headerAlign: 'right',
     description: "",
-    minWidth: 160,
-    maxWidth: 160,
+    minWidth: 120,
+    maxWidth: 120,
     align: 'right',
     flex: 1,
     sortComparator: compareBySpread,

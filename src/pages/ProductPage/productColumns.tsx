@@ -18,7 +18,7 @@ export const productColumns: GridColDef[]  = [
   },
   {
     field: 'priceDateTime',
-    headerName: 'DateTime',
+    headerName: 'Price freshness',
     description: "",
     width: 140,
     flex: 1,
@@ -37,14 +37,25 @@ export const productColumns: GridColDef[]  = [
       <b>{priceWithSpaces(Math.round(params.row.price!/* * 100)/100*/))} Kč</b>
     )
   },
+  // {
+  //   field: 'redemptionDateTime',
+  //   headerName: 'Buyout freshness',
+  //   description: "",
+  //   width: 140,
+  //   flex: 1,
+  //   sortComparator: compareStringAsDate,
+  //   valueGetter: (params: GridValueGetterParams<any, Price>) => (
+  //       moment(params.row.priceDateTime).format('h:mm:ss a, DD.MM.YYYY')
+  //   )
+  // },
   {
     field: 'redemption',
-    headerName: 'Redemption',
+    headerName: 'Buy out',
     description: "",
     width: 140,
     flex: 1,
-    valueGetter: (params: GridValueGetterParams<any, Price>) => (
-      `${priceWithSpaces(Math.round(params.row.redemption! * 100)/100)} Kč`
+    renderCell: (params: GridRenderCellParams<Price>) => (
+      <b>{priceWithSpaces(Math.round(params.row.redemption!))} Kč</b>
     )
   },
   {

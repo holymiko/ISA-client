@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {createPortfolio} from '../services/PortfolioService';
-import {PageTitle} from "../components/PageTitle";
-import {getProductsAsDTO} from "../services/ProductService";
+import {createPortfolio} from '../../services/PortfolioService';
+import {PageTitle} from "../../components/PageTitle";
+import {getProductsAsDTO} from "../../services/ProductService";
 
 class AddPortfolioPage extends Component {
     constructor(props) {

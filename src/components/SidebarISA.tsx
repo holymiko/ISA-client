@@ -9,9 +9,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import EqualizerIcon from '@mui/icons-material/Equalizer';
 import {useNavigate} from "react-router-dom";
+import helmet from "../img/icon/helmetIcon2.png";
+import stockIcon from "../img/icon/stockIcon.png";
+import portfolioIcon from "../img/icon/portfolioIcon.png";
+import Typography from "@mui/material/Typography";
 
 const drawerWidth = 210;
 
@@ -21,23 +23,17 @@ export const SidebarISA = (props: any) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: process.env.REACT_APP_NEXUS_BLUE}}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: "#92B4EC"}}>
         <Box sx={{display: 'inline-flex'}}>
           <Toolbar sx={{ width: '0.5', justifyContent: 'flex-start'}}>
-            {/*<Box*/}
-            {/*  component="img"*/}
-            {/*  // src={.png}*/}
-            {/*  sx={{width: 0.12}}*/}
-            {/*  onClick={() =>*/}
-            {/*    navigate('/')*/}
-            {/*  }*/}
-            {/*/>*/}
-            <Box
-              sx={{width: 0.12}}
+            <Typography
+              variant={"h4"}
+              sx={{cursor: "pointer"}}
               onClick={() =>
                 navigate('/')
-              }
-            >Home</Box>
+            }>
+              Investment scraper
+            </Typography>
           </Toolbar>
         </Box>
       </AppBar>
@@ -52,10 +48,18 @@ export const SidebarISA = (props: any) => {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
+            <ListItem key={'Stock'} disablePadding>
+              <ListItemButton onClick={() => navigate('/stock')}>
+                <ListItemIcon>
+                  <img src={stockIcon} alt="" width="35"/>
+                </ListItemIcon>
+                <ListItemText primary={'Stock'}/>
+              </ListItemButton>
+            </ListItem>
             <ListItem key={'Gold'} disablePadding>
               <ListItemButton onClick={() => navigate('/product/gold')}>
                 <ListItemIcon>
-                  <EqualizerIcon />
+                  <img src={helmet} alt="" width="40"/>
                 </ListItemIcon>
                 <ListItemText primary={'Gold'}/>
               </ListItemButton>
@@ -63,7 +67,7 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Silver'} disablePadding>
               <ListItemButton onClick={() => navigate('/product/silver')}>
                 <ListItemIcon>
-                  <EqualizerIcon />
+                  <img src={helmet} alt="" width="40"/>
                 </ListItemIcon>
                 <ListItemText primary={'Silver'} />
               </ListItemButton>
@@ -71,7 +75,7 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Platinum'} disablePadding>
               <ListItemButton onClick={() => navigate('/product/platinum')}>
                 <ListItemIcon>
-                  <EqualizerIcon />
+                  <img src={helmet} alt="" width="40"/>
                 </ListItemIcon>
                 <ListItemText primary={'Platinum'} />
               </ListItemButton>
@@ -79,7 +83,7 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Palladium'} disablePadding>
               <ListItemButton onClick={() => navigate('/product/palladium')}>
                 <ListItemIcon>
-                  <EqualizerIcon />
+                  <img src={helmet} alt="" width="40"/>
                 </ListItemIcon>
                 <ListItemText primary={'Palladium'} />
               </ListItemButton>
@@ -87,9 +91,9 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Portfolios'} disablePadding>
               <ListItemButton onClick={() => {navigate('/portfolio')}}>
                 <ListItemIcon>
-                  <SupervisedUserCircleIcon />
+                  <img src={portfolioIcon} alt="" width="35"/>
                 </ListItemIcon>
-                <ListItemText primary={'Portfolios'} />
+                <ListItemText primary={'Portfolio'} />
               </ListItemButton>
             </ListItem>
           </List>

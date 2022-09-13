@@ -50,7 +50,13 @@ export const ProductListPage = () =>  {
                 <Box sx={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid
-                          sx={{borderColor: "white"}}
+                          sx={{
+                              borderColor: "white",
+                              "& .MuiDataGrid-columnHeaderTitle": {
+                                  fontSize: 16,
+                                  fontWeight: 'bold'
+                              }
+                          }}
                           rows={products}
                           columns={productListColumns}
                           loading={loading}

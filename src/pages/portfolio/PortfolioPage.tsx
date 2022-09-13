@@ -1,8 +1,15 @@
-import React, { Component } from 'react';
-import PortfolioService, {getPortfolioById} from '../services/PortfolioService';
-import { getTextYield, priceWithSpaces } from '../util/utils.tsx';
-import {PageTitle} from "../components/PageTitle";
+import {PageTitle} from "../../components/PageTitle";
 
+export const PortfolioPage = () => {
+    return (
+        <>
+            <PageTitle>Portfolio</PageTitle>
+            <div>Development is ongoing...</div>
+        </>
+    );
+}
+
+/*
 class PortfolioPage extends Component {
 
     constructor(props) {
@@ -23,7 +30,7 @@ class PortfolioPage extends Component {
         getPortfolioById(this.state.id).then(
             (res) => {
                 let portfolio = res.data;
-                this.setState({ 
+                this.setState({
                     owner: portfolio.owner,
                     beginPrice: portfolio.beginPrice,
                     value: portfolio.value,
@@ -55,7 +62,7 @@ class PortfolioPage extends Component {
                                 <th>Yield</th>
                             </tr>
                         </thead>
-    
+
                         <tbody>
                             {
                                 this.state.investmentsMetal.map(
@@ -68,13 +75,13 @@ class PortfolioPage extends Component {
                                         </td>
                                         <td>
                                             {investment.productDTO.latestPrices.map(
-                                                price => 
+                                                price =>
                                                     <div>
                                                         {priceWithSpaces(price.price)}
                                                     </div>
                                                     )
                                             }
-                                        </td>   
+                                        </td>
                                         <td>
                                             {investment.dealer}
                                         </td>
@@ -117,7 +124,7 @@ class PortfolioPage extends Component {
                                 <th>Yield</th>
                             </tr>
                         </thead>
-    
+
                         <tbody>
                             {
                                 this.state.investmentsStock.map(
@@ -136,10 +143,10 @@ class PortfolioPage extends Component {
                                         </td>
                                         <td>
                                             {investment.amount}
-                                        </td>   
+                                        </td>
                                         <td>
                                             {investment.stockDTO.previousClose}
-                                        </td>   
+                                        </td>
                                         <td>
                                             {getTextYield(investment.yield)}
                                         </td>
@@ -157,6 +164,5 @@ class PortfolioPage extends Component {
             </div>
         );
     }
-}
 
-export default PortfolioPage;
+ */

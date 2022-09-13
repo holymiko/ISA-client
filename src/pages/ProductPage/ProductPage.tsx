@@ -96,7 +96,7 @@ export const ProductPage = () => {
         <Box>
             <PageTitle>{product?.name}</PageTitle>
 
-            <BoxChart>
+            <BoxChart sx={{pb: "1rem", pl: "1rem"}}>
                 <LineChart width={1450} height={500} data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="dateTime" />
@@ -110,7 +110,7 @@ export const ProductPage = () => {
                 </LineChart>
             </BoxChart>
 
-            <BoxChart>
+            <BoxChart sx={{pb: "1rem", pl: "1rem"}}>
                 <AreaChart width={1450} height={500} data={areaChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="dateTime" />
@@ -124,35 +124,41 @@ export const ProductPage = () => {
                 </AreaChart>
             </BoxChart>
 
-
-            <Box sx={{ height: 527, width: '100%', mt: "1rem"}}>
-                <DataGrid
-                  sx={{borderColor: "white"}}
-                  rows={rows}
-                  columns={productColumns}
-                  loading={loading}
-                  initialState={{
-                    sorting: {
-                      sortModel: [{ field: 'priceDateTime', sort: 'desc' }],
-                    },
-                  }}
-                  // rowCount={totalItems}
-                  // pageSize={pageSize}
-                  // rowsPerPageOptions={[pageSize]}
-                  // checkboxSelection
-                  // pagination
-                  // paginationMode="server"
-                  // sortingMode="server"
-                  // onPageChange={(page) => setCurrentPage(page+1)}
-                  // page={currentPage-1}
-                  // components={{
-                  //     Pagination: Pagination1,
-                  // }}
-                  // classes={{
-                  //     row: styles.rows
-                  // }}
-                />
+            <BoxChart>
+                <Box sx={{ height: 527, width: '100%'}}>
+                    <DataGrid
+                      sx={{
+                          borderColor: "whitesmoke",
+                          "& .MuiDataGrid-columnHeaderTitle": {
+                              fontSize: 16,
+                              fontWeight: 'bold'
+                          }}}
+                      rows={rows}
+                      columns={productColumns}
+                      loading={loading}
+                      initialState={{
+                        sorting: {
+                          sortModel: [{ field: 'priceDateTime', sort: 'desc' }],
+                        },
+                      }}
+                      // rowCount={totalItems}
+                      // pageSize={pageSize}
+                      // rowsPerPageOptions={[pageSize]}
+                      // checkboxSelection
+                      // pagination
+                      // paginationMode="server"
+                      // sortingMode="server"
+                      // onPageChange={(page) => setCurrentPage(page+1)}
+                      // page={currentPage-1}
+                      // components={{
+                      //     Pagination: Pagination1,
+                      // }}
+                      // classes={{
+                      //     row: styles.rows
+                      // }}
+                    />
             </Box>
+            </BoxChart>
 
             <Box sx={{mt: "1rem"}}>Links:
                 <Box sx={{ml: "1rem"}}>
@@ -161,8 +167,7 @@ export const ProductPage = () => {
                             <div>
                                 <a href={link}>{link}</a>
                             </div>
-                    )
-                    }
+                    )}
                 </Box>
             </Box>
         </Box>

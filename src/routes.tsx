@@ -1,13 +1,14 @@
 import React from "react";
 import {Route, Routes, Navigate} from 'react-router-dom';
-import PortfolioPage from "./pages/PortfolioPage";
-import AddPortfolioPage from "./pages/AddPortfolioPage";
+import {PortfolioPage} from "./pages/portfolio/PortfolioPage";
+import AddPortfolioPage from "./pages/portfolio/AddPortfolioPage";
 import {ProductPage} from "./pages/ProductPage/ProductPage";
 import Box from "@mui/material/Box";
 import {NotFound} from "./components/NotFound";
 import {HomePage} from "./pages/HomePage";
 import {ProductListPage} from "./pages/ProductListPage/ProductListPage";
-import {PortfolioListPage} from "./pages/PortfolioListPage";
+import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
+import {StockPage} from "./pages/StockPage";
 
 export const RouterRoot = () => {
     return (
@@ -23,6 +24,9 @@ export const RouterRoot = () => {
                     <Route index element={<ProductListPage/>}/>
                     <Route path="id/:id" element={<ProductPage/>} />
                     <Route path=":metal" element={<ProductListPage/>}/>
+                </Route>
+                <Route path = "stock">
+                    <Route index element={<StockPage/>}/>
                 </Route>
                 <Route path="404" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="404" />} />
