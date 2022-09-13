@@ -131,7 +131,7 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <img src={getDealerImage(params.row.latestPrices.sort(compareByPrice)[0]?.dealer)} alt='' />
+      <img src={getDealerImage(params.row.bestPrice!.dealer)} alt='' />
     )
   },
   {
@@ -178,7 +178,7 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <img src={getDealerImage(params.row.latestPrices.sort(compareByRedemption)[0]?.dealer)} alt=''/>
+      <img src={getDealerImage(params.row.bestRedemption?.dealer)} alt=''/>
     )
   },
   {
