@@ -18,4 +18,8 @@ export const scrapByParams = (
     });
 }
 
+export const scrapProductById = (productId: number) => {
+    return api.get("scrap/product/" + productId);
+}
+
 

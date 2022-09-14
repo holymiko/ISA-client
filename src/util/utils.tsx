@@ -16,3 +16,10 @@ export function priceWithSpaces(x: number): string {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return parts.join(".");
 }
+
+export function capitalizeFirstLetter(string: string|undefined): string{
+    if(string === undefined) {
+        return "";
+    }
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

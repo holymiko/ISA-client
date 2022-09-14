@@ -2,9 +2,6 @@ import React, { useEffect, useState} from 'react';
 import {getPortfolios, scrapByPortfolio} from '../../services/PortfolioService';
 import { getTextYield } from '../../util/utils';
 import {PageTitle} from '../../components/PageTitle';
-import AddIcon from '@mui/icons-material/Add';
-import {ButtonBlue} from "../../components/ButtonBlue";
-import {BoxRow} from "../../components/BoxRow";
 import {Link, useNavigate} from "react-router-dom";
 
 export const PortfolioListPage = () =>  {

@@ -11,7 +11,12 @@ import {Price} from "../../types/Price";
 import moment from "moment/moment";
 import {Dealer} from "../../types/dealer";
 import {BoxChart} from "../../components/BoxChart";
-
+import {SubTitle} from "../../components/SubTitle";
+import {BoxRow} from "../../components/BoxRow";
+import {Button} from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import {scrapByParams, scrapProductById} from "../../services/ScrapService";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 const setData = (prices: Price[]) => {
     return prices.map((price) => {
@@ -75,9 +80,8 @@ export const ProductPage = () => {
 
     const productId: number = getIdFromUrl(window.location.pathname);
 
-    useEffect(() => {
-        // setLoading(true)
-
+    const getProduct = () => {
+        setLoading(true)
         getProductById(productId).then((res) => {
             // setTotalItems(res.totalItems)
             setProduct(res);
@@ -90,13 +94,36 @@ export const ProductPage = () => {
             )
             setLoading(false);
         });
+    }
+
+    useEffect(() => {
+        getProduct();
     }, [productId]);
 
     return (
         <Box>
             <PageTitle>{product?.name}</PageTitle>
 
-            <BoxChart sx={{pb: "1rem", pl: "1rem"}}>
+            <BoxRow sx={{justifyContent: 'flex-end', mb: "0.5rem"}}>
+                <Button
+                    onClick = {() => getProduct()}
+                    startIcon={<RefreshIcon/>}
+                    disabled={loading}
+                    variant="contained"
+                >
+                    Refresh prices
+                </Button>
+                <Button
+                    onClick = {() => scrapProductById(productId)}
+                    startIcon={<PlayCircleOutlineIcon/>}
+                    variant="contained"
+                >
+                    Scrap product prices
+                </Button>
+            </BoxRow>
+
+            <SubTitle>Price chart</SubTitle>
+            <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
                 <LineChart width={1450} height={500} data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="dateTime" />
@@ -110,7 +137,8 @@ export const ProductPage = () => {
                 </LineChart>
             </BoxChart>
 
-            <BoxChart sx={{pb: "1rem", pl: "1rem"}}>
+            <SubTitle>Price & Buyout chart</SubTitle>
+            <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
                 <AreaChart width={1450} height={500} data={areaChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="dateTime" />
@@ -124,7 +152,8 @@ export const ProductPage = () => {
                 </AreaChart>
             </BoxChart>
 
-            <BoxChart>
+            <SubTitle>History table</SubTitle>
+            <BoxChart sx={{mb: "4rem"}}>
                 <Box sx={{ height: 527, width: '100%'}}>
                     <DataGrid
                       sx={{
@@ -160,7 +189,7 @@ export const ProductPage = () => {
             </Box>
             </BoxChart>
 
-            <Box sx={{mt: "1rem"}}>Links:
+            <Box sx={{mt: "1rem"}}>References:
                 <Box sx={{ml: "1rem"}}>
                     {product?.links?.map(
                         link =>

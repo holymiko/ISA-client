@@ -48,14 +48,6 @@ export const SidebarISA = (props: any) => {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
-            <ListItem key={'Stock'} disablePadding>
-              <ListItemButton onClick={() => navigate('/stock')}>
-                <ListItemIcon>
-                  <img src={stockIcon} alt="" width="35"/>
-                </ListItemIcon>
-                <ListItemText primary={'Stock'}/>
-              </ListItemButton>
-            </ListItem>
             <ListItem key={'Gold'} disablePadding>
               <ListItemButton onClick={() => navigate('/product/gold')}>
                 <ListItemIcon>
@@ -86,6 +78,14 @@ export const SidebarISA = (props: any) => {
                   <img src={helmet} alt="" width="40"/>
                 </ListItemIcon>
                 <ListItemText primary={'Palladium'} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem key={'Stock'} disablePadding>
+              <ListItemButton onClick={() => navigate('/stock')}>
+                <ListItemIcon>
+                  <img src={stockIcon} alt="" width="35"/>
+                </ListItemIcon>
+                <ListItemText primary={'Stock'}/>
               </ListItemButton>
             </ListItem>
             <ListItem key={'Portfolios'} disablePadding>

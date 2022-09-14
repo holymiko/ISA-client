@@ -4,7 +4,7 @@ import {PortfolioPage} from "./pages/portfolio/PortfolioPage";
 import AddPortfolioPage from "./pages/portfolio/AddPortfolioPage";
 import {ProductPage} from "./pages/ProductPage/ProductPage";
 import Box from "@mui/material/Box";
-import {NotFound} from "./components/NotFound";
+import {NotFoundPage} from "./pages/NotFoundPage";
 import {HomePage} from "./pages/HomePage";
 import {ProductListPage} from "./pages/ProductListPage/ProductListPage";
 import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
@@ -28,7 +28,7 @@ export const RouterRoot = () => {
                 <Route path = "stock">
                     <Route index element={<StockPage/>}/>
                 </Route>
-                <Route path="404" element={<NotFound />} />
+                <Route path="404" element={<NotFoundPage />} />
                 <Route path="*" element={<Navigate to="404" />} />
             </Routes>
         </Box>

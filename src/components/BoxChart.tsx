@@ -10,7 +10,6 @@ export const BoxChart = (props: BoxProps) => {
     return (
         <Box
             sx={{
-                my: "3rem",
                 p: "2rem",
                 borderRadius: 3,
                 backgroundColor: "whitesmoke",
