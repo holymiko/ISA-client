@@ -15,11 +15,12 @@ import {SubTitle} from "../../components/SubTitle";
 import {BoxRow} from "../../components/BoxRow";
 import {Button} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import {scrapByParams, scrapProductById} from "../../services/ScrapService";
+import {scrapProductById} from "../../services/ScrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 const setData = (prices: Price[]) => {
     return prices.map((price) => {
+        // Exclude zero
         if(price.price === 0) return;
         switch (price.dealer) {
             case Dealer.BESSERGOLD_CZ: return {

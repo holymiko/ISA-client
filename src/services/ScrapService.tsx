@@ -10,9 +10,7 @@ export const scrapByParams = (
 ) => {
     return api.get("scrap/param", {
         params: {
-            'isRedemption': isRedemption,
             'metal': metal?.toUpperCase(),
-            'dealer': dealer?.toUpperCase(),
             'form': form?.toUpperCase()
         },
     });

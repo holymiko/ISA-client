@@ -1,17 +1,28 @@
 import {BoxColumn} from "../components/BoxColumn";
-import {Link} from "react-router-dom";
-import {PageTitle} from "../components/PageTitle";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import {useNavigate} from "react-router-dom";
 
 export const HomePage = () => {
+    const navigate = useNavigate();
     return (
-        <BoxColumn sx={{ height: '31rem', pt: '3rem'}}>
-            <PageTitle>
-                <Link to={"/product/all"}>Products</Link>
-            </PageTitle>
-
-            <PageTitle>
-                <Link to={"/portfolio"}>Portfolios</Link>
-            </PageTitle>
+        <BoxColumn sx={{ height: '31rem', gap: "3rem"}}>
+            <Typography
+                variant={"h4"}
+                sx={{cursor: "pointer"}}
+                onClick={() =>
+                    navigate('/product/all')
+                }>
+                Products
+            </Typography>
+            <Typography
+                variant={"h4"}
+                sx={{cursor: "pointer"}}
+                onClick={() =>
+                    navigate('/portfolio')
+                }>
+                Portfolios
+            </Typography>
         </BoxColumn>
     );
 }
