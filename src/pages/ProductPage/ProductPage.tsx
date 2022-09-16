@@ -18,53 +18,88 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import {scrapProductById} from "../../services/ScrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
-const setData = (prices: Price[]) => {
-    return prices.map((price) => {
-        // Exclude zero
-        if(price.price === 0) return;
-        switch (price.dealer) {
-            case Dealer.BESSERGOLD_CZ: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Bessergold": price.price
-            }
-            case Dealer.BESSERGOLD_DE: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Bessergold DE": price.price
-            }
-            case Dealer.ZLATAKY: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Zlataky": price.price
-            }
-            case Dealer.SILVERUM: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Silverum": price.price
-            }
-        }
-    })
+interface lineChartData {
+    dateTime: string;
+    Bessergold?: number;
+    "Bessergold.de"?: number;
+    Zlataky?: number;
+    Silverum?: number;
 }
 
-const setData2 = (prices: Price[]) => {
-    return prices.map((price) => {
+interface areaChartData {
+    dateTime: string;
+    Bessergold?: [number, number];
+    "Bessergold.de"?: [number, number];
+    Zlataky?: [number, number];
+    Silverum?: [number, number];
+}
+
+const sortedRoundedDeepCopy = (prices: Price[]): Price[] => {
+    // Deep copy
+    let deepPrices: Price[] = JSON.parse(JSON.stringify(prices));
+    // Sort from latest => newest
+    deepPrices = deepPrices.sort(
+        (a: Price, b: Price) => moment(a.priceDateTime).isBefore(b.priceDateTime) ? -1 : 1
+    );
+    // Round dateTime on minutes
+    deepPrices.forEach((p: Price) => {
+        p.priceDateTime = new Date(new Date(p.priceDateTime).setSeconds(0, 0));
+    });
+    return deepPrices;
+}
+
+const getLineChartData = (prices: Price[]) => {
+    const result: lineChartData[] = [];
+    const deepPrices: Price[] = sortedRoundedDeepCopy(prices);
+    let chartData: lineChartData = {dateTime: moment(deepPrices[0].priceDateTime).format('h:mm a, DD.MM.YYYY')}
+
+    for (let i = 0; i < deepPrices.length; i++) {
+        const price: Price = deepPrices[i];
+        const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
+        // Exclude zero
         if(price.price === 0) return;
-        switch (price.dealer) {
-            case Dealer.BESSERGOLD_CZ: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Bessergold": [price.price, price.redemption]
-            }
-            case Dealer.BESSERGOLD_DE: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Bessergold DE": [price.price, price.redemption]
-            }
-            case Dealer.ZLATAKY: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Zlataky": [price.price, price.redemption]
-            }
-            case Dealer.SILVERUM: return {
-                "dateTime": moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY'),
-                "Silverum": [price.price, price.redemption]
-            }
+        // New price dateTime found
+        if(chartData.dateTime !== priceMoment) {
+            result.push(chartData);
+            chartData = {dateTime: priceMoment};
         }
-    })
+
+        switch (price.dealer) {
+            case Dealer.BESSERGOLD_CZ: {chartData.Bessergold = price.price; break;}
+            case Dealer.BESSERGOLD_DE: {chartData["Bessergold.de"] = price.price; break;}
+            case Dealer.ZLATAKY: {chartData.Zlataky = price.price; break;}
+            case Dealer.SILVERUM: {chartData.Silverum = price.price; break;}
+        }
+    }
+    result.push(chartData);
+    return result;
+}
+
+const getAreaChartData = (prices: Price[]) => {
+    const result: areaChartData[] = [];
+    const deepPrices: Price[] = sortedRoundedDeepCopy(prices);
+    let chartData: areaChartData = {dateTime: moment(deepPrices[0].priceDateTime).format('h:mm a, DD.MM.YYYY')}
+
+    for (let i = 0; i < deepPrices.length; i++) {
+        const price: Price = deepPrices[i];
+        const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
+        // Exclude zero
+        if(price.price === 0) return;
+        // New price dateTime found
+        if(chartData.dateTime !== priceMoment) {
+            result.push(chartData);
+            chartData = {dateTime: priceMoment};
+        }
+
+        switch (price.dealer) {
+            case Dealer.BESSERGOLD_CZ: {chartData.Bessergold = [price.price, price.redemption]; break;}
+            case Dealer.BESSERGOLD_DE: {chartData["Bessergold.de"] = [price.price, price.redemption]; break;}
+            case Dealer.ZLATAKY: {chartData.Zlataky = [price.price, price.redemption]; break;}
+            case Dealer.SILVERUM: {chartData.Silverum = [price.price, price.redemption]; break;}
+        }
+    }
+    result.push(chartData);
+    return result;
 }
 
 export const ProductPage = () => {
@@ -88,18 +123,18 @@ export const ProductPage = () => {
             setProduct(res);
             setRows(res.prices!);
             setChartData(
-                setData(res.prices!)
+                getLineChartData(res.prices!)
             )
             setAreaChartData(
-                setData2(res.prices!)
+                getAreaChartData(res.prices!)
             )
             setLoading(false);
-        });
+        })//.catch(e => setLoading(false));
     }
 
     useEffect(() => {
         getProduct();
-    }, [productId]);
+    }, []);
 
     return (
         <Box>
@@ -132,7 +167,7 @@ export const ProductPage = () => {
                     <Tooltip />
                     <Legend />
                     <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold" stroke="red" />
-                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold DE" stroke="green" />
+                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold.de" stroke="green" />
                     <Line connectNulls strokeWidth={4} type="monotone" dataKey="Zlataky" stroke="orange" />
                     <Line connectNulls strokeWidth={4} type="monotone" dataKey="Silverum" stroke="blue" />
                 </LineChart>
@@ -147,7 +182,7 @@ export const ProductPage = () => {
                     <Tooltip />
                     <Legend />
                     <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold" stroke="red" />
-                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold DE" stroke="green" />
+                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold.de" stroke="green" />
                     <Area connectNulls strokeWidth={4} type="monotone" dataKey="Zlataky" stroke="orange" />
                     <Area connectNulls strokeWidth={4} type="monotone" dataKey="Silverum" stroke="blue" />
                 </AreaChart>
