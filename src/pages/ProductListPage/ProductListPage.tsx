@@ -8,7 +8,7 @@ import {productListColumns} from "./productListColumns";
 import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
-import {scrapByParams} from "../../services/ScrapService";
+import {scrapByMetalInSync} from "../../services/ScrapService";
 import {capitalizeFirstLetter} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
@@ -114,7 +114,7 @@ export const ProductListPage = () =>  {
                     Refresh products
                 </Button>
                 <Button
-                    onClick = {() => scrapByParams(undefined, undefined, metal, undefined)}
+                    onClick = {() => scrapByMetalInSync(metal)}
                     startIcon={<PlayCircleOutlineIcon/>}
                     variant="contained"
                 >
@@ -150,7 +150,7 @@ export const ProductListPage = () =>  {
                     onChange={handleMaxPriceChange}
                 />
 
-                {/* TODO */}
+                {/* TODO Finish impl*/}
                 {/*<FormControl component="fieldset" variant="standard">*/}
                 {/*    <FormLabel  component="legend">Form</FormLabel>*/}
                 {/*    <FormGroup row={true}>*/}

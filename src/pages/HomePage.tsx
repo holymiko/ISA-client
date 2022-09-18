@@ -11,7 +11,7 @@ export const HomePage = () => {
                 variant={"h4"}
                 sx={{cursor: "pointer"}}
                 onClick={() =>
-                    navigate('/product/all')
+                    navigate('/product/gold')
                 }>
                 Products
             </Typography>
