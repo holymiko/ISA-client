@@ -57,7 +57,7 @@ const getLineChartData = (prices: Price[]) => {
         const price: Price = deepPrices[i];
         const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
         // Exclude zero
-        if(price.price === 0) return;
+        if(price.price === 0) continue;
         // New price dateTime found
         if(chartData.dateTime !== priceMoment) {
             result.push(chartData);
@@ -84,7 +84,7 @@ const getAreaChartData = (prices: Price[]) => {
         const price: Price = deepPrices[i];
         const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
         // Exclude zero
-        if(price.price === 0) return;
+        if(price.price === 0) continue;
         // New price dateTime found
         if(chartData.dateTime !== priceMoment) {
             result.push(chartData);
