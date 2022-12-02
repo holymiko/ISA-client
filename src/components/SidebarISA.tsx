@@ -32,7 +32,7 @@ export const SidebarISA = (props: any) => {
               onClick={() =>
                 navigate('/')
             }>
-              Investment scraper
+              Invest Scraper
             </Typography>
           </Toolbar>
         </Box>
