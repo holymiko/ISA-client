@@ -1,3 +1,4 @@
+import {Roles} from "../enums/roles";
 
 export function getTextYield(params: number): string {
     return params >= 1 ?
@@ -23,3 +24,70 @@ export function capitalizeFirstLetter(string: string|undefined): string{
     }
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+
+export const excludeNumbers = (value: string): string => {
+    return value.replace(/\d/g, '');
+}
+
+/**
+ * Filters everything expect Unicode + whitespace + ,.'-
+ * @param value
+ */
+export const filterNonLetters = (value: string): string => {
+    return value.replace(/[^\p{L}\s,.'-]+/gu, '');
+}
+
+
+
+export const isEmpty = (value: string|null|undefined): boolean => {
+    return value === '' || value === null || value === undefined;
+}
+
+export const filterPhoneNonDigit = (phoneVar: string): string => {
+    phoneVar = phoneVar.trim();
+    phoneVar = phoneVar.replaceAll(' ', '');
+    phoneVar = phoneVar.replaceAll('(', '');
+    phoneVar = phoneVar.replaceAll(')', '');
+    phoneVar = phoneVar.replaceAll('+', '');
+    return phoneVar;
+}
+
+/**
+ * Returns string keys of Subordinate roles
+ * @param roleIndex
+ */
+export const getSubordinateRoles = (roleIndex: number): string[] => {
+    const result: string[] = [];
+    for (let i = 0; i < roleIndex; i++) {
+        result.push(Object.keys(Roles)[i])
+    }
+    return result;
+}
+
+export const getIndexOfHighestRole = (roles: Roles[]): number => {
+    let index = 0;
+    roles.forEach(role => {
+        const i = Object.keys(Roles).indexOf(role as unknown as Roles);
+        if(i > index) {
+            index = i;
+        }
+    })
+    return index;
+}
+
+export const getHighestRole = (roles: Roles[]): Roles => {
+    return Object.values(Roles)[getIndexOfHighestRole(roles)];
+}
+
+export const isSuperAdmin = (roles: Roles[]): boolean => {
+    return getIndexOfHighestRole(roles) === Object.values(Roles).indexOf(Roles.SUPERADMIN);
+}
+
+export const logOutMemClean = () => {
+    // TODO Unite the locations to one & Test
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("user")
+}
+

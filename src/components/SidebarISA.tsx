@@ -96,6 +96,22 @@ export const SidebarISA = (props: any) => {
                 <ListItemText primary={'Portfolio'} />
               </ListItemButton>
             </ListItem>
+            <ListItem key={'Add user'} disablePadding>
+              <ListItemButton onClick={() => {navigate('/user/add')}}>
+                <ListItemIcon>
+                  <img src={helmet} alt="" width="40"/>
+                </ListItemIcon>
+                <ListItemText primary={'Add user'} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem key={'Users'} disablePadding>
+              <ListItemButton onClick={() => {navigate('/user')}}>
+                <ListItemIcon>
+                  <img src={helmet} alt="" width="40"/>
+                </ListItemIcon>
+                <ListItemText primary={'Users'} />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Box>
       </Drawer>

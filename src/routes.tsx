@@ -9,6 +9,7 @@ import {HomePage} from "./pages/HomePage";
 import {ProductListPage} from "./pages/ProductListPage/ProductListPage";
 import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
 import {StockPage} from "./pages/StockPage";
+import {AddUser} from "./pages/AddUserPage/AddUser";
 
 export const RouterRoot = () => {
     return (
@@ -24,6 +25,11 @@ export const RouterRoot = () => {
                     <Route index element={<ProductListPage/>}/>
                     <Route path="id/:id" element={<ProductPage/>} />
                     <Route path=":metal" element={<ProductListPage/>}/>
+                </Route>
+                <Route path = "user">
+                    {/*<Route index element={<ProductListPage/>}/>*/}
+                    <Route path="add" element={<AddUser/>} />
+                    {/*<Route path=":metal" element={<ProductListPage/>}/>*/}
                 </Route>
                 <Route path = "stock">
                     <Route index element={<StockPage/>}/>
