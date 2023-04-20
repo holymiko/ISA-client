@@ -4,13 +4,13 @@ import {api} from "./api";
 
 export const getProductsAsDTO = (metal: string|undefined) => {
     if(metal === undefined || metal === 'all') {
-        return api.get("product/dto");
+        return api.get("product");
     }
-    return api.get("product/dto/metal/"+metal);
+    return api.get("product/metal/"+metal);
 }
 
 export const getProductById = async (productId: number): Promise<Product> => {
-    const { data } = await api.get<Product>('product/id/' + productId);
+    const { data } = await api.get<Product>('product/' + productId);
     return data;
 };
 
