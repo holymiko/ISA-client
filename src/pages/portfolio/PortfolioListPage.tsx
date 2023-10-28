@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
-import {getPortfolios, } from '../../services/portfolio';
-import {scrapByPortfolio} from '../../services/scrap'
+import {getPortfolios, } from '../../services/portfolioService';
+import {scrapByPortfolio} from '../../services/scrapService'
 import { getTextYield } from '../../util/utils';
 import {PageTitle} from '../../components/PageTitle';
 import {Link, useNavigate} from "react-router-dom";

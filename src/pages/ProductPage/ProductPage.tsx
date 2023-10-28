@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
-import {getProductById} from "../../services/product";
+import {getProductById} from "../../services/productService";
 import {getIdFromUrl} from "../../util/parse";
 import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
@@ -15,7 +15,7 @@ import {SubTitle} from "../../components/SubTitle";
 import {BoxRow} from "../../components/BoxRow";
 import {Button} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import {scrapProductById} from "../../services/scrap";
+import {scrapProductById} from "../../services/scrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 interface lineChartData {
