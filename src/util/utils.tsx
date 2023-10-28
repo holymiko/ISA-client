@@ -1,4 +1,4 @@
-import {Roles} from "../enums/roles";
+import {Role} from "../types/enums/role";
 
 export function getTextYield(params: number): string {
     return params >= 1 ?
@@ -60,15 +60,15 @@ export const filterPhoneNonDigit = (phoneVar: string): string => {
 export const getSubordinateRoles = (roleIndex: number): string[] => {
     const result: string[] = [];
     for (let i = 0; i < roleIndex; i++) {
-        result.push(Object.keys(Roles)[i])
+        result.push(Object.keys(Role)[i])
     }
     return result;
 }
 
-export const getIndexOfHighestRole = (roles: Roles[]): number => {
+export const getIndexOfHighestRole = (roles: Role[]): number => {
     let index = 0;
     roles.forEach(role => {
-        const i = Object.keys(Roles).indexOf(role as unknown as Roles);
+        const i = Object.keys(Role).indexOf(role as unknown as Role);
         if(i > index) {
             index = i;
         }
@@ -76,12 +76,12 @@ export const getIndexOfHighestRole = (roles: Roles[]): number => {
     return index;
 }
 
-export const getHighestRole = (roles: Roles[]): Roles => {
-    return Object.values(Roles)[getIndexOfHighestRole(roles)];
+export const getHighestRole = (roles: Role[]): Role => {
+    return Object.values(Role)[getIndexOfHighestRole(roles)];
 }
 
-export const isSuperAdmin = (roles: Roles[]): boolean => {
-    return getIndexOfHighestRole(roles) === Object.values(Roles).indexOf(Roles.SUPERADMIN);
+export const isSuperAdmin = (roles: Role[]): boolean => {
+    return getIndexOfHighestRole(roles) === Object.values(Role).indexOf(Role.SUPER_ADMIN);
 }
 
 export const logOutMemClean = () => {

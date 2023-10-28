@@ -7,7 +7,7 @@ export const getPortfolios = () => {
 //     return api.get( 'portfolio/dto/4/id/' + id);
 // }
 
-// // TODO Add type
-// export const createPortfolio = (portfolioCreateDto: any) => {
-//     return api.post( 'portfolio/', portfolioCreateDto);
-// }
+// TODO Add type
+export const createPortfolio = (portfolioCreateDto: any) => {
+    return api.post( 'portfolio/', portfolioCreateDto);
+}

@@ -14,6 +14,8 @@ import helmet from "../img/icon/helmetIcon2.png";
 import stockIcon from "../img/icon/stockIcon.png";
 import portfolioIcon from "../img/icon/portfolioIcon.png";
 import Typography from "@mui/material/Typography";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 const drawerWidth = 210;
 
@@ -99,7 +101,7 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Add user'} disablePadding>
               <ListItemButton onClick={() => {navigate('/user/add')}}>
                 <ListItemIcon>
-                  <img src={helmet} alt="" width="40"/>
+                  <PersonAddIcon fontSize="large"/>
                 </ListItemIcon>
                 <ListItemText primary={'Add user'} />
               </ListItemButton>
@@ -107,9 +109,9 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Users'} disablePadding>
               <ListItemButton onClick={() => {navigate('/user')}}>
                 <ListItemIcon>
-                  <img src={helmet} alt="" width="40"/>
+                  <PeopleAltIcon fontSize="large" sx={{pr:0.0, mr:0}}/>
                 </ListItemIcon>
-                <ListItemText primary={'Users'} />
+                <ListItemText primary={'Users'} sx={{pl:0.0, ml:0}} />
               </ListItemButton>
             </ListItem>
           </List>

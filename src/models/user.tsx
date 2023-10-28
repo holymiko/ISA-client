@@ -1,4 +1,4 @@
-import {Roles} from "../enums/roles";
+import {Role} from "../types/enums/role";
 
 export class UserCreateDto {
     account?: Account;
@@ -9,18 +9,20 @@ export class UserCreateDto {
     phoneNumber?:	string;
 }
 
-export class UserDto {
-    id?: number
-    email?:	string;
-    firstName?:	string;
-    lastName?:	string;
-    midName?:	string;
-    phoneNumber?:	string;
+export class PersonAccountDto {
+    id?: number;
+    account?: Account;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
 }
 
 export class Account {
+    id?: number;
+    role?:	Role;
     username?:	string;
-    password?:	string;
-    role?:	Roles;
+    personId?: number;
 }
 

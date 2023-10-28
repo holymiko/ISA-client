@@ -1,6 +1,6 @@
 import {Price} from "./Price";
-import {Metal} from "./metal";
-import {Form} from "./form";
+import {Metal} from "./enums/metal";
+import {Form} from "./enums/form";
 
 export interface Product {
   id: number;

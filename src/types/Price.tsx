@@ -1,4 +1,4 @@
-import {Dealer} from "./dealer";
+import {Dealer} from "./enums/dealer";
 
 export interface Price {
   id: number,

@@ -14,13 +14,9 @@ import {
   useTheme
 } from "@mui/material";
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {Roles} from "../../enums/roles";
+import {Role} from "../../types/enums/role";
 import {
-  capitalizeFirstLetter,
   filterNonLetters,
-  filterPhoneNonDigit,
-  getIndexOfHighestRole,
-  getSubordinateRoles,
   isEmpty,
   isSuperAdmin, logOutMemClean
 } from "../../util/utils";
@@ -30,12 +26,11 @@ import {FormPassword} from "../../components/FormPassword";
 import {useNavigate} from "react-router-dom";
 import {SnackbarISA} from "../../components/SnackbarISA";
 import {ButtonISA} from "../../components/ButtonISA";
-import {UserDto} from "../../models/user";
+import {PersonAccountDto} from "../../models/user";
 import {PageTitle} from "../../components/PageTitle";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
-const PHONE_NUMBER_MIN_DIGIT_LENGTH = 6;
 
 const MenuProps = {
   PaperProps: {
@@ -98,7 +93,7 @@ export const AddUser = () => {
   const [tenantDisabled, setTenantDisabled] = useState<boolean>(false);
   const [tenantIdNameMap, setTenantIdNameMap] = useState<Map<number, string>>();
   const [facilityIdNameMap, setFacilityIdNameMap] = useState<Map<number, string>>();
-  const [currentUser, setCurrentUser] = useState<UserDto>();
+  const [currentUser, setCurrentUser] = useState<PersonAccountDto>();
   const [rolesForSelect, setRolesForSelect] = useState<string[]>([])
 
   // Snack bar hooks - used to show result of BE requests
@@ -360,13 +355,13 @@ export const AddUser = () => {
                   input={<OutlinedInput label="Role" />}
                   MenuProps={MenuProps}
               >
-                {(rolesForSelect as Array<keyof typeof Roles>).map((roleKey) => ([
+                {(rolesForSelect as Array<keyof typeof Role>).map((roleKey) => ([
                       <MenuItem
                           key={roleKey}
                           value={roleKey}
                           style={getStyles(roleKey, roles, theme)}
                       >
-                        {Roles[roleKey]}
+                        {Role[roleKey]}
                       </MenuItem>
                     ]
                 ))}

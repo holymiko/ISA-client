@@ -9,7 +9,7 @@ import {productColumns} from "./productColumns";
 import {CartesianGrid, Legend, Line, Tooltip, XAxis, YAxis, LineChart, AreaChart, Area} from "recharts";
 import {Price} from "../../types/Price";
 import moment from "moment/moment";
-import {Dealer} from "../../types/dealer";
+import {Dealer} from "../../types/enums/dealer";
 import {BoxChart} from "../../components/BoxChart";
 import {SubTitle} from "../../components/SubTitle";
 import {BoxRow} from "../../components/BoxRow";

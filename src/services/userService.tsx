@@ -1,22 +1,21 @@
 import {api} from "./api";
-import {UserCreateDto, UserDto} from "../models/user";
+import {UserCreateDto, PersonAccountDto} from "../models/user";
 
-const version = process.env.REACT_APP_VERSION_URL;
 
-export const getUserList = async (): Promise<UserDto[]> => {
-  const { data } = await api.get<UserDto[]>(version + '/user/list');
+export const getUserList = async (): Promise<PersonAccountDto[]> => {
+  const { data } = await api.get<PersonAccountDto[]>('/person');
   return data;
 };
 
-export const getCurrentUser = async (): Promise<UserDto> => {
-  const { data } = await api.get<UserDto>(version + '/user/');
+export const getCurrentUser = async (): Promise<PersonAccountDto> => {
+  const { data } = await api.get<PersonAccountDto>('/person/me');
   return data;
 }
 
 export const createUser = async (username: string, user: UserCreateDto): Promise<any> => {
-  return await api.post<UserCreateDto>(version + '/user/' + username, user);
+  return await api.post<UserCreateDto>('/user/' + username, user);
 }
 
 export const deleteUser = async (id: number): Promise<null> => {
-  return await api.delete(version + '/user/' + id);
+  return await api.delete('/user/' + id);
 }

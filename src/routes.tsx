@@ -2,14 +2,15 @@ import React from "react";
 import {Route, Routes, Navigate} from 'react-router-dom';
 import {PortfolioPage} from "./pages/portfolio/PortfolioPage";
 import AddPortfolioPage from "./pages/portfolio/AddPortfolioPage";
-import {ProductPage} from "./pages/ProductPage/ProductPage";
+import {ProductPage} from "./pages/product/ProductPage";
 import Box from "@mui/material/Box";
 import {NotFoundPage} from "./pages/NotFoundPage";
 import {HomePage} from "./pages/HomePage";
-import {ProductListPage} from "./pages/ProductListPage/ProductListPage";
+import {ProductListPage} from "./pages/product-list/ProductListPage";
 import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
 import {StockPage} from "./pages/StockPage";
-import {AddUser} from "./pages/AddUserPage/AddUser";
+import {AddUser} from "./pages/user-add/AddUser";
+import {UserListPage} from "./pages/user-list/UserListPage";
 
 export const RouterRoot = () => {
     return (
@@ -27,9 +28,9 @@ export const RouterRoot = () => {
                     <Route path=":metal" element={<ProductListPage/>}/>
                 </Route>
                 <Route path = "user">
-                    {/*<Route index element={<ProductListPage/>}/>*/}
+                    <Route index element={<UserListPage/>}/>
                     <Route path="add" element={<AddUser/>} />
-                    {/*<Route path=":metal" element={<ProductListPage/>}/>*/}
+                    {/*<Route path=":metal" element={<UserListPage/>}/>*/}
                 </Route>
                 <Route path = "stock">
                     <Route index element={<StockPage/>}/>
