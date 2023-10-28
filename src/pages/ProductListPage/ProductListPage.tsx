@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {BoxRow} from "../../components/BoxRow";
 import {PageTitle} from "../../components/PageTitle";
-import {getProductsAsDTO} from "../../services/ProductService";
+import {getProductsAsDTO} from "../../services/product";
 import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
 import {productListColumns} from "./productListColumns";
 import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
-import {scrapByMetalInSync} from "../../services/ScrapService";
+import {scrapByMetalInSync} from "../../services/scrap";
 import {capitalizeFirstLetter} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
