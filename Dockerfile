@@ -1,12 +1,12 @@
 FROM node:14
 WORKDIR /app
 COPY package.json .
-COPY yarn.lock .
+# COPY yarn.lock .
 COPY tsconfig.json . 
 COPY src ./src
 COPY public ./public
 
-RUN yarn install
+RUN yarn install --production --ignore-engines
 RUN yarn build
 RUN yarn global add serve
 
