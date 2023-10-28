@@ -3,7 +3,8 @@ import {api} from "./api";
 export const scrapByMetalInSync = (
   metal: string|undefined
 ) => {
-    return api.post("scrap/param", {
+    return api.post("scrap/param", {},
+        {
         params: {
             'metal': metal?.toUpperCase()
         },
