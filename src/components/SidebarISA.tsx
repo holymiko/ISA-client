@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
-const drawerWidth = 210;
+const drawerWidth = 190;
 
 export const SidebarISA = (props: any) => {
   const navigate = useNavigate();
@@ -82,22 +82,6 @@ export const SidebarISA = (props: any) => {
                 <ListItemText primary={'Palladium'} />
               </ListItemButton>
             </ListItem>
-            <ListItem key={'Stock'} disablePadding>
-              <ListItemButton onClick={() => navigate('/stock')}>
-                <ListItemIcon>
-                  <img src={stockIcon} alt="" width="35"/>
-                </ListItemIcon>
-                <ListItemText primary={'Stock'}/>
-              </ListItemButton>
-            </ListItem>
-            <ListItem key={'Portfolios'} disablePadding>
-              <ListItemButton onClick={() => {navigate('/portfolio')}}>
-                <ListItemIcon>
-                  <img src={portfolioIcon} alt="" width="35"/>
-                </ListItemIcon>
-                <ListItemText primary={'Portfolio'} />
-              </ListItemButton>
-            </ListItem>
             <ListItem key={'Add user'} disablePadding>
               <ListItemButton onClick={() => {navigate('/user/add')}}>
                 <ListItemIcon>
@@ -114,13 +98,28 @@ export const SidebarISA = (props: any) => {
                 <ListItemText primary={'Users'} sx={{pl:0.0, ml:0}} />
               </ListItemButton>
             </ListItem>
+            <ListItem key={'Stock'} disablePadding>
+              <ListItemButton onClick={() => navigate('/stock')}>
+                <ListItemIcon>
+                  <img src={stockIcon} alt="" width="35"/>
+                </ListItemIcon>
+                <ListItemText primary={'Stock'}/>
+              </ListItemButton>
+            </ListItem>
+            <ListItem key={'Portfolios'} disablePadding>
+              <ListItemButton onClick={() => {navigate('/portfolio')}}>
+                <ListItemIcon>
+                  <img src={portfolioIcon} alt="" width="35"/>
+                </ListItemIcon>
+                <ListItemText primary={'Portfolio'} />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Box>
       </Drawer>
       <Box
-        width='100%'
         display='flex'
-        sx={{mr: 2, mt: 2}}>
+        sx={{mr: 2, mt: 2, width: 1}}>
         {props.children}
       </Box>
     </Box>

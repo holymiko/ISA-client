@@ -1,58 +1,22 @@
 import Box from "@mui/material/Box";
-import {
-  AlertColor,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Theme,
-  Typography,
-  useTheme
-} from "@mui/material";
+import {AlertColor, Checkbox, FormControlLabel, SelectChangeEvent, TextField, Typography} from "@mui/material";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Role} from "../../types/enums/role";
-import {
-  filterNonLetters,
-  isEmpty,
-  isSuperAdmin, logOutMemClean
-} from "../../util/utils";
+import {filterNonLetters, isEmpty, logOutMemClean} from "../../util/utils";
 import {MuiTelInput} from 'mui-tel-input';
 import {isValidEmailAddress, nameErrorMsg, passwordErrorMsg} from "./AddUserValidations";
 import {FormPassword} from "../../components/FormPassword";
 import {useNavigate} from "react-router-dom";
 import {SnackbarISA} from "../../components/SnackbarISA";
 import {ButtonISA} from "../../components/ButtonISA";
-import {PersonAccountDto} from "../../models/user";
+import {PersonAccountCreateDto, PersonAccountDto} from "../../models/user";
 import {PageTitle} from "../../components/PageTitle";
+import {createUser} from "../../services/userService";
+import {FormControlRoles} from "../../components/FormControlRoles";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 export const AddUser = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
   const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
   //// User inputs
   const [username, setUsername] = useState<string>('');
@@ -62,10 +26,8 @@ export const AddUser = () => {
   const [middleName, setMiddleName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('+32');
-  const [tenantId, setTenantId] = useState<string>('');
-  const [facilityId, setFacilityId] = useState<string>('');
-  const [roles, setRoles] = useState<string[]>([]);
+  const [phone, setPhone] = useState<string>('+420');
+  const [role, setRole] = useState<string>('');
 
   //// Dynamic error messages
   const [usernameHelperText, setUsernameHelperText] = useState<string>('');
@@ -82,17 +44,14 @@ export const AddUser = () => {
   //// Simple error indicators
   const hasConfirmPasswordError: boolean = wasSubmitted && password !== confirmPassword;
   const hasEmailError: boolean = wasSubmitted && !isValidEmailAddress(email);
-  const hasFacilityError: boolean = wasSubmitted && isEmpty(facilityId);
-  const hasRolesError: boolean = wasSubmitted && roles.length === 0;
+  const hasRoleError: boolean = wasSubmitted && isEmpty(role);
   const isSubmitDisabled = wasSubmitted && (hasUsernameError || hasPasswordError || hasConfirmPasswordError ||
-    hasFirstNameError || hasLastNameError || hasEmailError || hasFacilityError || hasRolesError);
+    hasFirstNameError || hasLastNameError || hasEmailError || hasRoleError);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
-  const [tenantDisabled, setTenantDisabled] = useState<boolean>(false);
-  const [tenantIdNameMap, setTenantIdNameMap] = useState<Map<number, string>>();
-  const [facilityIdNameMap, setFacilityIdNameMap] = useState<Map<number, string>>();
+  const [personVisible, setPersonVisible] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<PersonAccountDto>();
   const [rolesForSelect, setRolesForSelect] = useState<string[]>([])
 
@@ -216,53 +175,49 @@ export const AddUser = () => {
     setPhone(phone.trim());
 
     if(nameErrorMsg(firstName) !== '' || nameErrorMsg(lastName) !== '' || nameErrorMsg(username) !== '' ||
-      passwordErrorMsg(password) !== '' || password !== confirmPassword || !isValidEmailAddress(email) ||
-      isEmpty(facilityId) || roles.length === 0
+      passwordErrorMsg(password) !== '' || password !== confirmPassword || !isValidEmailAddress(email) || role.length === 0
     ) {
       return;
     }
 
-    // @ts-ignore
-    // const roleKeys: Roles[] = roles.map( x => Roles[x] );
+    const userCreateDto: PersonAccountCreateDto = {
+      account: {
+        // @ts-ignore
+        role: Role[role],
+        username: username,
+        password: password,
+      },
+      firstName: firstName,
+      lastName: lastName,
+      midName: middleName,
+      email: email,
+      phone: phone
+    }
 
-    // const userCreateDto: UserCreateDto = {
-    //   // password: password,
-    //   tenantId: Number(tenantId),
-    //   facilityId: Number(facilityId),
-    //   roles: roles,
-    //   profile: {
-    //     firstName: firstName,
-    //     lastName: lastName,
-    //     midName: middleName,
-    //     email: email,
-    //     phoneNumber: phone
-    //   },
-    // }
-
-    // createUser(username, userCreateDto).then(() => {
-    //   setSnackSeverity("success");
-    //   setSnackMsg("User has been created");
-    //   setIsSnackOpen(true);
-    // }).catch(status => {
-    //   switch (status) {
-    //     case 401: {
-    //       //logOutMemClean();
-    //       //<Navigate to={}
-    //       // alert('Log out')
-    //       break;
-    //     }
-    //     case 409: {
-    //       setHasUsernameError(true);
-    //       setUsernameHelperText('Username already exists. Change username')
-    //       break;
-    //     }
-    //     default: {
-    //       setSnackSeverity("warning");
-    //       setSnackMsg(`User hasn't been created. Error ${status}`)
-    //       setIsSnackOpen(true);
-    //     }
-    //   }
-    // })
+    createUser(userCreateDto).then(() => {
+      setSnackSeverity("success");
+      setSnackMsg("User has been created");
+      setIsSnackOpen(true);
+    }).catch(error => {
+      switch (error.response.status) {
+        case 401: {
+          //logOutMemClean();
+          //<Navigate to={}
+          // alert('Log out')
+          break;
+        }
+        case 409: {
+          setHasUsernameError(true);
+          setUsernameHelperText('Username already exists. Change username')
+          break;
+        }
+        default: {
+          setSnackSeverity("warning");
+          setSnackMsg(`User hasn't been created. Error ${error.response.status} ${error.response.data}`)
+          setIsSnackOpen(true);
+        }
+      }
+    })
   }
 
   //////////// Input handling ////////////////////////
@@ -297,12 +252,9 @@ export const AddUser = () => {
   const handleConfirmPassword = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setConfirmPassword(e.target.value.replaceAll(' ', ''));
   }
-  const handleRoles = (event: SelectChangeEvent<typeof roles>) => {
+  const handleRoles = (event: SelectChangeEvent<typeof role>) => {
     const {target: { value }} = event;
-    setRoles (
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    );
+    setRole(value);
   };
 
   return(
@@ -311,80 +263,69 @@ export const AddUser = () => {
         Add user
       </PageTitle>
 
-      {/*/////////////////// CREDENTIALS ///////////////////*/}
-      <Box sx={{ width: '1', gap: 1, display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h4">Credentials</Typography>
-        <Box sx={{ width: '1', gap: 1, my: 1, display: 'flex', flexDirection: 'inline-flex' }}>
-          <TextField
-            label="Username"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            error={hasUsernameError}
-            helperText={usernameHelperText}
-            sx={{minWidth: 270}}
-          />
-          <FormPassword
-            hasPasswordError={hasPasswordError}
-            handlePassword={handlePassword}
-            showPassword={showPassword}
-            setShowPassword={() => setShowPassword(!showPassword)}
-            inputLabel={"Password"}
-            password={password}
-            passwordHelperText={passwordHelperText}
-          />
-          <FormPassword
-            hasPasswordError={hasConfirmPasswordError}
-            handlePassword={handleConfirmPassword}
-            showPassword={showConfirmPassword}
-            setShowPassword={() => setShowConfirmPassword(!showConfirmPassword)}
-            inputLabel={"Confirm Password"}
-            password={confirmPassword}
-            passwordHelperText={(hasConfirmPasswordError ? 'Passwords doesn\'t match' : '')}
-          />
-        </Box>
-        {/*/////////////////// PROFILE ///////////////////*/}
-        <Typography variant="h4">Profile</Typography>
-        <Box sx={{ width: '1', gap: 1, my: 1, display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ width: '.7', gap: 1, my: 1}} >
-            <FormControl sx={{ minWidth: 548 }} error={hasRolesError}>
-              <InputLabel>Role</InputLabel>
-              <Select
-                  multiple
-                  value={roles}
-                  onChange={handleRoles}
-                  input={<OutlinedInput label="Role" />}
-                  MenuProps={MenuProps}
-              >
-                {(rolesForSelect as Array<keyof typeof Role>).map((roleKey) => ([
-                      <MenuItem
-                          key={roleKey}
-                          value={roleKey}
-                          style={getStyles(roleKey, roles, theme)}
-                      >
-                        {Role[roleKey]}
-                      </MenuItem>
-                    ]
-                ))}
-              </Select>
-              <FormHelperText>{hasRolesError ? 'At least one role has to be chosen' : ''}</FormHelperText>
-            </FormControl>
+
+      <Box sx={{ width: '1', gap: 1, mb: 0, display: 'flex', flexDirection: 'column' }}>
+        {/*/////////////////// ACCOUNT ///////////////////*/}
+        <Box sx={{ width: '1', gap: 0, mb: 2, display: 'flex', flexDirection: 'column' }}>
+          <Typography variant="h4">Account</Typography>
+          <Box sx={{ width: '1', gap: 1, my: 1, display: 'flex', flexDirection: 'inline-flex' }}>
+            <TextField
+              label="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+              error={hasUsernameError}
+              helperText={usernameHelperText}
+              sx={{minWidth: 281, width: 0.2}}
+            />
+            <FormControlRoles roles={role} hasRolesError={hasRoleError} handleRoles={handleRoles} />
           </Box>
-          <Box sx={{ width: '1', gap: 1, display: 'flex', flexDirection: 'inline-flex' }}>
+          <Box sx={{ width: '1', gap: 1, mt: 1, display: 'flex', flexDirection: 'inline-flex' }}>
+            <FormPassword
+              hasPasswordError={hasPasswordError}
+              handlePassword={handlePassword}
+              showPassword={showPassword}
+              setShowPassword={() => setShowPassword(!showPassword)}
+              inputLabel={"Password"}
+              password={password}
+              passwordHelperText={passwordHelperText}
+            />
+            <FormPassword
+              hasPasswordError={hasConfirmPasswordError}
+              handlePassword={handleConfirmPassword}
+              showPassword={showConfirmPassword}
+              setShowPassword={() => setShowConfirmPassword(!showConfirmPassword)}
+              inputLabel={"Confirm Password"}
+              password={confirmPassword}
+              passwordHelperText={(hasConfirmPasswordError ? 'Passwords doesn\'t match' : '')}
+            />
+          </Box>
+
+          {/* Checkbox */}
+          <FormControlLabel sx={{mx: 1}} label={"add Person to Account"} control={
+                <Checkbox
+                    checked={personVisible}
+                    onChange={() => setPersonVisible(!personVisible)}
+          />}/>
+        </Box>
+        {/*/////////////////// PERSON ///////////////////*/}
+        <Box sx={{ width: '1', gap: 0, my: 1, display: 'flex', flexDirection: 'column' }}>
+          <Typography variant="h4">Person</Typography>
+          <Box sx={{ width: '1', gap: 1, my: 1, display: 'flex', flexDirection: 'inline-flex' }}>
             <TextField
               label="First name"
               onChange={handleFirstName}
               value={firstName}
               error={hasFirstNameError}
               helperText={firstNameHelperText}
-              sx={{minWidth: 270}}
+              sx={{minWidth: 281, width: 0.2}}
             />
-            <TextField
-              label="Middle name"
-              type="text"
-              onChange={handleMiddleName}
-              value={middleName}
-              sx={{minWidth: 270}}
-            />
+            {/*<TextField*/}
+            {/*  label="Middle name"*/}
+            {/*  type="text"*/}
+            {/*  onChange={handleMiddleName}*/}
+            {/*  value={middleName}*/}
+            {/*  sx={{minWidth: 281, width: 0.2}}*/}
+            {/*/>*/}
             <TextField
               label="Last name"
               type="text"
@@ -392,10 +333,10 @@ export const AddUser = () => {
               value={lastName}
               error={hasLastNameError}
               helperText={lastNameHelperText}
-              sx={{minWidth: 270}}
+              sx={{minWidth: 281, width: 0.2}}
             />
           </Box>
-          <Box sx={{ width: '1', gap: 1, display: 'flex', flexDirection: 'inline-flex' }}>
+          <Box sx={{ width: '1', gap: 1, mt: 1, display: 'flex', flexDirection: 'inline-flex' }}>
             {/*TODO Test prefix behaviour*/}
             <MuiTelInput
               value={phone}
@@ -404,7 +345,7 @@ export const AddUser = () => {
               helperText={phoneHelperText}
               onChange={handlePhoneChange}
               variant="outlined"
-              sx={{ width: 270 }}
+              sx={{minWidth: 281, width: 0.2}}
             />
             <TextField
               label="Email"
@@ -413,7 +354,7 @@ export const AddUser = () => {
               value={email}
               error={hasEmailError}
               helperText={hasEmailError ? 'Email address is invalid' : ''}
-              sx={{minWidth: 270}}
+              sx={{minWidth: 281, width: 0.2}}
             />
           </Box>
         </Box>
@@ -423,7 +364,7 @@ export const AddUser = () => {
           variant='contained'
           onClick={handleSubmit}
           disabled={isSubmitDisabled}
-          sx={{mt: 1}}
+          sx={{mt: 1, width: 0.405, height: 50}}
         >
           Submit
         </ButtonISA>

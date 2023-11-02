@@ -17,7 +17,7 @@ export const FormPassword = (
   {hasPasswordError, setShowPassword, showPassword, handlePassword, inputLabel, password, passwordHelperText}: FormPasswordProps
 ) => {
   return (
-    <FormControl sx={{minWidth: 270}} variant="outlined" error={hasPasswordError}>
+    <FormControl sx={{minWidth: 281, width: 0.2}} variant="outlined" error={hasPasswordError}>
       <InputLabel>{inputLabel}</InputLabel>
       <OutlinedInput
         label={inputLabel}

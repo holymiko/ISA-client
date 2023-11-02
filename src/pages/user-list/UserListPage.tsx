@@ -38,7 +38,7 @@ export const UserListPage = () =>  {
                     disabled={loading}
                     variant="contained"
                 >
-                    Refresh products
+                    Refresh users
                 </Button>
             </BoxRow>
 

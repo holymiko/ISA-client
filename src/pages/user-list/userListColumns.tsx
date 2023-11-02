@@ -22,6 +22,7 @@ export const userListColumns: GridColDef[] = [
     field: 'username',
     headerName: 'User name',
     headerAlign: 'center',
+    align: 'center',
     minWidth: 200,
     maxWidth: 200,
     flex: 1,
@@ -65,8 +66,9 @@ export const userListColumns: GridColDef[] = [
     minWidth: 240,
     disableColumnMenu: true,
     flex: 1,
+    sortable: false,
     renderCell: (params: GridRenderCellParams<Product>) => (
-        <Box>
+        <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
           <KeyIcon />
           <LockResetIcon />
           <ClearIcon />

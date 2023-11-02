@@ -17,8 +17,8 @@ export const PageTitle = (props: TitleProps) => {
                     pb: "0.3rem",
                     pl: "1rem",
                 }}
-                variant='h4'
-                component='h4'
+                variant='h3'
+                component='h3'
             >
                 {props.children}
             </Typography>
