@@ -12,8 +12,8 @@ import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import ErrorIcon from '@mui/icons-material/Error';
 import {Price} from "../../types/Price";
 
-const freshnessMinuteLimit = 60;
-// TODO Freshness HERE
+const freshnessMinuteLimit = 180; // VPS is using UTC (-1h)
+
 const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean) => {
   const d = new Date();
   d.setMinutes(d.getMinutes()-freshnessMinuteLimit);

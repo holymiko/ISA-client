@@ -19,3 +19,7 @@ export const createUser = async (user: PersonAccountCreateDto): Promise<any> => 
 export const deleteUser = async (id: number): Promise<null> => {
   return await api.delete('person/' + id);
 }
+
+export const deleteAccount = async (id: number): Promise<null> => {
+  return await api.delete('account/' + id);
+}

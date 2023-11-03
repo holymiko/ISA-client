@@ -5,7 +5,9 @@ import KeyIcon from '@mui/icons-material/Key';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import {Product} from "../../types/Product";
 import Box from "@mui/material/Box";
-import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {deleteAccount} from "../../services/userService";
+import {IconButton, Tooltip} from "@mui/material";
 
 export const userListColumns: GridColDef[] = [
   {
@@ -69,9 +71,21 @@ export const userListColumns: GridColDef[] = [
     sortable: false,
     renderCell: (params: GridRenderCellParams<Product>) => (
         <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
-          <KeyIcon />
-          <LockResetIcon />
-          <ClearIcon />
+          <Tooltip title="Change password" >
+            <IconButton>
+              <KeyIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Reset password" >
+            <IconButton>
+              <LockResetIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete" >
+            <IconButton onClick={() => deleteAccount(params.row.account.id)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
     )
   },
