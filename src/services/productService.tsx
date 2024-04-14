@@ -1,5 +1,6 @@
 import {Product} from "../types/Product";
 import {api} from "./api";
+import {ProductDetail} from "../types/ProductDetail";
 
 
 export const getProductsAsDTO = async (
@@ -46,5 +47,30 @@ export const getProductsAsDTOOld = (metal: string|undefined) => {
 export const getProductById = async (productId: number): Promise<Product> => {
     const { data } = await api.get<Product>('product/' + productId);
     return data;
+};
+
+export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
+    const { data } = await api.get<ProductDetail>('product/' + productId, {
+        params: {
+            dto: 1
+        }
+    });
+    return data;
+};
+
+export const saveProductSeparately = async (productId: number, linkId: number): Promise<ProductDetail> => {
+    return await api.put<any, ProductDetail>('product/link', {
+        fromProductId: productId,
+        linkId: linkId,
+        toProductId: null
+    });
+};
+
+export const updateLinkReference = async (fromProductId: number, linkId: number, toProductId: number): Promise<ProductDetail> => {
+    return await api.put<any, ProductDetail>('product/link', {
+        fromProductId: fromProductId,
+        linkId: linkId,
+        toProductId: toProductId
+    });
 };
 

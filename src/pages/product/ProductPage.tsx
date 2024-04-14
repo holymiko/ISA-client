@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {DataGrid} from '@mui/x-data-grid';
-import {getProductById} from "../../services/productService";
+import {DataGrid, GridRenderCellParams} from '@mui/x-data-grid';
+import {getProductDetailById, saveProductSeparately} from "../../services/productService";
 import {getIdFromUrl} from "../../util/parse";
 import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
 import Box from "@mui/material/Box";
-import {productColumns} from "./productColumns";
+import {priceColumns} from "./priceColumns";
 import {CartesianGrid, Legend, Line, Tooltip, XAxis, YAxis, LineChart, AreaChart, Area} from "recharts";
 import {Price} from "../../types/Price";
 import moment from "moment/moment";
@@ -17,6 +17,9 @@ import {Button} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {scrapProductById} from "../../services/scrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import {ProductDetail} from "../../types/ProductDetail";
+import {LinkPrice} from "../../types/LinkPrice";
+import {ButtonISA} from "../../components/ButtonISA";
 
 interface lineChartData {
     dateTime: string;
@@ -105,8 +108,8 @@ const getAreaChartData = (prices: Price[]) => {
 export const ProductPage = () => {
 
     // Hooks declaration
-    const [rows, setRows] = useState<Price[]>([]);
-    const [product, setProduct] = useState<Product>();
+    const [priceRows, setPriceRows] = useState<Price[]>([]);
+    const [product, setProduct] = useState<ProductDetail>();
     const [loading, setLoading] = useState<boolean>(true);
     const [chartData, setChartData] = useState<any>([]);
     const [areaChartData, setAreaChartData] = useState<any>([]);
@@ -116,20 +119,43 @@ export const ProductPage = () => {
 
     const productId: number = getIdFromUrl(window.location.pathname);
 
+    const setHooks = (res: ProductDetail) => {
+        // setTotalItems(res.totalItems)
+        const prices: Price[] = res.prices!.flatMap((x) => {
+            const tmp = [];
+            for(const i of x.prices) {
+                tmp.push({
+                    ...i,
+                    dealer: x.dealer
+                })
+            }
+            return tmp;
+        });
+        setProduct(res);
+        setPriceRows(prices);
+        setChartData(
+            getLineChartData(prices)
+        )
+        setAreaChartData(
+            getAreaChartData(prices)
+        )
+        setLoading(false);
+    }
+
     const getProduct = () => {
         setLoading(true)
-        getProductById(productId).then((res) => {
-            // setTotalItems(res.totalItems)
-            setProduct(res);
-            setRows(res.prices!);
-            setChartData(
-                getLineChartData(res.prices!)
-            )
-            setAreaChartData(
-                getAreaChartData(res.prices!)
-            )
-            setLoading(false);
-        })//.catch(e => setLoading(false));
+        getProductDetailById(productId).then(
+            (res: ProductDetail) => setHooks(res)
+        )//.catch(e => setLoading(false));
+    }
+
+    const saveProductSeparatelyFce = (linkId: number) => {
+        setLoading(true)
+        saveProductSeparately(productId, linkId).then(
+            getProduct
+        ).catch(
+            e => setLoading(false)
+        );
     }
 
     useEffect(() => {
@@ -190,7 +216,7 @@ export const ProductPage = () => {
 
             <SubTitle>History table</SubTitle>
             <BoxChart sx={{mb: "4rem"}}>
-                <Box sx={{ height: 527, width: '100%'}}>
+                <Box sx={{height: 527, width: '100%'}}>
                     <DataGrid
                       sx={{
                           borderColor: "whitesmoke",
@@ -198,8 +224,8 @@ export const ProductPage = () => {
                               fontSize: 16,
                               fontWeight: 'bold'
                           }}}
-                      rows={rows}
-                      columns={productColumns}
+                      rows={priceRows}
+                      columns={priceColumns}
                       loading={loading}
                       initialState={{
                         sorting: {
@@ -219,22 +245,61 @@ export const ProductPage = () => {
                       //     Pagination: Pagination1,
                       // }}
                       // classes={{
-                      //     row: styles.rows
+                      //     row: styles.priceRows
                       // }}
                     />
-            </Box>
+                </Box>
             </BoxChart>
 
-            <Box sx={{mt: "1rem"}}>References:
-                <Box sx={{ml: "1rem"}}>
-                    {product?.links?.map(
-                        link =>
-                            <div>
-                                <a href={link}>{link}</a>
-                            </div>
-                    )}
+            <SubTitle>Sources</SubTitle>
+            <BoxChart sx={{mb: "4rem"}}>
+                <Box sx={{height: 527, width: '100%'}}>
+                    <DataGrid
+                        sx={{
+                            borderColor: "whitesmoke",
+                            "& .MuiDataGrid-columnHeaderTitle": {
+                                fontSize: 16,
+                                fontWeight: 'bold'
+                            }
+                        }}
+                        loading={loading}
+                        rows={product?.latestPrices?.length ? product?.latestPrices : []}
+                        columns={[
+                            {
+                                field: 'uri',
+                                headerName: 'URL',
+                                headerAlign: 'center',
+                                align: 'left',
+                                minWidth: 1000,
+                                maxWidth: 1000,
+                                flex: 1,
+                                renderCell: (params: GridRenderCellParams<LinkPrice>) => (
+                                    <div>
+                                        <a href={params.row.uri}>{params.row.uri}</a>
+                                    </div>
+                                )
+                            },
+                            {
+                                field: 'actions',
+                                headerName: 'Actions',
+                                headerAlign: 'center',
+                                align: 'center',
+                                minWidth: 240,
+                                disableColumnMenu: true,
+                                flex: 1,
+                                sortable: false,
+                                renderCell: (params: GridRenderCellParams<Product>) => (
+                                    <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
+                                        <ButtonISA onClick={() => saveProductSeparatelyFce(params.row.id)}>
+                                            save separately
+                                        </ButtonISA>
+                                    </Box>
+                                )
+                            },
+                        ]}
+                    />
                 </Box>
-            </Box>
+            </BoxChart>
         </Box>
     );
 }

@@ -5,7 +5,7 @@ import {getDealerImage} from "../../util/getImage";
 import moment from "moment/moment";
 import {priceWithSpaces} from "../../util/utils";
 
-export const productColumns: GridColDef[]  = [
+export const priceColumns: GridColDef[]  = [
   {
     field: 'dealer',
     headerName: 'Dealer',

@@ -361,7 +361,6 @@ export const AddUser = () => {
 
 
         <ButtonISA
-          variant='contained'
           onClick={handleSubmit}
           disabled={isSubmitDisabled}
           sx={{mt: 1, width: 0.405, height: 50}}
