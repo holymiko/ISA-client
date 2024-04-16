@@ -66,8 +66,18 @@ export const ProductListPage = () =>  {
 
     const getProducts = () => {
         setLoading(true)
-        getProductsAsDTO(metal).then((res) => {
-            const tmpProducts: Product[] = res.data;
+        getProductsAsDTO(
+            undefined,
+            undefined,
+            metal,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined
+        ).then((page) => {
+            const tmpProducts: Product[] = page.content;
             let tmpMaxPrice: number = 0;
             tmpProducts.forEach(
                 product => {

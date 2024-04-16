@@ -44,8 +44,18 @@ class AddPortfolioPage extends Component {
     }
 
     componentDidMount() {
-        getProductsAsDTO(undefined).then((res) => {
-            this.setState({products: res.data});
+        getProductsAsDTO(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined
+        ).then((res) => {
+            this.setState({products: res.data.content});
         });
     }
 
