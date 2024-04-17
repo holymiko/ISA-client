@@ -299,7 +299,7 @@ export const ProductPage = () => {
                                 sortable: false,
                                 renderCell: (params: GridRenderCellParams<Product>) => (
                                     <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
-                                        <ButtonISA onClick={() => saveProductSeparatelyFce(params.row.id)}>
+                                        <ButtonISA disabled={process.env.REACT_APP_PROFILE === 'prod'} onClick={() => saveProductSeparatelyFce(params.row.id)}>
                                             save separately
                                         </ButtonISA>
                                     </Box>
