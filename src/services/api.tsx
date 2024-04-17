@@ -1,10 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-// TODO Load this from .env
+// TODO Load this from .env. I tried, it didnt work in prod
 const BASE_URL = "http://67.223.117.163:8080/api/v2/";
 // const BASE_URL = "http://localhost:8080/api/v2/"
-
-const version = process.env.REACT_APP_VERSION_URL;
 
 
 class Http {
