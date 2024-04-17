@@ -20,6 +20,7 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import {ProductDetail} from "../../types/ProductDetail";
 import {LinkPrice} from "../../types/LinkPrice";
 import {ButtonISA} from "../../components/ButtonISA";
+import {useNavigate} from "react-router-dom";
 
 interface lineChartData {
     dateTime: string;
@@ -107,6 +108,8 @@ const getAreaChartData = (prices: Price[]) => {
 
 export const ProductPage = () => {
 
+    const navigate = useNavigate();
+
     // Hooks declaration
     const [priceRows, setPriceRows] = useState<Price[]>([]);
     const [product, setProduct] = useState<ProductDetail>();
@@ -144,7 +147,7 @@ export const ProductPage = () => {
 
     const getProduct = () => {
         setLoading(true)
-        getProductDetailById(productId).then(
+        return getProductDetailById(productId).then(
             (res: ProductDetail) => setHooks(res)
         )//.catch(e => setLoading(false));
     }
@@ -152,9 +155,15 @@ export const ProductPage = () => {
     const saveProductSeparatelyFce = (linkId: number) => {
         setLoading(true)
         saveProductSeparately(productId, linkId).then(
-            getProduct
+            (res) => getProduct().catch(
+                () => {
+                    // last Link was replaced -> this Product was deleted
+                    setLoading(false);
+                    navigate("/product/"+res.data.metal.toLowerCase());
+                }
+            )
         ).catch(
-            e => setLoading(false)
+            () => setLoading(false)
         );
     }
 

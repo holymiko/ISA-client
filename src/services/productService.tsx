@@ -58,7 +58,7 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
     return data;
 };
 
-export const saveProductSeparately = async (productId: number, linkId: number): Promise<ProductDetail> => {
+export const saveProductSeparately = async (productId: number, linkId: number): Promise<any> => {
     return await api.put<any, ProductDetail>('product/link', {
         fromProductId: productId,
         linkId: linkId,
