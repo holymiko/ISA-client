@@ -26,8 +26,12 @@ export function capitalizeFirstLetter(string: string|undefined): string{
 }
 
 
-export const excludeNumbers = (value: string): string => {
+export const excludeDigits = (value: string): string => {
     return value.replace(/\d/g, '');
+}
+
+export const excludeNonDigits = (value: string): string => {
+    return value.replaceAll(/\D/g, '').trim()
 }
 
 /**

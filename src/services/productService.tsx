@@ -74,3 +74,8 @@ export const updateLinkReference = async (fromProductId: number, linkId: number,
     });
 };
 
+export const existsProductById = async (productId: number): Promise<boolean> => {
+    const { data } = await api.get<boolean>('product/exists/' + productId);
+    return data;
+};
+

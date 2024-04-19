@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {DataGrid, GridRenderCellParams} from '@mui/x-data-grid';
-import {getProductDetailById, saveProductSeparately} from "../../services/productService";
+import {
+    existsProductById,
+    getProductDetailById,
+    saveProductSeparately,
+    updateLinkReference
+} from "../../services/productService";
 import {getIdFromUrl} from "../../util/parse";
 import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
@@ -13,7 +18,7 @@ import {Dealer} from "../../types/enums/dealer";
 import {BoxChart} from "../../components/BoxChart";
 import {SubTitle} from "../../components/SubTitle";
 import {BoxRow} from "../../components/BoxRow";
-import {Button} from "@mui/material";
+import {Button, Modal, TextField, Typography} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {scrapProductById} from "../../services/scrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
@@ -21,6 +26,7 @@ import {ProductDetail} from "../../types/ProductDetail";
 import {LinkPrice} from "../../types/LinkPrice";
 import {ButtonISA} from "../../components/ButtonISA";
 import {useNavigate} from "react-router-dom";
+import {excludeNonDigits} from "../../util/utils";
 
 interface lineChartData {
     dateTime: string;
@@ -37,6 +43,19 @@ interface areaChartData {
     Zlataky?: [number, number];
     Silverum?: [number, number];
 }
+
+const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 650,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    borderRadius: 3,
+    boxShadow: 24,
+    p: 4,
+};
 
 const sortedRoundedDeepCopy = (prices: Price[]): Price[] => {
     // Deep copy
@@ -116,6 +135,10 @@ export const ProductPage = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [chartData, setChartData] = useState<any>([]);
     const [areaChartData, setAreaChartData] = useState<any>([]);
+    const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+    const [modalProductIdInput, setModalProductIdInput] = useState<string>();
+    const [modalProductExists, setModalProductExists] = useState<boolean>(false);
+    const [selectedLink, setSelectedLink] = useState<LinkPrice>();
 
     // const [totalItems, setTotalItems] = useState<number>(0);
     // const [currentPage, setCurrentPage] = useState<number>(1);
@@ -170,6 +193,12 @@ export const ProductPage = () => {
     useEffect(() => {
         getProduct();
     }, []);
+
+    useEffect(() => {
+        existsProductById(Number(modalProductIdInput)).then(
+            setModalProductExists
+        )
+    }, [modalProductIdInput]);
 
     return (
         <Box>
@@ -264,6 +293,7 @@ export const ProductPage = () => {
             <BoxChart sx={{mb: "4rem"}}>
                 <Box sx={{height: 527, width: '100%'}}>
                     <DataGrid
+                        getRowHeight={() => 'auto'}
                         sx={{
                             borderColor: "whitesmoke",
                             "& .MuiDataGrid-columnHeaderTitle": {
@@ -279,13 +309,13 @@ export const ProductPage = () => {
                                 headerName: 'URL',
                                 headerAlign: 'center',
                                 align: 'left',
-                                minWidth: 1000,
-                                maxWidth: 1000,
+                                minWidth: 850,
+                                maxWidth: 850,
                                 flex: 1,
                                 renderCell: (params: GridRenderCellParams<LinkPrice>) => (
-                                    <div>
+                                    <Typography variant='subtitle1'>
                                         <a href={params.row.uri}>{params.row.uri}</a>
-                                    </div>
+                                    </Typography>
                                 )
                             },
                             {
@@ -293,14 +323,21 @@ export const ProductPage = () => {
                                 headerName: 'Actions',
                                 headerAlign: 'center',
                                 align: 'center',
-                                minWidth: 240,
+                                minWidth: 300,
                                 disableColumnMenu: true,
                                 flex: 1,
                                 sortable: false,
                                 renderCell: (params: GridRenderCellParams<Product>) => (
-                                    <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
+                                    <Box sx={{gap: 2, width: 1.0, my: 2, display: 'flex', justifyContent: 'center'}}>
                                         <ButtonISA disabled={process.env.NODE_ENV === 'production'} onClick={() => saveProductSeparatelyFce(params.row.id)}>
                                             save separately
+                                        </ButtonISA>
+                                        <ButtonISA disabled={process.env.NODE_ENV === 'production'}
+                                            onClick={() => {
+                                                setSelectedLink(params.row)
+                                                setModalIsOpen(true)
+                                            }}>
+                                            connect URL to different product
                                         </ButtonISA>
                                     </Box>
                                 )
@@ -309,6 +346,59 @@ export const ProductPage = () => {
                     />
                 </Box>
             </BoxChart>
+
+            <Modal
+                open={modalIsOpen}
+                onClose={() => {
+                    setModalIsOpen(false);
+                    setModalProductIdInput('');
+                    setModalProductExists(false);
+                    setSelectedLink(undefined);
+                }}
+            >
+                <Box sx={modalStyle}>
+                    <Typography variant="h6" sx={{mb: 1}}>
+                        Insert ID of Product to which you want to connect following URL
+                    </Typography>
+                    <Typography variant='subtitle1' sx={{mb: 2}}>
+                        <a href={selectedLink?.uri}>{selectedLink?.uri}</a>
+                    </Typography>
+                    <BoxRow>
+                        <TextField
+                            size={'small'}
+                            label="Product ID"
+                            value={modalProductIdInput}
+                            onChange={(x) => setModalProductIdInput(excludeNonDigits(x.target.value))}
+                        />
+                        <ButtonISA disabled={true}>
+                            search
+                        </ButtonISA>
+                        <ButtonISA variant="outlined" onClick={() => setModalProductIdInput('')}>
+                            clear
+                        </ButtonISA>
+                        <ButtonISA disabled={process.env.NODE_ENV === 'production' || !modalProductExists}
+                            onClick={() => {
+                                const metal = product?.metal
+                                updateLinkReference(productId, selectedLink!.id, Number(modalProductIdInput)).then(
+                                    () => getProduct().then(
+                                        () => setModalIsOpen(false)
+                                    ).catch(
+                                        () => {
+                                            // last Link was replaced -> this Product was deleted
+                                            setLoading(false);
+                                            navigate("/product/"+metal);
+                                        }
+                                    )
+                                )
+                            }}
+                        >
+                            connect
+                        </ButtonISA>
+                    </BoxRow>
+
+                </Box>
+            </Modal>
+
         </Box>
     );
 }
