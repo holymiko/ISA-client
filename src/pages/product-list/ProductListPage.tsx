@@ -201,17 +201,25 @@ export const ProductListPage = () =>  {
                 <Box sx={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid
-                          sx={{
-                              borderColor: "white",
-                              "& .MuiDataGrid-columnHeaderTitle": {
-                                  fontSize: 16,
-                                  fontWeight: 'bold'
-                              }
-                          }}
-                          rows={productsControlled}
-                          columns={productListColumns}
-                          loading={loading}
-                          checkboxSelection={false}
+                            initialState={{
+                                columns: {
+                                    columnVisibilityModel: {
+                                        // Hide column shortName, the other columns will remain visible
+                                        name: false
+                                    },
+                                },
+                            }}
+                            sx={{
+                                borderColor: "white",
+                                "& .MuiDataGrid-columnHeaderTitle": {
+                                    fontSize: 16,
+                                    fontWeight: 'bold'
+                                }
+                            }}
+                            rows={productsControlled}
+                            columns={productListColumns}
+                            loading={loading}
+                            checkboxSelection={false}
                         />
                     </div>
                 </Box>

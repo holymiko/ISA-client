@@ -386,7 +386,7 @@ export const ProductPage = () => {
                                         () => {
                                             // last Link was replaced -> this Product was deleted
                                             setLoading(false);
-                                            navigate("/product/"+metal);
+                                            navigate("/product/"+metal?.toLowerCase());
                                         }
                                     )
                                 )

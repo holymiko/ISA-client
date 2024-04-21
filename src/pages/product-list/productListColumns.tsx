@@ -1,7 +1,7 @@
 import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
 import {Product} from "../../types/Product";
 import React from "react";
-import {compareByPrice, compareByRedemption, compareByPrice1, compareBySpread} from "../../util/compare";
+import {compareByPrice1, compareBySpread} from "../../util/compare";
 import {getDealerImage, getFormImage} from "../../util/getImage";
 import {numberWithSpaces} from "../../util/utils";
 import {formatProductName} from "../../util/formatProductName";
@@ -61,8 +61,21 @@ export const productListColumns: GridColDef[] = [
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
       <Link to={"/product/id/"+params.row.id}>
-        {params.row.name !== undefined ? formatProductName(params.row.name) : "undefined"}
+        {params.row.name !== undefined ? params.row.name : "undefined"}
       </Link>
+    )
+  },
+  {
+    field: 'shortName',
+    headerName: 'Short Name',
+    description: "",
+    minWidth: 330,
+    maxWidth: 330,
+    flex: 1,
+    renderCell: (params: GridRenderCellParams<Product>) => (
+        <Link to={"/product/id/"+params.row.id}>
+          {params.row.name !== undefined ? formatProductName(params.row.name) : "undefined"}
+        </Link>
     )
   },
   {
