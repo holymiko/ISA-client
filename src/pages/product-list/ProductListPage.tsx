@@ -12,9 +12,27 @@ import {scrapByMetalInSync} from "../../services/scrapService";
 import {capitalizeFirstLetter} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
-import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Slider, TextField} from "@mui/material";
+import {
+    Button,
+    Checkbox,
+    Collapse,
+    FormControlLabel,
+    List,
+    ListItemButton,
+    TextField
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import {ExpandLess, ExpandMore} from "@mui/icons-material";
+import ListItemText from "@mui/material/ListItemText";
+import {Form} from "../../types/enums/form";
+
+
+interface MetalForm {
+    id: number;
+    value: Form;
+    checked: boolean;
+}
 
 export const ProductListPage = () =>  {
     const { metal } = useParams();
@@ -26,8 +44,16 @@ export const ProductListPage = () =>  {
 
     const [minPrice, setMinPrice] = useState<number>(0);
     const [maxPrice, setMaxPrice] = useState<number>(100);
-    const [form, setForm] = useState<boolean[]>([true, true, true]);
+    const [metalForms, setMetalForms] = useState<MetalForm[]>([])
 
+    const [openFilterForm, setOpenFilterForm] = useState<boolean>(false);
+
+
+    const handleMetalFormsChecked = (id: number) => {
+        setMetalForms(metalForms.map(item =>
+            item.id === id ? { ...item, checked: !item.checked } : item
+        ));
+    };
 
     const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const min = Number(event.target.value)
@@ -46,19 +72,22 @@ export const ProductListPage = () =>  {
         }
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setExcludeUnavailable(event.target.checked);
-    };
-
     const filterProducts = () => {
+        const metalFormValues: Form[] = metalForms.filter(x => x.checked).map(x => x.value)
         let tmpProducts: Product[] = products;
         if(excludeUnavailable) {
             tmpProducts = tmpProducts.filter(x => x.bestPrice?.price !== 0 || x.bestRedemption?.redemption !== 0)
         }
         tmpProducts = tmpProducts.filter(x => {
+            // For moment of initialization
             if(x.bestPrice === undefined) {
                 return true;
             }
+            // Form
+            if(!metalFormValues.includes(x.form)) {
+                return false;
+            }
+            // Price
             return x.bestPrice!.price >= minPrice && x.bestPrice!.price <= maxPrice
         })
         return tmpProducts;
@@ -77,17 +106,20 @@ export const ProductListPage = () =>  {
             undefined,
             undefined
         ).then((page) => {
+            let tmpMetalFormSet = new Set<Form>();
             const tmpProducts: Product[] = page.content;
             let tmpMaxPrice: number = 0;
             tmpProducts.forEach(
                 product => {
-                    product.bestPrice = product.latestPrices.sort(compareByPrice)[0]
-                    product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0]
+                    tmpMetalFormSet.add(product.form);
+                    product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
+                    product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
                     if(product.bestPrice.price > tmpMaxPrice) {
-                        tmpMaxPrice = product.bestPrice.price
+                        tmpMaxPrice = product.bestPrice.price;
                     }
                 }
             )
+            setMetalForms(Array.from(tmpMetalFormSet).map((value, index) => ({id: index, value: value, checked: true})));
             setMaxPrice(tmpMaxPrice);
             setProducts(tmpProducts);
             setLoading(false);
@@ -106,7 +138,7 @@ export const ProductListPage = () =>  {
         setProductsControlled(
             filterProducts()
         );
-    }, [products, minPrice, maxPrice, excludeUnavailable])
+    }, [products, minPrice, maxPrice, metalForms, excludeUnavailable])
 
     return (
         <Box>
@@ -114,6 +146,7 @@ export const ProductListPage = () =>  {
                 {capitalizeFirstLetter(metal)} products
             </PageTitle>
 
+            {/* BUTTONS */}
             <BoxRow sx={{justifyContent: 'flex-end', mt: "1rem", mb: "0.5rem"}}>
                 <Button
                     onClick = {() => getProducts()}
@@ -131,59 +164,62 @@ export const ProductListPage = () =>  {
                     Scrap {metal} prices
                 </Button>
             </BoxRow>
-            <BoxChart sx={{gap: "1rem", display: 'inline-flex', width: '1', mb: "1rem"}}>
-                <TextField
-                    label="Min. price"
-                    type="number"
-                    inputProps={{
-                        step: '10'
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    variant="standard"
-                    value={minPrice}
-                    onChange={handleMinPriceChange}
-                />
-                <Typography sx={{pt: "1rem"}}>-</Typography>
-                <TextField
-                    label="Max. price"
-                    type="number"
-                    inputProps={{
-                        step: '10'
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    variant="standard"
-                    value={Math.round(maxPrice)}
-                    onChange={handleMaxPriceChange}
-                />
 
-                {/* TODO Finish impl*/}
-                {/*<FormControl component="fieldset" variant="standard">*/}
-                {/*    <FormLabel  component="legend">Form</FormLabel>*/}
-                {/*    <FormGroup row={true}>*/}
-                {/*        <FormControlLabel*/}
-                {/*            control={*/}
-                {/*                <Checkbox checked={form[0]} onChange={handleChange} />*/}
-                {/*            }*/}
-                {/*            label="Coin"*/}
-                {/*        />*/}
-                {/*        <FormControlLabel*/}
-                {/*            control={*/}
-                {/*                <Checkbox checked={form[1]} onChange={handleChange} />*/}
-                {/*            }*/}
-                {/*            label="Bar"*/}
-                {/*        />*/}
-                {/*        <FormControlLabel*/}
-                {/*            control={*/}
-                {/*                <Checkbox checked={form[2]} onChange={handleChange} />*/}
-                {/*            }*/}
-                {/*            label="Other"*/}
-                {/*        />*/}
-                {/*    </FormGroup>*/}
-                {/*</FormControl>*/}
+            {/* FILTER */}
+            <BoxChart sx={{ width: '1', gap: 0, mb: 2, display: 'flex', flexDirection: 'column' }}>
+                <BoxRow sx={{gap: "1rem", display: 'inline-flex', width: '1', mb: "1rem"}}>
+                    <TextField
+                        label="Min. price"
+                        type="number"
+                        inputProps={{
+                            step: '10'
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="standard"
+                        value={minPrice}
+                        onChange={handleMinPriceChange}
+                    />
+                    <Typography sx={{pt: "1rem"}}>-</Typography>
+                    <TextField
+                        label="Max. price"
+                        type="number"
+                        inputProps={{
+                            step: '10'
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="standard"
+                        value={Math.round(maxPrice)}
+                        onChange={handleMaxPriceChange}
+                    />
+                </BoxRow>
+
+                <List sx={{ width: 1, bgcolor: 'whitesmoke'}}>
+                    <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterForm(!openFilterForm)}>
+                        <ListItemText primary="Forms" />
+                        {openFilterForm ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={openFilterForm} timeout="auto" unmountOnExit>
+                        {
+                            metalForms.map((form: MetalForm) => (
+                                <FormControlLabel
+                                    sx={{ml: "2rem"}}
+                                    key={form.id}
+                                    label={form.value}
+                                    control={
+                                        <Checkbox
+                                            checked={form.checked}
+                                            onChange={() => handleMetalFormsChecked(form.id)}
+                                        />
+                                    }
+                                />
+                            ))
+                        }
+                    </Collapse>
+                </List>
 
                 <FormControlLabel
                     sx={{ml: "2rem"}}
@@ -191,7 +227,7 @@ export const ProductListPage = () =>  {
                     control={
                         <Checkbox
                             checked={excludeUnavailable}
-                            onChange={handleChange}
+                            onChange={(e) => setExcludeUnavailable(e.target.checked)}
                         />
                     }
                 />
