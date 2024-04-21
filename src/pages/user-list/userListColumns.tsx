@@ -72,12 +72,12 @@ export const userListColumns: GridColDef[] = [
     renderCell: (params: GridRenderCellParams<Product>) => (
         <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
           <Tooltip title="Change password" >
-            <IconButton>
+            <IconButton disabled={true}>
               <KeyIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Reset password" >
-            <IconButton>
+            <IconButton disabled={true}>
               <LockResetIcon />
             </IconButton>
           </Tooltip>
