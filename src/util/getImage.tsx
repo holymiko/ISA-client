@@ -12,7 +12,7 @@ import iconBarSilver from "../img/icon/silver/iconBar.jpg";
 import iconCoinSilver from "../img/icon/silver/iconCoin.jpg";
 import iconWheelSilver from "../img/icon/silver/iconWheel.jpg";
 
-export const getDealerImage = (dealer: Dealer) => {
+export const getDealerImage = (dealer: Dealer | undefined) => {
   switch (dealer) {
     case Dealer.BESSERGOLD_CZ: return logoBessergold;
     case Dealer.ZLATAKY: return logoZlataky;

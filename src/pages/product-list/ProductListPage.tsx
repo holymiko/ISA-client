@@ -26,9 +26,16 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import ListItemText from "@mui/material/ListItemText";
 import {Form} from "../../types/enums/form";
+import {Dealer} from "../../types/enums/dealer";
 
 
-interface MetalForm {
+interface FilterDealer {
+    id: number;
+    value: Dealer;
+    checked: boolean;
+}
+
+interface FilterForm {
     id: number;
     value: Form;
     checked: boolean;
@@ -44,13 +51,22 @@ export const ProductListPage = () =>  {
 
     const [minPrice, setMinPrice] = useState<number>(0);
     const [maxPrice, setMaxPrice] = useState<number>(100);
-    const [metalForms, setMetalForms] = useState<MetalForm[]>([])
+    const [filterForms, setFilterForms] = useState<FilterForm[]>([])
+    const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
 
-    const [openFilterForm, setOpenFilterForm] = useState<boolean>(false);
+    const [openFilterForm, setOpenFilterForm] = useState<boolean>(true);
+    const [openFilterDealer, setOpenFilterDealer] = useState<boolean>(true);
 
 
-    const handleMetalFormsChecked = (id: number) => {
-        setMetalForms(metalForms.map(item =>
+
+    const handleFilterFormChecked = (id: number) => {
+        setFilterForms(filterForms.map(item =>
+            item.id === id ? { ...item, checked: !item.checked } : item
+        ));
+    };
+
+    const handleFilterDealerChecked = (id: number) => {
+        setFilterDealers(filterDealers.map(item =>
             item.id === id ? { ...item, checked: !item.checked } : item
         ));
     };
@@ -73,8 +89,9 @@ export const ProductListPage = () =>  {
     };
 
     const filterProducts = () => {
-        const metalFormValues: Form[] = metalForms.filter(x => x.checked).map(x => x.value)
-        let tmpProducts: Product[] = products;
+        const filterFormValues: Form[] = filterForms.filter(x => x.checked).map(x => x.value);
+        const filterDealerValues: Dealer[] = filterDealers.filter(x => x.checked).map(x => x.value);
+        let tmpProducts: Product[] = structuredClone(products);
         if(excludeUnavailable) {
             tmpProducts = tmpProducts.filter(x => x.bestPrice?.price !== 0 || x.bestRedemption?.redemption !== 0)
         }
@@ -84,12 +101,27 @@ export const ProductListPage = () =>  {
                 return true;
             }
             // Form
-            if(!metalFormValues.includes(x.form)) {
+            if(!filterFormValues.includes(x.form)) {
                 return false;
             }
             // Price
             return x.bestPrice!.price >= minPrice && x.bestPrice!.price <= maxPrice
         })
+        // Dealer - filter prices
+        tmpProducts.forEach(
+            product => {
+                product.latestPrices = product.latestPrices.filter(x => filterDealerValues.includes(x.dealer))
+            }
+        )
+        // Dealer - filter products
+        tmpProducts = tmpProducts.filter(x => x.latestPrices.length !== 0)
+        // Dealer - set best
+        tmpProducts.forEach(
+            product => {
+                product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
+                product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
+            }
+        )
         return tmpProducts;
     }
 
@@ -106,12 +138,12 @@ export const ProductListPage = () =>  {
             undefined,
             undefined
         ).then((page) => {
-            let tmpMetalFormSet = new Set<Form>();
+            let formSet = new Set<Form>();
             const tmpProducts: Product[] = page.content;
             let tmpMaxPrice: number = 0;
             tmpProducts.forEach(
                 product => {
-                    tmpMetalFormSet.add(product.form);
+                    formSet.add(product.form);
                     product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
                     product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
                     if(product.bestPrice.price > tmpMaxPrice) {
@@ -119,7 +151,10 @@ export const ProductListPage = () =>  {
                     }
                 }
             )
-            setMetalForms(Array.from(tmpMetalFormSet).map((value, index) => ({id: index, value: value, checked: true})));
+            console.log(tmpProducts)
+            const dealerSet = new Set(tmpProducts.flatMap(x => x.latestPrices).map(x => x.dealer));
+            setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
+            setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
             setMaxPrice(tmpMaxPrice);
             setProducts(tmpProducts);
             setLoading(false);
@@ -138,7 +173,7 @@ export const ProductListPage = () =>  {
         setProductsControlled(
             filterProducts()
         );
-    }, [products, minPrice, maxPrice, metalForms, excludeUnavailable])
+    }, [products, minPrice, maxPrice, filterForms, filterDealers, excludeUnavailable])
 
     return (
         <Box>
@@ -199,12 +234,12 @@ export const ProductListPage = () =>  {
 
                 <List sx={{ width: 1, bgcolor: 'whitesmoke'}}>
                     <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterForm(!openFilterForm)}>
-                        <ListItemText primary="Forms" />
+                        <ListItemText primary="Form" />
                         {openFilterForm ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                     <Collapse in={openFilterForm} timeout="auto" unmountOnExit>
                         {
-                            metalForms.map((form: MetalForm) => (
+                            filterForms.map((form: FilterForm) => (
                                 <FormControlLabel
                                     sx={{ml: "2rem"}}
                                     key={form.id}
@@ -212,7 +247,31 @@ export const ProductListPage = () =>  {
                                     control={
                                         <Checkbox
                                             checked={form.checked}
-                                            onChange={() => handleMetalFormsChecked(form.id)}
+                                            onChange={() => handleFilterFormChecked(form.id)}
+                                        />
+                                    }
+                                />
+                            ))
+                        }
+                    </Collapse>
+                </List>
+
+                <List sx={{ width: 1, bgcolor: 'whitesmoke'}}>
+                    <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterDealer(!openFilterDealer)}>
+                        <ListItemText primary="Dealer" />
+                        {openFilterDealer ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={openFilterDealer} timeout="auto" unmountOnExit>
+                        {
+                            filterDealers.map((dealer: FilterDealer) => (
+                                <FormControlLabel
+                                    sx={{ml: "2rem"}}
+                                    key={dealer.id}
+                                    label={dealer.value}
+                                    control={
+                                        <Checkbox
+                                            checked={dealer.checked}
+                                            onChange={() => handleFilterDealerChecked(dealer.id)}
                                         />
                                     }
                                 />

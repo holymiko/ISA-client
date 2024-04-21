@@ -93,7 +93,7 @@ export const productListColumns: GridColDef[] = [
     field: '#',
     headerName: '#',
     headerAlign: 'center',
-    description: 'Number of sellers',
+    description: 'Number of sources',
     align: 'center',
     minWidth: 57,
     maxWidth: 57,
@@ -144,7 +144,7 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <img src={getDealerImage(params.row.bestPrice!.dealer)} alt='' />
+      <img src={getDealerImage(params.row.bestPrice?.dealer)} alt='' />
     )
   },
   {
