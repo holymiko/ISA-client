@@ -27,6 +27,7 @@ import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import ListItemText from "@mui/material/ListItemText";
 import {Form} from "../../types/enums/form";
 import {Dealer} from "../../types/enums/dealer";
+import {useTranslation} from "react-i18next";
 
 
 interface FilterDealer {
@@ -42,6 +43,7 @@ interface FilterForm {
 }
 
 export const ProductListPage = () =>  {
+    const { t } = useTranslation();
     const { metal } = useParams();
     const [products, setProducts] = useState<Product[]>([])
     const [productsControlled, setProductsControlled] = useState<Product[]>([])
@@ -151,7 +153,6 @@ export const ProductListPage = () =>  {
                     }
                 }
             )
-            console.log(tmpProducts)
             const dealerSet = new Set(tmpProducts.flatMap(x => x.latestPrices).map(x => x.dealer));
             setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
             setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
@@ -232,7 +233,7 @@ export const ProductListPage = () =>  {
                     />
                 </BoxRow>
 
-                <List sx={{ width: 1, bgcolor: 'whitesmoke'}}>
+                <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
                     <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterForm(!openFilterForm)}>
                         <ListItemText primary="Form" />
                         {openFilterForm ? <ExpandLess /> : <ExpandMore />}
@@ -243,7 +244,7 @@ export const ProductListPage = () =>  {
                                 <FormControlLabel
                                     sx={{ml: "2rem"}}
                                     key={form.id}
-                                    label={form.value}
+                                    label={form.value.toLowerCase()}
                                     control={
                                         <Checkbox
                                             checked={form.checked}
@@ -256,7 +257,7 @@ export const ProductListPage = () =>  {
                     </Collapse>
                 </List>
 
-                <List sx={{ width: 1, bgcolor: 'whitesmoke'}}>
+                <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
                     <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterDealer(!openFilterDealer)}>
                         <ListItemText primary="Dealer" />
                         {openFilterDealer ? <ExpandLess /> : <ExpandMore />}
@@ -267,7 +268,7 @@ export const ProductListPage = () =>  {
                                 <FormControlLabel
                                     sx={{ml: "2rem"}}
                                     key={dealer.id}
-                                    label={dealer.value}
+                                    label={t(dealer.value.toLowerCase())}
                                     control={
                                         <Checkbox
                                             checked={dealer.checked}
@@ -281,7 +282,7 @@ export const ProductListPage = () =>  {
                 </List>
 
                 <FormControlLabel
-                    sx={{ml: "2rem"}}
+                    sx={{ml: "2rem", mt: "1rem"}}
                     label={"exclude unavailable products"}
                     control={
                         <Checkbox
