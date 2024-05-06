@@ -11,32 +11,88 @@ import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
 import {StockPage} from "./pages/StockPage";
 import {AddUser} from "./pages/user-add/AddUser";
 import {UserListPage} from "./pages/user-list/UserListPage";
+import {isEmpty} from "./util/utils";
+import Login from "./pages/Login";
+import {SidebarISA} from "./components/SidebarISA";
+
+
+const ProtectedRoute = ({ children }: any) => {
+    const user = sessionStorage.getItem('user')
+    if (isEmpty(user)) {
+        return <Navigate to="/login" replace />
+    }
+    return (
+        <SidebarISA>
+            {children}
+        </SidebarISA>
+    );
+};
 
 export const RouterRoot = () => {
     return (
         <Box sx={{width: '100%', px: '4rem', pb: '3rem', pt: '6rem', height: '1'}}>
             <Routes>
-                <Route index element={<HomePage/>} />
+                <Route index element={
+                    <ProtectedRoute>
+                        <HomePage/>
+                    </ProtectedRoute>
+                }/>
                 <Route path="portfolio">
-                    <Route index element={<PortfolioListPage/>}/>
-                    <Route path="add" element={<AddPortfolioPage/>}/>
-                    <Route path=":id" element={<PortfolioPage/>}/>
+                    <Route index element={
+                        <ProtectedRoute>
+                            <PortfolioListPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="add" element={
+                        <ProtectedRoute>
+                            <AddPortfolioPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path=":id" element={
+                        <ProtectedRoute>
+                            <PortfolioPage/>
+                        </ProtectedRoute>
+                    }/>
                 </Route>
                 <Route path = "product">
-                    <Route index element={<ProductListPage/>}/>
-                    <Route path="id/:id" element={<ProductPage/>} />
-                    <Route path=":metal" element={<ProductListPage/>}/>
+                    <Route index element={
+                        <ProtectedRoute>
+                            <ProductListPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="id/:id" element={
+                        <ProtectedRoute>
+                            <ProductPage/>
+                        </ProtectedRoute>
+                    } />
+                    <Route path=":metal" element={
+                        <ProtectedRoute>
+                            <ProductListPage/>
+                        </ProtectedRoute>
+                    }/>
                 </Route>
                 <Route path = "user">
-                    <Route index element={<UserListPage/>}/>
-                    <Route path="add" element={<AddUser/>} />
-                    {/*<Route path=":metal" element={<UserListPage/>}/>*/}
+                    <Route index element={
+                        <ProtectedRoute>
+                            <UserListPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="add" element={
+                        <ProtectedRoute>
+                            <AddUser/>
+                        </ProtectedRoute>
+                    }/>
                 </Route>
                 <Route path = "stock">
-                    <Route index element={<StockPage/>}/>
+                    <Route index element={
+                        <ProtectedRoute>
+                            <StockPage/>
+                        </ProtectedRoute>
+                    }/>
                 </Route>
-                <Route path="404" element={<NotFoundPage />} />
-                <Route path="*" element={<Navigate to="404" />} />
+                <Route path="/login" element={<Login/>} />
+                <Route path="404" element={<NotFoundPage/>} />
+                <Route path="*" element={<Navigate to="404"/>} />
             </Routes>
         </Box>
     );

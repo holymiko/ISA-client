@@ -1,6 +1,6 @@
 import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
 import React from "react";
-import {PersonAccountDto} from "../../models/user";
+import {PersonAccountDto} from "../../types/PersonAccountDto";
 import KeyIcon from '@mui/icons-material/Key';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import {Product} from "../../types/Product";

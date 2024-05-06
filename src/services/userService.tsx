@@ -1,5 +1,6 @@
 import {api} from "./api";
-import {PersonAccountCreateDto, PersonAccountDto} from "../models/user";
+import {PersonAccountCreateDto} from "../types/PersonAccountCreateDto";
+import {PersonAccountDto} from "../types/PersonAccountDto";
 
 
 export const getUserList = async (): Promise<PersonAccountDto[]> => {

@@ -20,6 +20,7 @@ export const FormPassword = (
     <FormControl sx={{minWidth: 281, width: 0.2}} variant="outlined" error={hasPasswordError}>
       <InputLabel>{inputLabel}</InputLabel>
       <OutlinedInput
+        sx={{backgroundColor: "white"}}
         label={inputLabel}
         value={password}
         type={showPassword ? 'text' : 'password'}

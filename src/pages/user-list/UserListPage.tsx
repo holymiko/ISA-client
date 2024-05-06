@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {Button} from "@mui/material";
 import {getUserList} from "../../services/userService";
-import {PersonAccountDto} from "../../models/user";
+import {PersonAccountDto} from "../../types/PersonAccountDto";
 
 export const UserListPage = () =>  {
     const [users, setUser] = useState<PersonAccountDto[]>([])
@@ -26,7 +26,7 @@ export const UserListPage = () =>  {
     }, [])
 
     return (
-        <Box>
+        <Box sx={{width: 1}}>
             <PageTitle sx={{mb: '2rem'}}>
                 Users
             </PageTitle>

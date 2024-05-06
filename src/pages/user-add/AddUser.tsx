@@ -9,10 +9,11 @@ import {FormPassword} from "../../components/FormPassword";
 import {useNavigate} from "react-router-dom";
 import {SnackbarISA} from "../../components/SnackbarISA";
 import {ButtonISA} from "../../components/ButtonISA";
-import {PersonAccountCreateDto, PersonAccountDto} from "../../models/user";
+import {PersonAccountCreateDto} from "../../types/PersonAccountCreateDto";
 import {PageTitle} from "../../components/PageTitle";
 import {createUser} from "../../services/userService";
 import {FormControlRoles} from "../../components/FormControlRoles";
+import {PersonAccountDto} from "../../types/PersonAccountDto";
 
 
 export const AddUser = () => {
@@ -258,7 +259,7 @@ export const AddUser = () => {
   };
 
   return(
-    <Box>
+    <Box sx={{width: 1}}>
       <PageTitle sx={{mb: '2rem'}}>
         Add user
       </PageTitle>

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -13,7 +11,6 @@ import {useNavigate} from "react-router-dom";
 import helmet from "../img/icon/helmetIcon2.png";
 import stockIcon from "../img/icon/stockIcon.png";
 import portfolioIcon from "../img/icon/portfolioIcon.png";
-import Typography from "@mui/material/Typography";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
@@ -24,21 +21,6 @@ export const SidebarISA = (props: any) => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: "#92B4EC"}}>
-        <Box sx={{display: 'inline-flex'}}>
-          <Toolbar sx={{ width: '0.5', justifyContent: 'flex-start'}}>
-            <Typography
-              variant={"h4"}
-              sx={{cursor: "pointer"}}
-              onClick={() =>
-                navigate('/')
-            }>
-              Invest Scraper
-            </Typography>
-          </Toolbar>
-        </Box>
-      </AppBar>
       <Drawer
         variant="permanent"
         sx={{

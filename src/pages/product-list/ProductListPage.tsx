@@ -177,7 +177,7 @@ export const ProductListPage = () =>  {
     }, [products, minPrice, maxPrice, filterForms, filterDealers, excludeUnavailable])
 
     return (
-        <Box>
+        <Box sx={{width: 1}}>
             <PageTitle sx={{mb: '2rem'}}>
                 {capitalizeFirstLetter(metal)} products
             </PageTitle>
