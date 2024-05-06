@@ -28,9 +28,7 @@ export const ProfileComponent = () => {
             setVisible(false)
             handleClose()
         } else {
-            setTimeout(() => {
-                setVisible(true)
-            }, 5);
+            setVisible(true)
         }
     }, [location])
 
