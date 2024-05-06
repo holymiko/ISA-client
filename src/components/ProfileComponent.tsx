@@ -24,16 +24,6 @@ export const ProfileComponent = () => {
     };
 
     useEffect(() => {
-        const userString = sessionStorage.getItem('user');
-        if(!isEmpty(userString)) {
-            const x: PersonAccountDto = JSON.parse(userString!);
-            setUser(x);
-        } else {
-            setUser({})
-        }
-    }, [anchorEl])
-
-    useEffect(() => {
         if(location.pathname === "/login") {
             setVisible(false)
             handleClose()
@@ -43,6 +33,17 @@ export const ProfileComponent = () => {
             }, 5);
         }
     }, [location])
+
+    useEffect(() => {
+        const userString = sessionStorage.getItem('user');
+        if(!isEmpty(userString)) {
+            const x: PersonAccountDto = JSON.parse(userString!);
+            setUser(x);
+        } else {
+            setUser({})
+            setVisible(false);
+        }
+    }, [anchorEl])
 
   return (visible ?
       <>
