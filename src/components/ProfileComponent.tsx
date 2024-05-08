@@ -89,10 +89,10 @@ export const ProfileComponent = () => {
                                   {user.account?.role ? user.account.role : '-'}
                               </Typography>
                               <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
-                                {user.phone ? user.phone : '-'}
+                                  {user.phone ? user.phone : '-'}
                               </Typography>
                               <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
-                                {user.email ? user.email : '-'}
+                                  {user.email ? user.email : '-'}
                               </Typography>
                           </Box>
                       </Box>

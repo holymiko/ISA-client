@@ -56,6 +56,7 @@ export const UserListPage = () =>  {
                           rows={users}
                           columns={userListColumns}
                           loading={loading}
+                          getRowId={(row: PersonAccountDto) => row.account!.id!}
                           checkboxSelection={false}
                         />
                     </div>

@@ -11,13 +11,15 @@ import {SnackbarISA} from "../../components/SnackbarISA";
 import {ButtonISA} from "../../components/ButtonISA";
 import {PersonAccountCreateDto} from "../../types/PersonAccountCreateDto";
 import {PageTitle} from "../../components/PageTitle";
-import {createUser} from "../../services/userService";
+import {createAccount, createUser} from "../../services/userService";
 import {FormControlRoles} from "../../components/FormControlRoles";
 import {PersonAccountDto} from "../../types/PersonAccountDto";
+import {AccountCreateDto} from "../../types/AccountCreateDto";
 
 
 export const AddUser = () => {
   const navigate = useNavigate();
+
   const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
   //// User inputs
   const [username, setUsername] = useState<string>('');
@@ -37,18 +39,6 @@ export const AddUser = () => {
   const [lastNameHelperText, setLastNameHelperText] = useState<string>('');
   const [phoneHelperText, setPhoneHelperText] = useState<string>('');
 
-  //// Advanced error indicators
-  const [hasUsernameError, setHasUsernameError] = useState<boolean>(false);
-  const [hasPasswordError, setHasPasswordError] = useState<boolean>(false);
-  const [hasFirstNameError, setHasFirstNameError] = useState<boolean>(false);
-  const [hasLastNameError, setHasLastNameError] = useState<boolean>(false);
-  //// Simple error indicators
-  const hasConfirmPasswordError: boolean = wasSubmitted && password !== confirmPassword;
-  const hasEmailError: boolean = wasSubmitted && !isValidEmailAddress(email);
-  const hasRoleError: boolean = wasSubmitted && isEmpty(role);
-  const isSubmitDisabled = wasSubmitted && (hasUsernameError || hasPasswordError || hasConfirmPasswordError ||
-    hasFirstNameError || hasLastNameError || hasEmailError || hasRoleError);
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
@@ -60,6 +50,20 @@ export const AddUser = () => {
   const [snackMsg, setSnackMsg] = useState<string>('');
   const [snackSeverity, setSnackSeverity] = useState<AlertColor>('success');
   const [isSnackOpen, setIsSnackOpen] = useState<boolean>(false);
+
+  //// Advanced error indicators
+  const [hasUsernameError, setHasUsernameError] = useState<boolean>(false);
+  const [hasPasswordError, setHasPasswordError] = useState<boolean>(false);
+  const [hasFirstNameError, setHasFirstNameError] = useState<boolean>(false);
+  const [hasLastNameError, setHasLastNameError] = useState<boolean>(false);
+  const [hasEmailError, setHasEmailError] = useState<boolean>(false);
+
+  //// Simple error indicators
+  const hasConfirmPasswordError: boolean = wasSubmitted && password !== confirmPassword;
+  const hasRoleError: boolean = wasSubmitted && isEmpty(role);
+  const isSubmitDisabled = wasSubmitted
+      && (hasUsernameError || hasPasswordError || hasConfirmPasswordError || hasRoleError)
+      || (personVisible && (hasFirstNameError || hasLastNameError || hasEmailError));
 
   // Occasional error of refresh token. Not sure if BE or FE
   const handleLoadingError = (status: any) => {
@@ -117,6 +121,13 @@ export const AddUser = () => {
 
   useEffect( () => {
     if(!wasSubmitted) return;
+    if(!personVisible) return;
+    setHasEmailError(!isValidEmailAddress(email));
+    }, [email, personVisible, wasSubmitted]
+  );
+  useEffect( () => {
+    if(!wasSubmitted) return;
+    if(!personVisible) return;
     const validationResult = nameErrorMsg(firstName);
     if(validationResult === '') {
       setHasFirstNameError(false);
@@ -125,10 +136,11 @@ export const AddUser = () => {
     }
     setHasFirstNameError(true);
     setFirstNameHelperText('First ' + validationResult);
-    }, [firstName, wasSubmitted]
+    }, [firstName, personVisible, wasSubmitted]
   );
   useEffect( () => {
     if(!wasSubmitted) return;
+    if(!personVisible) return;
     const validationResult = nameErrorMsg(lastName);
     if(validationResult === '') {
       setHasLastNameError(false);
@@ -137,7 +149,7 @@ export const AddUser = () => {
     }
     setHasLastNameError(true);
     setLastNameHelperText('Last ' + validationResult);
-    }, [lastName, wasSubmitted]
+    }, [lastName, personVisible, wasSubmitted]
   );
   useEffect( () => {
       if(!wasSubmitted) return;
@@ -166,36 +178,48 @@ export const AddUser = () => {
   //////////// Handling
 
   const handleSubmit = () => {
+    let promise: Promise<any>;
     setWasSubmitted(true);
 
-    setFirstName(firstName.trim());
-    setMiddleName(middleName.trim());
-    setLastName(lastName.trim());
     setUsername(username.trim());
-    setEmail(email.trim());
-    setPhone(phone.trim());
-
-    if(nameErrorMsg(firstName) !== '' || nameErrorMsg(lastName) !== '' || nameErrorMsg(username) !== '' ||
-      passwordErrorMsg(password) !== '' || password !== confirmPassword || !isValidEmailAddress(email) || role.length === 0
-    ) {
+    if(nameErrorMsg(username) !== '' || passwordErrorMsg(password) !== '' || password !== confirmPassword || role.length === 0) {
       return;
     }
 
-    const userCreateDto: PersonAccountCreateDto = {
-      account: {
+    if(personVisible) {
+      setFirstName(firstName.trim());
+      setMiddleName(middleName.trim());
+      setLastName(lastName.trim());
+      setEmail(email.trim());
+      setPhone(phone.trim());
+
+      if(nameErrorMsg(firstName) !== '' || nameErrorMsg(lastName) !== '' || !isValidEmailAddress(email)) {
+        return;
+      }
+    }
+
+    let userCreateDto: AccountCreateDto|PersonAccountCreateDto = {
         // @ts-ignore
         role: Role[role],
         username: username,
         password: password,
-      },
-      firstName: firstName,
-      lastName: lastName,
-      midName: middleName,
-      email: email,
-      phone: phone
     }
 
-    createUser(userCreateDto).then(() => {
+    if(personVisible) {
+      userCreateDto = {
+        account: userCreateDto,
+        firstName: firstName,
+        lastName: lastName,
+        midName: middleName,
+        email: email,
+        phone: phone
+      }
+      promise = createUser(userCreateDto);
+    } else {
+      promise = createAccount(userCreateDto);
+    }
+
+    promise.then(() => {
       setSnackSeverity("success");
       setSnackMsg("User has been created");
       setIsSnackOpen(true);
@@ -309,6 +333,7 @@ export const AddUser = () => {
           />}/>
         </Box>
         {/*/////////////////// PERSON ///////////////////*/}
+        {personVisible ?
         <Box sx={{ width: '1', gap: 0, my: 1, display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h4">Person</Typography>
           <Box sx={{ width: '1', gap: 1, my: 1, display: 'flex', flexDirection: 'inline-flex' }}>
@@ -359,7 +384,7 @@ export const AddUser = () => {
             />
           </Box>
         </Box>
-
+        : <></>}
 
         <ButtonISA
           onClick={handleSubmit}
