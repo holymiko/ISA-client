@@ -6,7 +6,6 @@ import {
     saveProductSeparately,
     updateLinkReference
 } from "../../services/productService";
-import {getIdFromUrl} from "../../util/parse";
 import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
 import Box from "@mui/material/Box";
@@ -25,7 +24,7 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import {ProductDetail} from "../../types/ProductDetail";
 import {LinkPrice} from "../../types/LinkPrice";
 import {ButtonISA} from "../../components/ButtonISA";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {excludeNonDigits, getSessionUser, isAdmin} from "../../util/utils";
 import {Role} from "../../types/enums/role";
 
@@ -129,6 +128,7 @@ const getAreaChartData = (prices: Price[]) => {
 export const ProductPage = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Hooks declaration
     const [priceRows, setPriceRows] = useState<Price[]>([]);
@@ -145,7 +145,7 @@ export const ProductPage = () => {
     // const [totalItems, setTotalItems] = useState<number>(0);
     // const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const productId: number = getIdFromUrl(window.location.pathname);
+    const productId: number = Number(location.pathname.split("/").pop())
 
     const setHooks = (res: ProductDetail) => {
         // setTotalItems(res.totalItems)
@@ -200,6 +200,7 @@ export const ProductPage = () => {
     }, []);
 
     useEffect(() => {
+        if(!modalIsOpen) return;
         existsProductById(Number(modalProductIdInput)).then(
             setModalProductExists
         )
@@ -211,7 +212,7 @@ export const ProductPage = () => {
 
             <BoxRow sx={{justifyContent: 'flex-end', mb: "0.5rem"}}>
                 <Button
-                    onClick = {() => getProduct()}
+                    onClick = {getProduct}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"

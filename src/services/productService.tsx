@@ -19,15 +19,15 @@ export const getProductsAsDTO = async (
     }
     const { data } = await api.get("product", {
         params: {
-            dealer: dealer != undefined ? dealer.toUpperCase() : null,
-            producer: producer != undefined ? producer.toUpperCase() : null,
-            metal: metal != undefined ? metal.toUpperCase() : null,
-            form: form != undefined ? form.toUpperCase() : null,
-            grams: grams != undefined ? grams : null,
-            year: year != undefined ? year : null,
-            savedAlone: savedAlone != undefined ? savedAlone : null,
-            page: page != undefined ? page : null,
-            size: size != undefined ? size : null
+            dealer: dealer !== undefined ? dealer.toUpperCase() : null,
+            producer: producer !== undefined ? producer.toUpperCase() : null,
+            metal: metal !== undefined ? metal.toUpperCase() : null,
+            form: form !== undefined ? form.toUpperCase() : null,
+            grams: grams !== undefined ? grams : null,
+            year: year !== undefined ? year : null,
+            savedAlone: savedAlone !== undefined ? savedAlone : null,
+            page: page !== undefined ? page : null,
+            size: size !== undefined ? size : null
         }
     });
     return data;
