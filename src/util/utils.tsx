@@ -1,4 +1,6 @@
 import {Role} from "../types/enums/role";
+import {PersonAccountDto} from "../types/PersonAccountDto";
+import {NavigateFunction} from "react-router-dom";
 
 export function getTextYield(params: number): string {
     return params >= 1 ?
@@ -84,14 +86,24 @@ export const getHighestRole = (roles: Role[]): Role => {
     return Object.values(Role)[getIndexOfHighestRole(roles)];
 }
 
-export const isSuperAdmin = (roles: Role[]): boolean => {
-    return getIndexOfHighestRole(roles) === Object.values(Role).indexOf(Role.SUPER_ADMIN);
+export const isAdmin = (role: Role|undefined): boolean => {
+    return role === Role.ADMIN || role === Role.SUPER_ADMIN
 }
 
 export const logOutMemClean = () => {
-    // TODO Unite the locations to one & Test
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    sessionStorage.removeItem("user")
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("user");
+}
+
+export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|undefined => {
+    const stringUser = sessionStorage.getItem('user');
+
+    if(isEmpty(stringUser)) {
+        logOutMemClean();
+        navigate("/login");
+    } else {
+        return JSON.parse(stringUser!);
+    }
 }
 

@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Box, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-// import {authorization} from "../services/auth"
 import {isEmpty, logOutMemClean} from "../util/utils";
-// import {getCurrentUser} from "../services/user";
 import {FormPassword} from "../components/FormPassword";
 import {Role} from "../types/enums/role";
 import {SnackbarISA} from "../components/SnackbarISA";
 import {BoxChart} from "../components/BoxChart";
 import {PersonAccountDto} from "../types/PersonAccountDto";
 import {ButtonISA} from "../components/ButtonISA";
+import {authorization} from "../services/auth";
+import {getCurrentUser} from "../services/userService";
 
 
 export const Login = () => {
@@ -31,6 +31,14 @@ export const Login = () => {
   const handleRequestError = (statusCode: number) => {
     setUsernameError(true);
     setPasswordError(true);
+
+    setUsername("");
+    setPassword("");
+    initCredentialEffects();
+    setWasSubmitted(false);
+    setSnackMsg(`Username/Password combination doesn't exist.`)
+    setIsSnackOpen(true);
+
     switch (statusCode) {
       case 0: return setPasswordHelperText('Problem in communication with server. Check you internet connection.');
       case 401: return setPasswordHelperText('Combination of username and password doesn\'t exist');
@@ -61,53 +69,18 @@ export const Login = () => {
       setSnackMsg(`You have been authenticated successfully, but as a '${highestRole}' you are missing authority for entering`)
       setIsSnackOpen(true);
     } else {
-      // TODO remove mock and use backend
-      if(username === "isa-admin" && password === "isa-password") {
-        const dummyUser: PersonAccountDto = {
-          id: 0,
-          account: {
-            id: 1,
-            role: Role.SUPER_ADMIN,
-            username: "karel_capek",
-            personId: 0
-          },
-          firstName: "Karel",
-          middleName: "Josef",
-          lastName: "Čapek",
-          email: "karel.capek@gmail.com",
-          phone: "721547896"
-        }
-        localStorage.setItem("accessToken", "dummyToken");
-        localStorage.setItem("refreshToken", "dummyToken");
-        sessionStorage.setItem('user', JSON.stringify(dummyUser));
-        navigate('/');
-      } else {
-        setUsername("");
-        setPassword("");
-        initCredentialEffects();
-        setWasSubmitted(false);
-        setSnackMsg(`Username/Password combination doesn't exist.`)
-        setIsSnackOpen(true);
-      }
+      authorization({username: username, password: password})
+          .then((res) => {
+            const {token} = res;
+            sessionStorage.setItem("accessToken", token);
+            // sessionStorage.setItem("refreshToken", refreshToken);
+            getCurrentUser().then((user: PersonAccountDto) => {
+              sessionStorage.setItem('user', JSON.stringify(user));
+            }).catch(() => sessionStorage.setItem('user', JSON.stringify("dummy")))
+            navigate('/');
+          }).catch(handleRequestError)
     }
-  //  TODO Connect
-  //   authorization({userName: username, password: password})
-  //     .then((res) => {
-  //       const {roles,  accessToken, refreshToken} = res;
-  //       const highestRole = getHighestRole(roles);
-  //       if( highestRole !== Roles.SUPERADMIN && highestRole !== Roles.TENANT_ADMIN ) {
-  //         setSnackMsg(`You have been authenticated successfully, but as a '${highestRole}' you are missing authority for entering`)
-  //         setIsSnackOpen(true);
-  //       } else {
-  //         localStorage.setItem("accessToken", accessToken);
-  //         localStorage.setItem("refreshToken", refreshToken);
-  //         getCurrentUser().then((user) => {
-  //           sessionStorage.setItem('user', JSON.stringify(user));
-  //           navigate('/list');
-  //         }).catch(handleRequestError)
-  //       }
-  //     }).catch(handleRequestError)
-    };
+  };
 
   useEffect(() => {
     if(!wasSubmitted) return;

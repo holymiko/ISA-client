@@ -11,14 +11,15 @@ import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
 import {StockPage} from "./pages/StockPage";
 import {AddUser} from "./pages/user-add/AddUser";
 import {UserListPage} from "./pages/user-list/UserListPage";
-import {isEmpty} from "./util/utils";
+import {isEmpty, logOutMemClean} from "./util/utils";
 import Login from "./pages/Login";
 import {SidebarISA} from "./components/SidebarISA";
 
 
 const ProtectedRoute = ({ children }: any) => {
-    const user = sessionStorage.getItem('user')
-    if (isEmpty(user)) {
+    const token = sessionStorage.getItem('accessToken')
+    if (isEmpty(token)) {
+        logOutMemClean();
         return <Navigate to="/login" replace />
     }
     return (

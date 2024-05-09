@@ -2,7 +2,14 @@ import Box from "@mui/material/Box";
 import {AlertColor, Checkbox, FormControlLabel, SelectChangeEvent, TextField, Typography} from "@mui/material";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Role} from "../../types/enums/role";
-import {filterNonLetters, isEmpty, logOutMemClean} from "../../util/utils";
+import {
+  filterNonLetters,
+  filterPhoneNonDigit, getSessionUser,
+  getIndexOfHighestRole,
+  getSubordinateRoles,
+  isEmpty,
+  logOutMemClean
+} from "../../util/utils";
 import {MuiTelInput} from 'mui-tel-input';
 import {isValidEmailAddress, nameErrorMsg, passwordErrorMsg} from "./AddUserValidations";
 import {FormPassword} from "../../components/FormPassword";
@@ -43,7 +50,6 @@ export const AddUser = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const [personVisible, setPersonVisible] = useState<boolean>(true);
-  const [currentUser, setCurrentUser] = useState<PersonAccountDto>();
   const [rolesForSelect, setRolesForSelect] = useState<string[]>([])
 
   // Snack bar hooks - used to show result of BE requests
@@ -75,56 +81,23 @@ export const AddUser = () => {
     }
   }
 
-  // useEffect(() => {
-  //   const stringUser = sessionStorage.getItem('user');
-  //
-  //   if(isEmpty(stringUser)) {
-  //     logOutMemClean();
-  //     navigate("/login");
-  //   } else {
-  //     const user: UserDto = JSON.parse(stringUser!);
-  //     const facilityMap = new Map();
-  //     const tenantMap = new Map();
-  //     setCurrentUser(user);
-  //     setRolesForSelect(
-  //       getSubordinateRoles(
-  //         getIndexOfHighestRole([Roles.SUPERADMIN])
-  //       )
-  //     );
-  //
-  //       // Super Admin can create users from other Tenants
-  //     //   getTenantList().then(res => {
-  //     //     res.forEach(t => {
-  //     //       tenantMap.set(t.id!, t.name!);
-  //     //     })
-  //     //   }).catch(handleLoadingError)
-  //     // } else {
-  //     //   getTenantById(user?.tenantId!).then((res) => {
-  //     //     tenantMap.set(res.id!, res.name!);
-  //     //     setTenantDisabled(true);
-  //     //   }).catch(handleLoadingError)
-  //     }
-  // },[])
-
-  // useEffect(() => {
-  //   // Load Tenant ID/Name Map
-  //   if(currentUser !== undefined) {
-  //     // getTenantById(currentUser?.tenantId!).then((res) => {
-  //     //   const facilityMap = new Map();
-  //     //   res.facilities!.forEach(f => facilityMap.set(f.id, f.name));
-  //     //   setFacilityIdNameMap(facilityMap);
-  //     // }).catch(handleLoadingError)
-  //   }
-  // }, [tenantId, currentUser])
+  useEffect(() => {
+    const user: PersonAccountDto = getSessionUser(navigate)!;
+    setRolesForSelect(
+        getSubordinateRoles(
+            getIndexOfHighestRole([user.account!.role!])
+        )
+    );
+  }, [])
 
   /////// Error useEffects
 
   useEffect( () => {
-    if(!wasSubmitted) return;
-    if(!personVisible) return;
-    setHasEmailError(!isValidEmailAddress(email));
-    }, [email, personVisible, wasSubmitted]
-  );
+      if(!wasSubmitted) return;
+      if(!personVisible) return;
+      setHasEmailError(!isValidEmailAddress(email));
+  }, [email, personVisible, wasSubmitted]);
+
   useEffect( () => {
     if(!wasSubmitted) return;
     if(!personVisible) return;
@@ -138,6 +111,7 @@ export const AddUser = () => {
     setFirstNameHelperText('First ' + validationResult);
     }, [firstName, personVisible, wasSubmitted]
   );
+
   useEffect( () => {
     if(!wasSubmitted) return;
     if(!personVisible) return;
@@ -151,6 +125,7 @@ export const AddUser = () => {
     setLastNameHelperText('Last ' + validationResult);
     }, [lastName, personVisible, wasSubmitted]
   );
+
   useEffect( () => {
       if(!wasSubmitted) return;
       const validationResult = nameErrorMsg(username);
@@ -163,6 +138,7 @@ export const AddUser = () => {
       setUsernameHelperText('User' + validationResult);
     }, [username, wasSubmitted]
   );
+
   useEffect( () => {
     if(!wasSubmitted) return;
     const validationResult = passwordErrorMsg(password);
@@ -188,10 +164,9 @@ export const AddUser = () => {
 
     if(personVisible) {
       setFirstName(firstName.trim());
-      setMiddleName(middleName.trim());
+      // setMiddleName(middleName.trim());
       setLastName(lastName.trim());
       setEmail(email.trim());
-      setPhone(phone.trim());
 
       if(nameErrorMsg(firstName) !== '' || nameErrorMsg(lastName) !== '' || !isValidEmailAddress(email)) {
         return;
@@ -212,7 +187,7 @@ export const AddUser = () => {
         lastName: lastName,
         midName: middleName,
         email: email,
-        phone: phone
+        phone: filterPhoneNonDigit(phone)
       }
       promise = createUser(userCreateDto);
     } else {
@@ -302,7 +277,7 @@ export const AddUser = () => {
               helperText={usernameHelperText}
               sx={{minWidth: 281, width: 0.2}}
             />
-            <FormControlRoles roles={role} hasRolesError={hasRoleError} handleRoles={handleRoles} />
+            <FormControlRoles roles={role} hasRolesError={hasRoleError} handleRoles={handleRoles} rolesForSelect={rolesForSelect} />
           </Box>
           <Box sx={{ width: '1', gap: 1, mt: 1, display: 'flex', flexDirection: 'inline-flex' }}>
             <FormPassword
@@ -363,7 +338,6 @@ export const AddUser = () => {
             />
           </Box>
           <Box sx={{ width: '1', gap: 1, mt: 1, display: 'flex', flexDirection: 'inline-flex' }}>
-            {/*TODO Test prefix behaviour*/}
             <MuiTelInput
               value={phone}
               //defaultCountry={'us'}

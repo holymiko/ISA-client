@@ -10,7 +10,7 @@ export const getUserList = async (): Promise<PersonAccountDto[]> => {
 };
 
 export const getCurrentUser = async (): Promise<PersonAccountDto> => {
-  const { data } = await api.get<PersonAccountDto>('person/me');
+  const { data } = await api.get<PersonAccountDto>('account/me');
   return data;
 }
 

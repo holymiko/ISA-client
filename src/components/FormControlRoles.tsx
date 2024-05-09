@@ -37,6 +37,7 @@ interface FormControlRolesProps {
     roles: string;
     hasRolesError: boolean;
     handleRoles: (e: SelectChangeEvent) => void;
+    rolesForSelect: string[];
 }
 
 /**
@@ -44,7 +45,7 @@ interface FormControlRolesProps {
  * @param props
  * @constructor
  */
-export const FormControlRoles = ({roles, handleRoles, hasRolesError}: FormControlRolesProps) => {
+export const FormControlRoles = ({roles, handleRoles, hasRolesError, rolesForSelect}: FormControlRolesProps) => {
     const theme = useTheme();
     const roles2 = ['CLIENT', 'SUPER_ADMIN']
     return (
@@ -60,6 +61,7 @@ export const FormControlRoles = ({roles, handleRoles, hasRolesError}: FormContro
                     key={Role.USER}
                     value={Role.USER}
                     style={getStyles(Role.USER, roles2, theme)}
+                    disabled={!rolesForSelect.includes(Role.USER)}
                 >
                     {Role.USER}
                 </MenuItem>
@@ -67,6 +69,7 @@ export const FormControlRoles = ({roles, handleRoles, hasRolesError}: FormContro
                     key={Role.CLIENT}
                     value={Role.CLIENT}
                     style={getStyles(Role.CLIENT, roles2, theme)}
+                    disabled={!rolesForSelect.includes(Role.CLIENT)}
                 >
                     {Role.CLIENT}
                 </MenuItem>
@@ -74,6 +77,7 @@ export const FormControlRoles = ({roles, handleRoles, hasRolesError}: FormContro
                     key={Role.DEALER}
                     value={Role.DEALER}
                     style={getStyles(Role.DEALER, roles2, theme)}
+                    disabled={!rolesForSelect.includes(Role.DEALER)}
                 >
                     {Role.DEALER}
                 </MenuItem>
@@ -81,6 +85,7 @@ export const FormControlRoles = ({roles, handleRoles, hasRolesError}: FormContro
                     key={Role.ADMIN}
                     value={Role.ADMIN}
                     style={getStyles(Role.ADMIN, roles2, theme)}
+                    disabled={!rolesForSelect.includes(Role.ADMIN)}
                 >
                     {Role.ADMIN}
                 </MenuItem>
@@ -88,6 +93,7 @@ export const FormControlRoles = ({roles, handleRoles, hasRolesError}: FormContro
                     key={Role.SUPER_ADMIN}
                     value={Role.SUPER_ADMIN}
                     style={getStyles(Role.SUPER_ADMIN, roles2, theme)}
+                    disabled={!rolesForSelect.includes(Role.SUPER_ADMIN)}
                 >
                     {Role.SUPER_ADMIN}
                 </MenuItem>

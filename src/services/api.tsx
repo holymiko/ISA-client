@@ -1,9 +1,58 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import { AxiosAuthRefreshRequestConfig } from 'axios-auth-refresh';
 
-const BASE_URL = process.env.NODE_ENV === 'production'
+const PREFIX_URL = process.env.NODE_ENV === 'production'
     ? "http://67.223.117.163:8080/api/v2/"
     : "http://localhost:8080/api/v2/"
 
+
+enum StatusCode {
+  Unauthorized = 401,
+  Forbidden = 403,
+  TooManyRequests = 429,
+  InternalServerError = 500,
+}
+
+const headers: Readonly<Record<string, string | boolean>> = {
+  Accept: "application/json; */*",
+  "Content-Type": "application/json; charset=utf-8",
+  // "Access-Control-Allow-Credentials": false,
+  // "X-Requested-With": "XMLHttpRequest",
+};
+
+// Function that will be called to refresh authorization
+const refreshAuthLogic = (failedRequest: any) =>
+    axios.post(
+        PREFIX_URL + '/auth/refresh',
+        {refreshToken: sessionStorage.getItem("refreshToken")},
+        {
+          headers: {
+            'Authorization': `Basic ${sessionStorage.getItem("accessToken")}`
+          }
+        }
+    ).then((tokenRefreshResponse: any) => {
+      // alert("Refresh active 1")
+      const {accessToken, refreshToken} = tokenRefreshResponse.data;
+      sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      failedRequest.response.config.headers['Authorization'] = 'Bearer ' + accessToken;
+      return Promise.resolve();
+    }) // .catch doesn't work here. Breaks App's error msg
+
+// We can use the following function to inject the JWT token through an interceptor
+// We get the `accessToken` from the sessionStorage that we set when we authenticate
+const injectToken = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  try {
+    const token = sessionStorage.getItem("accessToken");
+    if (token != null && config.headers != null) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
 
 class Http {
   private instance: AxiosInstance | null = null;
@@ -13,11 +62,24 @@ class Http {
   }
 
   initHttp() {
+
     const http = axios.create({
-      baseURL: BASE_URL,
+      baseURL: PREFIX_URL,
+      headers,
     });
 
-    http.defaults.headers.post['Content-Type'] = 'application/json';
+    // Instantiate the interceptor
+    createAuthRefreshInterceptor(http, refreshAuthLogic);
+
+    http.interceptors.request.use(injectToken, (error) => Promise.reject(error));
+
+    http.interceptors.response.use(
+        (response: any) => response,
+        (error: any) => {
+          const { response } = error;
+          return Http.handleError(response);
+        }
+    );
 
     this.instance = http;
     return http;
@@ -28,7 +90,6 @@ class Http {
   }
 
   get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R> {
-    console.log(url);
     return this.http.get<T, R>(url, config);
   }
 
@@ -44,6 +105,41 @@ class Http {
     return this.http.delete<T, R>(url, config);
   }
 
+  patch<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R> {
+    return this.http.patch<T, R>(url, data, config);
+  }
+
+  auth<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosAuthRefreshRequestConfig): Promise<R> {
+    return this.http.post<T, R>(url, data, config);
+  }
+
+  // Handle global app errors
+  // We can handle generic app errors depending on the status code
+  private static handleError(error: any) {
+    const { status } = error;
+
+    switch (status) {
+      case StatusCode.InternalServerError: {
+        // Handle InternalServerError
+        break;
+      }
+      case StatusCode.Forbidden: {
+        // Handle Forbidden
+        break;
+      }
+      case StatusCode.Unauthorized: {
+        // sessionStorage.removeItem('user')
+        // return <Navigate to="/login" replace />
+        break;
+      }
+      case StatusCode.TooManyRequests: {
+        // Handle TooManyRequests
+        break;
+      }
+    }
+
+    return Promise.reject(status);
+  }
 }
 
 export const api = new Http();
