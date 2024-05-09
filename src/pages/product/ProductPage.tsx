@@ -11,7 +11,7 @@ import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
 import Box from "@mui/material/Box";
 import {priceColumns} from "./priceColumns";
-import {CartesianGrid, Legend, Line, Tooltip, XAxis, YAxis, LineChart, AreaChart, Area} from "recharts";
+import {Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import {Price} from "../../types/Price";
 import moment from "moment/moment";
 import {Dealer} from "../../types/enums/dealer";
@@ -26,7 +26,8 @@ import {ProductDetail} from "../../types/ProductDetail";
 import {LinkPrice} from "../../types/LinkPrice";
 import {ButtonISA} from "../../components/ButtonISA";
 import {useNavigate} from "react-router-dom";
-import {excludeNonDigits} from "../../util/utils";
+import {excludeNonDigits, getSessionUser, isAdmin} from "../../util/utils";
+import {Role} from "../../types/enums/role";
 
 interface lineChartData {
     dateTime: string;
@@ -139,6 +140,7 @@ export const ProductPage = () => {
     const [modalProductIdInput, setModalProductIdInput] = useState<string>();
     const [modalProductExists, setModalProductExists] = useState<boolean>(false);
     const [selectedLink, setSelectedLink] = useState<LinkPrice>();
+    const [sessionUserRole, setSessionUserRole] = useState<Role|undefined>(undefined);
 
     // const [totalItems, setTotalItems] = useState<number>(0);
     // const [currentPage, setCurrentPage] = useState<number>(1);
@@ -192,6 +194,9 @@ export const ProductPage = () => {
 
     useEffect(() => {
         getProduct();
+        setSessionUserRole(
+            getSessionUser(navigate)?.account?.role
+        )
     }, []);
 
     useEffect(() => {
@@ -329,10 +334,10 @@ export const ProductPage = () => {
                                 sortable: false,
                                 renderCell: (params: GridRenderCellParams<Product>) => (
                                     <Box sx={{gap: 2, width: 1.0, my: 2, display: 'flex', justifyContent: 'center'}}>
-                                        <ButtonISA disabled={process.env.NODE_ENV === 'production'} onClick={() => saveProductSeparatelyFce(params.row.id)}>
+                                        <ButtonISA disabled={!isAdmin(sessionUserRole)} onClick={() => saveProductSeparatelyFce(params.row.id)}>
                                             save separately
                                         </ButtonISA>
-                                        <ButtonISA disabled={process.env.NODE_ENV === 'production'}
+                                        <ButtonISA disabled={!isAdmin(sessionUserRole)}
                                             onClick={() => {
                                                 setSelectedLink(params.row)
                                                 setModalIsOpen(true)
@@ -376,7 +381,7 @@ export const ProductPage = () => {
                         <ButtonISA variant="outlined" onClick={() => setModalProductIdInput('')}>
                             clear
                         </ButtonISA>
-                        <ButtonISA disabled={process.env.NODE_ENV === 'production' || !modalProductExists}
+                        <ButtonISA disabled={!isAdmin(sessionUserRole) || !modalProductExists}
                             onClick={() => {
                                 const metal = product?.metal
                                 updateLinkReference(productId, selectedLink!.id, Number(modalProductIdInput)).then(
