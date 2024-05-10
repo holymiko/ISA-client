@@ -1,4 +1,4 @@
-import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
+import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {Product} from "../../types/Product";
 import React from "react";
 import {compareByPrice1, compareBySpread} from "../../util/compare";
@@ -11,6 +11,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
 import ErrorIcon from '@mui/icons-material/Error';
 import {Price} from "../../types/Price";
+import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 
 const freshnessMinuteLimit = 180; // VPS is using UTC (-1h)
 
@@ -49,7 +50,9 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-        <img src={getFormImage(params.row.form, params.row.metal)} alt='' height={"85%"} />
+        <BoxColumnCenter>
+          <img src={getFormImage(params.row.form, params.row.metal)} alt='' height={"85%"} />
+        </BoxColumnCenter>
     )
   },
   {
@@ -87,7 +90,7 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 78,
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => `${Math.round(params.row.grams*100)/100} g`
+    valueGetter: (value, row: Product) => `${Math.round(row.grams*100)/100} g`
   },
   {
     field: '#',
@@ -99,7 +102,7 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 57,
     disableColumnMenu: true,
     flex: 1,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => `${params.row.latestPrices.length}`
+    valueGetter: (value, row: Product) => `${row.latestPrices.length}`
   },
   {
     field: 'price',
@@ -110,10 +113,10 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 150,
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+    valueGetter: (value, row: Product) => (
       `${numberWithSpaces(
         Math.round(
-            params.row.bestPrice?.price!
+            row.bestPrice?.price!
         ))} Kč`
     )
   },
@@ -129,9 +132,9 @@ export const productListColumns: GridColDef[] = [
     maxWidth: 50,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <>
+      <BoxColumnCenter sx={{pb: 0.25, pl: 0.8}}>
         {getPriceFreshness(params.row.latestPrices, false)}
-      </>
+      </BoxColumnCenter>
     )
   },
   {
@@ -144,7 +147,9 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <img src={getDealerImage(params.row.bestPrice?.dealer)} alt='' />
+        <BoxColumnCenter>
+          <img src={getDealerImage(params.row.bestPrice?.dealer)} alt='' />
+        </BoxColumnCenter>
     )
   },
   {
@@ -157,10 +162,10 @@ export const productListColumns: GridColDef[] = [
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => (
+    valueGetter: (value, row: Product) => (
       `${numberWithSpaces(
         Math.round(
-          params.row.bestRedemption?.redemption!
+          row.bestRedemption?.redemption!
         ))} Kč`
     )
   },
@@ -176,9 +181,9 @@ export const productListColumns: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <>
+      <BoxColumnCenter sx={{pb: 0.25, pl: 0.8}}>
         {getPriceFreshness(params.row.latestPrices, true)}
-      </>
+      </BoxColumnCenter>
     )
   },
   {
@@ -191,7 +196,9 @@ export const productListColumns: GridColDef[] = [
     sortable: false,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <img src={getDealerImage(params.row.bestRedemption?.dealer)} alt=''/>
+        <BoxColumnCenter>
+          <img src={getDealerImage(params.row.bestRedemption?.dealer)} alt=''/>
+        </BoxColumnCenter>
     )
   },
   {
@@ -204,9 +211,9 @@ export const productListColumns: GridColDef[] = [
     align: 'right',
     flex: 1,
     sortComparator: compareBySpread,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => (
-      `${ params.row.bestRedemption?.price !== undefined && params.row.bestPrice?.price !== undefined && params.row.bestPrice?.price !== 0
-            ? Math.round((params.row.bestRedemption?.redemption / params.row.bestPrice?.price)*10_000)/100
+    valueGetter: (value, row: Product) => (
+      `${ row.bestRedemption?.price !== undefined && row.bestPrice?.price !== undefined && row.bestPrice?.price !== 0
+            ? Math.round((row.bestRedemption?.redemption / row.bestPrice?.price)*10_000)/100
             : 0
       } %`
     )
@@ -221,9 +228,9 @@ export const productListColumns: GridColDef[] = [
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (params: GridValueGetterParams<any, Product>) => (
-      `${ params.row.bestPrice?.price !== undefined
-            ? Math.round((params.row.bestPrice?.price! / params.row.grams)*100)/100
+    valueGetter: (value, row: Product) => (
+      `${ row.bestPrice?.price !== undefined
+            ? Math.round((row.bestPrice?.price! / row.grams)*100)/100
             : '-'
         } Kč/g`
     )

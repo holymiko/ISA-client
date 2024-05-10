@@ -1,35 +1,41 @@
-import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
+import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {compareStringAsDate, compareByPrice1} from "../../util/compare";
 import {Price} from "../../types/Price";
 import {getDealerImage} from "../../util/getImage";
 import moment from "moment/moment";
 import {priceWithSpaces} from "../../util/utils";
+import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 
 export const priceColumns: GridColDef[]  = [
   {
     field: 'dealer',
     headerName: 'Dealer',
+    headerClassName: 'isa-app--header',
     description: "",
     width: 140,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Price>) => (
-      <img src={getDealerImage(params.row.dealer)} alt=''/>
+        <BoxColumnCenter>
+          <img src={getDealerImage(params.row.dealer)} alt=''/>
+        </BoxColumnCenter>
     )
   },
   {
     field: 'priceDateTime',
     headerName: 'Price freshness',
+    headerClassName: 'isa-app--header',
     description: "",
     width: 140,
     flex: 1,
     sortComparator: compareStringAsDate,
-    valueGetter: (params: GridValueGetterParams<any, Price>) => (
-      moment(params.row.priceDateTime).format('h:mm:ss a, DD.MM.YYYY')
+    valueGetter: (value, row: Price) => (
+      moment(row.priceDateTime).format('h:mm:ss a, DD.MM.YYYY')
     )
   },
   {
     field: 'price',
     headerName: 'Price',
+    headerClassName: 'isa-app--header',
     description: "",
     width: 140,
     flex: 1,
@@ -51,6 +57,7 @@ export const priceColumns: GridColDef[]  = [
   {
     field: 'redemption',
     headerName: 'Buy out',
+    headerClassName: 'isa-app--header',
     description: "",
     width: 140,
     flex: 1,
@@ -61,6 +68,7 @@ export const priceColumns: GridColDef[]  = [
   {
     field: 'spread',
     headerName: 'Spread',
+    headerClassName: 'isa-app--header',
     headerAlign: 'right',
     description: "",
     minWidth: 130,
@@ -68,13 +76,14 @@ export const priceColumns: GridColDef[]  = [
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (params: GridValueGetterParams<any, Price>) => (
-      `${ Math.round(params.row.spread*10_000)/100 } %`
+    valueGetter: (value, row: Price) => (
+      `${ Math.round(row.spread*10_000)/100 } %`
     )
   },
   {
     field: 'pricePerGram',
     headerName: 'Price / Gram',
+    headerClassName: 'isa-app--header',
     headerAlign: 'right',
     description: "",
     minWidth: 120,
@@ -82,8 +91,8 @@ export const priceColumns: GridColDef[]  = [
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (params: GridValueGetterParams<any, Price>) => (
-      `${ Math.round(params.row.pricePerGram*100)/100 } Kč/g`
+    valueGetter: (value, row: Price) => (
+      `${ Math.round(row.pricePerGram*100)/100 } Kč/g`
     )
   },
 ];

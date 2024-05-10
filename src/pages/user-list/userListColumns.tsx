@@ -1,13 +1,13 @@
-import {GridColDef, GridRenderCellParams, GridValueGetterParams} from "@mui/x-data-grid";
+import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import React from "react";
 import {PersonAccountDto} from "../../types/PersonAccountDto";
 import KeyIcon from '@mui/icons-material/Key';
 import LockResetIcon from '@mui/icons-material/LockReset';
-import {Product} from "../../types/Product";
 import Box from "@mui/material/Box";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {deleteAccount} from "../../services/userService";
 import {IconButton, Tooltip} from "@mui/material";
+import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 
 export const userListColumns: GridColDef[] = [
   {
@@ -18,7 +18,7 @@ export const userListColumns: GridColDef[] = [
     minWidth: 150,
     maxWidth: 150,
     flex: 1,
-    valueGetter: (params: GridValueGetterParams<any, PersonAccountDto>) => `${params.row.account?.role}`
+    valueGetter: (value, row: PersonAccountDto) => `${row.account?.role}`
   },
   {
     field: 'username',
@@ -28,7 +28,7 @@ export const userListColumns: GridColDef[] = [
     minWidth: 200,
     maxWidth: 200,
     flex: 1,
-    valueGetter: (params: GridValueGetterParams<any, PersonAccountDto>) => `${params.row.account?.username}`
+    valueGetter: (value, row: PersonAccountDto) => `${row.account?.username}`
   },
   {
     field: 'firstName',
@@ -69,7 +69,8 @@ export const userListColumns: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1,
     sortable: false,
-    renderCell: (params: GridRenderCellParams<Product>) => (
+    renderCell: (params: GridRenderCellParams<PersonAccountDto>) => (
+      <BoxColumnCenter>
         <Box sx={{gap: 2, width: 1.0, display: 'flex', justifyContent: 'center'}}>
           <Tooltip title="Change password" >
             <IconButton disabled={true}>
@@ -82,11 +83,12 @@ export const userListColumns: GridColDef[] = [
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete" >
-            <IconButton onClick={() => deleteAccount(params.row.account.id)}>
+            <IconButton onClick={() => deleteAccount(params.row.account!.id!)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
         </Box>
+      </BoxColumnCenter>
     )
   },
 

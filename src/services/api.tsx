@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { AxiosAuthRefreshRequestConfig } from 'axios-auth-refresh';
 
@@ -42,7 +42,7 @@ const refreshAuthLogic = (failedRequest: any) =>
 
 // We can use the following function to inject the JWT token through an interceptor
 // We get the `accessToken` from the sessionStorage that we set when we authenticate
-const injectToken = (config: AxiosRequestConfig): AxiosRequestConfig => {
+const injectToken = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   try {
     const token = sessionStorage.getItem("accessToken");
     if (token != null && config.headers != null) {

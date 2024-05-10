@@ -6,7 +6,6 @@ import {
     saveProductSeparately,
     updateLinkReference
 } from "../../services/productService";
-import {Product} from "../../types/Product";
 import {PageTitle} from "../../components/PageTitle";
 import Box from "@mui/material/Box";
 import {priceColumns} from "./priceColumns";
@@ -27,6 +26,7 @@ import {ButtonISA} from "../../components/ButtonISA";
 import {useLocation, useNavigate} from "react-router-dom";
 import {excludeNonDigits, getSessionUser, isAdmin} from "../../util/utils";
 import {Role} from "../../types/enums/role";
+import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 
 interface lineChartData {
     dateTime: string;
@@ -260,7 +260,13 @@ export const ProductPage = () => {
 
             <SubTitle>History table</SubTitle>
             <BoxChart sx={{mb: "4rem"}}>
-                <Box sx={{height: 527, width: '100%'}}>
+                <Box sx={{
+                    height: 527,
+                    width: '100%',
+                    '& .isa-app--header': {
+                        backgroundColor: 'whitesmoke',
+                    }
+                }}>
                     <DataGrid
                       sx={{
                           borderColor: "whitesmoke",
@@ -297,7 +303,13 @@ export const ProductPage = () => {
 
             <SubTitle>Sources</SubTitle>
             <BoxChart sx={{mb: "4rem"}}>
-                <Box sx={{height: 527, width: '100%'}}>
+                <Box sx={{
+                    height: 527,
+                    width: '100%',
+                    '& .isa-app--header': {
+                        backgroundColor: 'whitesmoke',
+                    }
+                }}>
                     <DataGrid
                         getRowHeight={() => 'auto'}
                         sx={{
@@ -313,27 +325,31 @@ export const ProductPage = () => {
                             {
                                 field: 'uri',
                                 headerName: 'URL',
+                                headerClassName: 'isa-app--header',
                                 headerAlign: 'center',
                                 align: 'left',
                                 minWidth: 850,
                                 maxWidth: 850,
                                 flex: 1,
                                 renderCell: (params: GridRenderCellParams<LinkPrice>) => (
-                                    <Typography variant='subtitle1'>
-                                        <a href={params.row.uri}>{params.row.uri}</a>
-                                    </Typography>
+                                    <BoxColumnCenter>
+                                        <Typography variant='subtitle1'>
+                                            <a href={params.row.uri}>{params.row.uri}</a>
+                                        </Typography>
+                                    </BoxColumnCenter>
                                 )
                             },
                             {
                                 field: 'actions',
                                 headerName: 'Actions',
+                                headerClassName: 'isa-app--header',
                                 headerAlign: 'center',
                                 align: 'center',
                                 minWidth: 300,
                                 disableColumnMenu: true,
                                 flex: 1,
                                 sortable: false,
-                                renderCell: (params: GridRenderCellParams<Product>) => (
+                                renderCell: (params: GridRenderCellParams<LinkPrice>) => (
                                     <Box sx={{gap: 2, width: 1.0, my: 2, display: 'flex', justifyContent: 'center'}}>
                                         <ButtonISA disabled={!isAdmin(sessionUserRole)} onClick={() => saveProductSeparatelyFce(params.row.id)}>
                                             save separately
