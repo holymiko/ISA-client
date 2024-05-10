@@ -16,13 +16,13 @@ export const PortfolioListPage = () =>  {
   const [rows, setRows] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setLoading(true)
-    getPortfolios().then((res) => {
-      setRows(res.data);
-      setLoading(false)
-    });
-  }, [])
+  // useEffect(() => {
+  //   setLoading(true)
+  //   getPortfolios().then((res) => {
+  //     setRows(res.data);
+  //     setLoading(false)
+  //   });
+  // }, [])
 
   return (
       <Box>
