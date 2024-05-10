@@ -1,5 +1,5 @@
 import {Price} from "../types/Price";
-import moment from "moment";
+import {compareAsc, parse} from "date-fns";
 
 export function stringCleaner(a: string) {
   a = a.replaceAll('%','').trim();
@@ -8,8 +8,11 @@ export function stringCleaner(a: string) {
   return parseFloat(a);
 }
 
-export function compareStringAsDate(a: string, b: string) {
-  return moment(moment(a).format()).isBefore(moment(b).format()) ? 1 : -1;
+export const compareStringAsDate = (a: string, b: string) => {
+  return compareAsc(
+      parse(a, 'h:mm:ss a, dd.MM.yyyy', 0),
+      parse(b, 'h:mm:ss a, dd.MM.yyyy', 0)
+  );
 }
 
 /**

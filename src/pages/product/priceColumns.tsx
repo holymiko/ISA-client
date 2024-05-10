@@ -2,11 +2,11 @@ import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {compareStringAsDate, compareByPrice1} from "../../util/compare";
 import {Price} from "../../types/Price";
 import {getDealerImage} from "../../util/getImage";
-import moment from "moment/moment";
 import {priceWithSpaces} from "../../util/utils";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
+import {format} from "date-fns";
 
-export const priceColumns: GridColDef[]  = [
+export const priceColumns: GridColDef[] = [
   {
     field: 'dealer',
     headerName: 'Dealer',
@@ -29,7 +29,7 @@ export const priceColumns: GridColDef[]  = [
     flex: 1,
     sortComparator: compareStringAsDate,
     valueGetter: (value, row: Price) => (
-      moment(row.priceDateTime).format('h:mm:ss a, DD.MM.YYYY')
+      format(row.priceDateTime, 'h:mm:ss a, dd.MM.yyyy')
     )
   },
   {

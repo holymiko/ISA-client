@@ -11,7 +11,6 @@ import Box from "@mui/material/Box";
 import {priceColumns} from "./priceColumns";
 import {Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import {Price} from "../../types/Price";
-import moment from "moment/moment";
 import {Dealer} from "../../types/enums/dealer";
 import {BoxChart} from "../../components/BoxChart";
 import {SubTitle} from "../../components/SubTitle";
@@ -27,6 +26,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {excludeNonDigits, getSessionUser, isAdmin} from "../../util/utils";
 import {Role} from "../../types/enums/role";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
+import {compareAsc, format} from "date-fns";
 
 interface lineChartData {
     dateTime: string;
@@ -62,7 +62,7 @@ const sortedRoundedDeepCopy = (prices: Price[]): Price[] => {
     let deepPrices: Price[] = JSON.parse(JSON.stringify(prices));
     // Sort from latest => newest
     deepPrices = deepPrices.sort(
-        (a: Price, b: Price) => moment(a.priceDateTime).isBefore(b.priceDateTime) ? -1 : 1
+        (a: Price, b: Price) => compareAsc(a.priceDateTime, b.priceDateTime)
     );
     // Round dateTime on minutes
     deepPrices.forEach((p: Price) => {
@@ -74,11 +74,11 @@ const sortedRoundedDeepCopy = (prices: Price[]): Price[] => {
 const getLineChartData = (prices: Price[]) => {
     const result: lineChartData[] = [];
     const deepPrices: Price[] = sortedRoundedDeepCopy(prices);
-    let chartData: lineChartData = {dateTime: moment(deepPrices[0].priceDateTime).format('h:mm a, DD.MM.YYYY')}
+    let chartData: lineChartData = {dateTime: format(deepPrices[0].priceDateTime, 'h:mm a, dd.MM.yyyy')}
 
     for (let i = 0; i < deepPrices.length; i++) {
         const price: Price = deepPrices[i];
-        const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
+        const priceMoment = format(price.priceDateTime, 'h:mm a, dd.MM.yyyy')
         // Exclude zero
         if(price.price === 0) continue;
         // New price dateTime found
@@ -101,11 +101,11 @@ const getLineChartData = (prices: Price[]) => {
 const getAreaChartData = (prices: Price[]) => {
     const result: areaChartData[] = [];
     const deepPrices: Price[] = sortedRoundedDeepCopy(prices);
-    let chartData: areaChartData = {dateTime: moment(deepPrices[0].priceDateTime).format('h:mm a, DD.MM.YYYY')}
+    let chartData: areaChartData = {dateTime: format(deepPrices[0].priceDateTime, 'h:mm a, dd.MM.yyyy')}
 
     for (let i = 0; i < deepPrices.length; i++) {
         const price: Price = deepPrices[i];
-        const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
+        const priceMoment = format(price.priceDateTime, 'h:mm a, dd.MM.yyyy')
         // Exclude zero
         if(price.price === 0) continue;
         if(price.redemption === 0) {
