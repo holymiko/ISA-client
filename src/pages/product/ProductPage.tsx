@@ -108,6 +108,9 @@ const getAreaChartData = (prices: Price[]) => {
         const priceMoment = moment(price.priceDateTime).format('h:mm a, DD.MM.YYYY')
         // Exclude zero
         if(price.price === 0) continue;
+        if(price.redemption === 0) {
+            price.redemption = price.price
+        }
         // New price dateTime found
         if(chartData.dateTime !== priceMoment) {
             result.push(chartData);
