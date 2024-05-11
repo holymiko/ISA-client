@@ -15,7 +15,7 @@ import {Dealer} from "../../types/enums/dealer";
 import {BoxChart} from "../../components/BoxChart";
 import {SubTitle} from "../../components/SubTitle";
 import {BoxRow} from "../../components/BoxRow";
-import {Button, Modal, TextField, Typography} from "@mui/material";
+import {Button, Checkbox, FormControlLabel, Modal, TextField, Typography} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {scrapProductById} from "../../services/scrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
@@ -27,21 +27,37 @@ import {excludeNonDigits, getSessionUser, isAdmin} from "../../util/utils";
 import {Role} from "../../types/enums/role";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 import {compareAsc, format} from "date-fns";
+import {LinkPrices} from "../../types/LinkPrices";
 
-interface lineChartData {
-    dateTime: string;
-    Bessergold?: number;
-    "Bessergold.de"?: number;
-    Zlataky?: number;
-    Silverum?: number;
+
+interface chartDealer {
+    uri: string,
+    dealer: Dealer,
+    dealerString: string,
+    color: string,
 }
 
-interface areaChartData {
-    dateTime: string;
-    Bessergold?: [number, number];
-    "Bessergold.de"?: [number, number];
-    Zlataky?: [number, number];
-    Silverum?: [number, number];
+const chartDealersPre = {
+    BESSERGOLD_CZ: {
+        dealer: Dealer.BESSERGOLD_CZ,
+        dealerString: "Bessergold",
+        color: "red"
+    },
+    BESSERGOLD_DE: {
+        dealer: Dealer.BESSERGOLD_DE,
+        dealerString: "Bessergold.de",
+        color: "green"
+    },
+    SILVERUM: {
+        dealer: Dealer.SILVERUM,
+        dealerString: "Silverum",
+        color: "blue"
+    },
+    ZLATAKY: {
+        dealer: Dealer.ZLATAKY,
+        dealerString: "Zlataky",
+        color: "orange"
+    },
 }
 
 const modalStyle = {
@@ -67,62 +83,83 @@ const sortedRoundedDeepCopy = (prices: Price[]): Price[] => {
     // Round dateTime on minutes
     deepPrices.forEach((p: Price) => {
         p.priceDateTime = new Date(new Date(p.priceDateTime).setSeconds(0, 0));
+        p.price = Math.round(p.price)
+        p.redemption = Math.round(p.redemption)
     });
     return deepPrices;
 }
 
-const getLineChartData = (prices: Price[]) => {
-    const result: lineChartData[] = [];
-    const deepPrices: Price[] = sortedRoundedDeepCopy(prices);
-    let chartData: lineChartData = {dateTime: format(deepPrices[0].priceDateTime, 'h:mm a, dd.MM.yyyy')}
 
-    for (let i = 0; i < deepPrices.length; i++) {
-        const price: Price = deepPrices[i];
-        const priceMoment = format(price.priceDateTime, 'h:mm a, dd.MM.yyyy')
+const getChartDealers = (linkPrices: LinkPrices[]): any[] => {
+    const dealerStruct: any[] = [];
+    const chartDealers: chartDealer[] = [];
+    linkPrices.forEach(linkPrice => {
+        // @ts-ignore
+        const dealerIndex: number = dealerStruct[linkPrice.dealer.toString()]
+        if(dealerIndex === undefined) {
+            // @ts-ignore
+            dealerStruct[linkPrice.dealer.toString()] = 0
+            chartDealers.push({ uri: linkPrice.uri, ...chartDealersPre[linkPrice.dealer] });
+        } else {
+            chartDealers.push({
+                uri: linkPrice.uri,
+                dealer: chartDealersPre[linkPrice.dealer].dealer,
+                dealerString: chartDealersPre[linkPrice.dealer].dealerString + "_" + dealerIndex,
+                color: chartDealersPre[linkPrice.dealer].color
+            })
+        }
+        // @ts-ignore
+        dealerStruct[linkPrice.dealer.toString()] += 1;
+    });
+    return chartDealers;
+}
+
+const getLineChartData = (prices: Price[], chartDealers: chartDealer[]) => {
+    const result: any[] = [];
+    let chartData = {dateTime: format(prices[0].priceDateTime, 'h:mm a, dd.MM.yyyy')}
+
+    for (let i = 0; i < prices.length; i++) {
+        const price: Price = prices[i];
+        const priceDateTime: string = format(price.priceDateTime, 'h:mm a, dd.MM.yyyy')
         // Exclude zero
         if(price.price === 0) continue;
         // New price dateTime found
-        if(chartData.dateTime !== priceMoment) {
+        if(chartData.dateTime !== priceDateTime) {
             result.push(chartData);
-            chartData = {dateTime: priceMoment};
+            chartData = {dateTime: priceDateTime};
         }
 
-        switch (price.dealer) {
-            case Dealer.BESSERGOLD_CZ: {chartData.Bessergold = price.price; break;}
-            case Dealer.BESSERGOLD_DE: {chartData["Bessergold.de"] = price.price; break;}
-            case Dealer.ZLATAKY: {chartData.Zlataky = price.price; break;}
-            case Dealer.SILVERUM: {chartData.Silverum = price.price; break;}
-        }
+        // @ts-ignore
+        const dealer: string = chartDealers.find((chartDealer) => chartDealer.uri === price.uri).dealerString
+        // @ts-ignore
+        chartData[dealer] = price.price;
     }
     result.push(chartData);
     return result;
 }
 
-const getAreaChartData = (prices: Price[]) => {
-    const result: areaChartData[] = [];
-    const deepPrices: Price[] = sortedRoundedDeepCopy(prices);
-    let chartData: areaChartData = {dateTime: format(deepPrices[0].priceDateTime, 'h:mm a, dd.MM.yyyy')}
+const getAreaChartData = (prices: Price[], chartDealers: chartDealer[]) => {
+    const result: any[] = [];
+    let chartData = {dateTime: format(prices[0].priceDateTime, 'h:mm a, dd.MM.yyyy')}
 
-    for (let i = 0; i < deepPrices.length; i++) {
-        const price: Price = deepPrices[i];
-        const priceMoment = format(price.priceDateTime, 'h:mm a, dd.MM.yyyy')
+    for (let i = 0; i < prices.length; i++) {
+        const price: Price = prices[i];
+        const priceDateTime = format(price.priceDateTime, 'h:mm a, dd.MM.yyyy')
         // Exclude zero
         if(price.price === 0) continue;
         if(price.redemption === 0) {
             price.redemption = price.price
         }
         // New price dateTime found
-        if(chartData.dateTime !== priceMoment) {
+        if(chartData.dateTime !== priceDateTime) {
             result.push(chartData);
-            chartData = {dateTime: priceMoment};
+            chartData = {dateTime: priceDateTime};
         }
 
-        switch (price.dealer) {
-            case Dealer.BESSERGOLD_CZ: {chartData.Bessergold = [price.price, price.redemption]; break;}
-            case Dealer.BESSERGOLD_DE: {chartData["Bessergold.de"] = [price.price, price.redemption]; break;}
-            case Dealer.ZLATAKY: {chartData.Zlataky = [price.price, price.redemption]; break;}
-            case Dealer.SILVERUM: {chartData.Silverum = [price.price, price.redemption]; break;}
-        }
+        // @ts-ignore
+        const dealer: string = chartDealers.find((chartDealer) => chartDealer.uri === price.uri).dealerString
+        // @ts-ignore
+        chartData[dealer] = [price.price, price.redemption];
     }
     result.push(chartData);
     return result;
@@ -144,7 +181,7 @@ export const ProductPage = () => {
     const [modalProductExists, setModalProductExists] = useState<boolean>(false);
     const [selectedLink, setSelectedLink] = useState<LinkPrice>();
     const [sessionUserRole, setSessionUserRole] = useState<Role|undefined>(undefined);
-
+    const [chartDealers, setChartDealers] = useState<chartDealer[]>([]);
     // const [totalItems, setTotalItems] = useState<number>(0);
     // const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -152,26 +189,36 @@ export const ProductPage = () => {
 
     const setHooks = (res: ProductDetail) => {
         // setTotalItems(res.totalItems)
-        const prices: Price[] = res.prices!.flatMap((x) => {
+        const linkPrices: LinkPrices[] = res.prices!;
+        const prices: Price[] = linkPrices.flatMap((x) => {
             const tmp = [];
             for(const i of x.prices) {
                 tmp.push({
                     ...i,
+                    uri: x.uri,     // extends Price entity
                     dealer: x.dealer
                 })
             }
             return tmp;
         });
         setProduct(res);
+        setChartDealers(
+            getChartDealers(linkPrices)
+        )
         setPriceRows(prices);
-        setChartData(
-            getLineChartData(prices)
-        )
-        setAreaChartData(
-            getAreaChartData(prices)
-        )
         setLoading(false);
     }
+
+    useEffect(() => {
+        if(priceRows.length === 0) return;
+        const deepPrices: Price[] = sortedRoundedDeepCopy(priceRows);
+        setChartData(
+            getLineChartData(deepPrices, chartDealers)
+        )
+        setAreaChartData(
+            getAreaChartData(deepPrices, chartDealers)
+        )
+    }, [priceRows, chartDealers]);
 
     const getProduct = () => {
         setLoading(true)
@@ -239,10 +286,19 @@ export const ProductPage = () => {
                     <YAxis type="number" domain={['auto', 'auto']}/>
                     <Tooltip />
                     <Legend />
-                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold" stroke="red" />
-                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold.de" stroke="green" />
-                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Zlataky" stroke="orange" />
-                    <Line connectNulls strokeWidth={4} type="monotone" dataKey="Silverum" stroke="blue" />
+                    {
+                        chartDealers.map((chartDealer: chartDealer) => (
+                            <Line
+                                connectNulls
+                                strokeWidth={4}
+                                type="monotone"
+                                // dot={false}
+                                key={chartDealer.dealerString}
+                                dataKey={chartDealer.dealerString}
+                                stroke={chartDealer.color}
+                            />
+                        ))
+                    }
                 </LineChart>
             </BoxChart>
 
@@ -254,10 +310,18 @@ export const ProductPage = () => {
                     <YAxis type="number" domain={['auto', 'auto']}/>
                     <Tooltip />
                     <Legend />
-                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold" stroke="red" />
-                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Bessergold.de" stroke="green" />
-                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Zlataky" stroke="orange" />
-                    <Area connectNulls strokeWidth={4} type="monotone" dataKey="Silverum" stroke="blue" />
+                    {
+                        chartDealers.map((chartDealer: chartDealer) => (
+                            <Area
+                                connectNulls
+                                strokeWidth={4}
+                                type="monotone"
+                                key={chartDealer.dealerString}
+                                dataKey={chartDealer.dealerString}
+                                stroke={chartDealer.color}
+                            />
+                        ))
+                    }
                 </AreaChart>
             </BoxChart>
 
