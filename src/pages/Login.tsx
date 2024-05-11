@@ -115,7 +115,6 @@ export const Login = () => {
         width: '1',
         display: 'flex',
         justifyContent: 'center',
-        mr: 7
     }}>
       <BoxChart
         sx={{

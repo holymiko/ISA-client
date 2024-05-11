@@ -14,6 +14,7 @@ import {UserListPage} from "./pages/user-list/UserListPage";
 import {isEmpty, logOutMemClean} from "./util/utils";
 import Login from "./pages/Login";
 import {SidebarISA} from "./components/SidebarISA";
+import {HeaderISA} from "./components/HeaderISA";
 
 
 const ProtectedRoute = ({ children }: any) => {
@@ -23,15 +24,18 @@ const ProtectedRoute = ({ children }: any) => {
         return <Navigate to="/login" replace />
     }
     return (
-        <SidebarISA>
-            {children}
-        </SidebarISA>
+        <>
+            <HeaderISA/>
+            <SidebarISA>
+                {children}
+            </SidebarISA>
+        </>
     );
 };
 
 export const RouterRoot = () => {
     return (
-        <Box sx={{width: '100%', px: '4rem', pb: '3rem', pt: '6rem', height: '1'}}>
+        <Box sx={{px: '4rem', pb: '3rem', pt: '6rem', height: '1'}}>
             <Routes>
                 <Route index element={
                     <ProtectedRoute>
@@ -92,7 +96,11 @@ export const RouterRoot = () => {
                     }/>
                 </Route>
                 <Route path="/login" element={<Login/>} />
-                <Route path="404" element={<NotFoundPage/>} />
+                <Route path="404" element={
+                    <ProtectedRoute>
+                        <NotFoundPage/>
+                    </ProtectedRoute>
+                }/>
                 <Route path="*" element={<Navigate to="404"/>} />
             </Routes>
         </Box>
