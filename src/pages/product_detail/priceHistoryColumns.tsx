@@ -6,7 +6,7 @@ import {getAvailabilityChipComponent, priceWithSpaces} from "../../util/utils";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 import {format} from "date-fns";
 
-export const priceColumns: GridColDef[] = [
+export const priceHistoryColumns: GridColDef[] = [
   {
     field: 'dealer',
     headerName: 'Dealer',

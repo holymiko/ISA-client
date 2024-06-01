@@ -9,7 +9,7 @@ import {PieChart} from "@mui/x-charts/PieChart";
 import Typography from "@mui/material/Typography";
 import {PortfolioBox} from "../../components/PortfolioBox";
 
-export const PortfolioListPage = () =>  {
+export const PortfolioTablePage = () =>  {
 
   const navigate = useNavigate();
   // TODO Add Portfolio type

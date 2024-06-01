@@ -2,15 +2,15 @@ import React from "react";
 import {Route, Routes, Navigate} from 'react-router-dom';
 import {PortfolioPage} from "./pages/portfolio/PortfolioPage";
 import AddPortfolioPage from "./pages/portfolio/AddPortfolioPage";
-import {ProductPage} from "./pages/product/ProductPage";
+import {ProductDetailPage} from "./pages/product_detail/ProductDetailPage";
 import Box from "@mui/material/Box";
 import {NotFoundPage} from "./pages/NotFoundPage";
 import {HomePage} from "./pages/HomePage";
-import {ProductListPage} from "./pages/product-list/ProductListPage";
-import {PortfolioListPage} from "./pages/portfolio/PortfolioListPage";
+import {ProductTablePage} from "./pages/product_table/ProductTablePage";
+import {PortfolioTablePage} from "./pages/portfolio/PortfolioTablePage";
 import {StockPage} from "./pages/StockPage";
-import {AddUser} from "./pages/user-add/AddUser";
-import {UserListPage} from "./pages/user-list/UserListPage";
+import {AddUser} from "./pages/user_add/AddUser";
+import {UserTablePage} from "./pages/user_table/UserTablePage";
 import {isEmpty, logOutMemClean} from "./util/utils";
 import Login from "./pages/Login";
 import {SidebarISA} from "./components/SidebarISA";
@@ -45,7 +45,7 @@ export const RouterRoot = () => {
                 <Route path="portfolio">
                     <Route index element={
                         <ProtectedRoute>
-                            <PortfolioListPage/>
+                            <PortfolioTablePage/>
                         </ProtectedRoute>
                     }/>
                     <Route path="add" element={
@@ -62,24 +62,24 @@ export const RouterRoot = () => {
                 <Route path = "product">
                     <Route index element={
                         <ProtectedRoute>
-                            <ProductListPage/>
+                            <ProductTablePage/>
                         </ProtectedRoute>
                     }/>
                     <Route path="id/:id" element={
                         <ProtectedRoute>
-                            <ProductPage/>
+                            <ProductDetailPage/>
                         </ProtectedRoute>
                     } />
                     <Route path=":metal" element={
                         <ProtectedRoute>
-                            <ProductListPage/>
+                            <ProductTablePage/>
                         </ProtectedRoute>
                     }/>
                 </Route>
                 <Route path = "user">
                     <Route index element={
                         <ProtectedRoute>
-                            <UserListPage/>
+                            <UserTablePage/>
                         </ProtectedRoute>
                     }/>
                     <Route path="add" element={

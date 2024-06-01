@@ -40,7 +40,7 @@ const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean
   }
 };
 
-export const productListColumns: GridColDef[] = [
+export const productColumns: GridColDef[] = [
   {
     field: 'form1',
     headerName: 'Form',

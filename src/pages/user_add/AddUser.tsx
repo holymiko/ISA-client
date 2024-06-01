@@ -11,7 +11,7 @@ import {
   logOutMemClean
 } from "../../util/utils";
 import {MuiTelInput} from 'mui-tel-input';
-import {isValidEmailAddress, nameErrorMsg, passwordErrorMsg} from "./AddUserValidations";
+import {isValidEmailAddress, nameErrorMsg, passwordErrorMsg} from "../../util/validations";
 import {FormPassword} from "../../components/FormPassword";
 import {useNavigate} from "react-router-dom";
 import {SnackbarISA} from "../../components/SnackbarISA";

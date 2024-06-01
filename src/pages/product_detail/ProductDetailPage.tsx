@@ -8,7 +8,7 @@ import {
 } from "../../services/productService";
 import {PageTitle} from "../../components/PageTitle";
 import Box from "@mui/material/Box";
-import {priceColumns} from "./priceColumns";
+import {priceHistoryColumns} from "./priceHistoryColumns";
 import {Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import {Price} from "../../types/Price";
 import {Dealer} from "../../types/enums/dealer";
@@ -165,7 +165,7 @@ const getAreaChartData = (prices: Price[], chartDealers: chartDealer[]) => {
     return result;
 }
 
-export const ProductPage = () => {
+export const ProductDetailPage = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -342,7 +342,7 @@ export const ProductPage = () => {
                               fontWeight: 'bold'
                           }}}
                       rows={priceRows}
-                      columns={priceColumns}
+                      columns={priceHistoryColumns}
                       loading={loading}
                       initialState={{
                         sorting: {

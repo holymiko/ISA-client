@@ -9,7 +9,7 @@ import {deleteAccount} from "../../services/userService";
 import {IconButton, Tooltip} from "@mui/material";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 
-export const userListColumns: GridColDef[] = [
+export const userColumns: GridColDef[] = [
   {
     field: 'role',
     headerName: 'Role',

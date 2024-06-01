@@ -1,4 +1,4 @@
-import {isEmpty} from "../../util/utils";
+import {isEmpty} from "./utils";
 
 export const nameErrorMsg = (name: string): string => {
   if(isEmpty(name)) {

@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {BoxRow} from "../../components/BoxRow";
 import {PageTitle} from "../../components/PageTitle";
 import {DataGrid} from "@mui/x-data-grid";
-import {userListColumns} from "./userListColumns";
+import {userColumns} from "./userColumns";
 import Box from "@mui/material/Box";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {Button} from "@mui/material";
 import {getUserList} from "../../services/userService";
 import {PersonAccountDto} from "../../types/PersonAccountDto";
 
-export const UserListPage = () =>  {
+export const UserTablePage = () =>  {
     const [users, setUser] = useState<PersonAccountDto[]>([])
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -54,7 +54,7 @@ export const UserListPage = () =>  {
                               }
                           }}
                           rows={users}
-                          columns={userListColumns}
+                          columns={userColumns}
                           loading={loading}
                           getRowId={(row: PersonAccountDto) => row.account!.id!}
                           checkboxSelection={false}

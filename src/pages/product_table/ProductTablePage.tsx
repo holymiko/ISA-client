@@ -4,7 +4,7 @@ import {PageTitle} from "../../components/PageTitle";
 import {getProductsAsDTO} from "../../services/productService";
 import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
-import {productListColumns} from "./productListColumns";
+import {productColumns} from "./productColumns";
 import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
@@ -50,7 +50,7 @@ interface FilterAvailability {
     checked: boolean;
 }
 
-export const ProductListPage = () =>  {
+export const ProductTablePage = () =>  {
     const { t } = useTranslation();
     const { metal } = useParams();
     const [products, setProducts] = useState<Product[]>([])
@@ -363,7 +363,7 @@ export const ProductListPage = () =>  {
                                 }
                             }}
                             rows={productsControlled}
-                            columns={productListColumns}
+                            columns={productColumns}
                             loading={loading}
                             checkboxSelection={false}
                         />
