@@ -1,7 +1,7 @@
 import "./i18n";
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {RouterRoot} from './routes';
+import {RouterRoot} from './RouterRoot';
 import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
