@@ -3,5 +3,10 @@
   "zlataky": "Zlataky.cz",
   "silverum": "Silverum.cz",
   "bessergold_cz": "Bessergold.cz",
-  "bessergold_de": "Bessergold.de"
+  "bessergold_de": "Bessergold.de",
+  "in_stock": "in stock",
+  "sold_out": "sold out",
+  "on_demand": "on demand",
+  "on_order": "on order",
+  "unavailable": "unavailable"
 }

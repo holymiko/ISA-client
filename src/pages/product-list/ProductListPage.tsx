@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
 import {scrapByMetalInSync} from "../../services/scrapService";
-import {capitalizeFirstLetter} from "../../util/utils";
+import {capitalizeFirstLetter, getAvailabilityChipComponent} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
 import {
@@ -28,6 +28,8 @@ import ListItemText from "@mui/material/ListItemText";
 import {Form} from "../../types/enums/form";
 import {Dealer} from "../../types/enums/dealer";
 import {useTranslation} from "react-i18next";
+import {Availability} from "../../types/enums/availability";
+import {Price} from "../../types/Price";
 
 
 interface FilterDealer {
@@ -39,6 +41,12 @@ interface FilterDealer {
 interface FilterForm {
     id: number;
     value: Form;
+    checked: boolean;
+}
+
+interface FilterAvailability {
+    id: number;
+    value: Availability;
     checked: boolean;
 }
 
@@ -55,9 +63,11 @@ export const ProductListPage = () =>  {
     const [maxPrice, setMaxPrice] = useState<number>(100);
     const [filterForms, setFilterForms] = useState<FilterForm[]>([])
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
+    const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
 
     const [openFilterForm, setOpenFilterForm] = useState<boolean>(true);
     const [openFilterDealer, setOpenFilterDealer] = useState<boolean>(true);
+    const [openFilterAvailability, setOpenFilterAvailability] = useState<boolean>(true);
 
 
 
@@ -69,6 +79,12 @@ export const ProductListPage = () =>  {
 
     const handleFilterDealerChecked = (id: number) => {
         setFilterDealers(filterDealers.map(item =>
+            item.id === id ? { ...item, checked: !item.checked } : item
+        ));
+    };
+
+    const handleFilterAvailabilityChecked = (id: number) => {
+        setFilterAvailability(filterAvailability.map(item =>
             item.id === id ? { ...item, checked: !item.checked } : item
         ));
     };
@@ -93,6 +109,7 @@ export const ProductListPage = () =>  {
     const filterProducts = () => {
         const filterFormValues: Form[] = filterForms.filter(x => x.checked).map(x => x.value);
         const filterDealerValues: Dealer[] = filterDealers.filter(x => x.checked).map(x => x.value);
+        const filterAvailabilityValues: Availability[] = filterAvailability.filter(x => x.checked).map(x => x.value);
         let tmpProducts: Product[] = structuredClone(products);
         if(excludeUnavailable) {
             tmpProducts = tmpProducts.filter(x => x.bestPrice?.price !== 0 || x.bestRedemption?.redemption !== 0)
@@ -109,13 +126,19 @@ export const ProductListPage = () =>  {
             // Price
             return x.bestPrice!.price >= minPrice && x.bestPrice!.price <= maxPrice
         })
+        // Availability - filter prices
+        tmpProducts.forEach(
+            product => {
+                product.latestPrices = product.latestPrices.filter(x => filterAvailabilityValues.includes(x.availability))
+            }
+        )
         // Dealer - filter prices
         tmpProducts.forEach(
             product => {
                 product.latestPrices = product.latestPrices.filter(x => filterDealerValues.includes(x.dealer))
             }
         )
-        // Dealer - filter products
+        // Filter products without Price
         tmpProducts = tmpProducts.filter(x => x.latestPrices.length !== 0)
         // Dealer - set best
         tmpProducts.forEach(
@@ -153,9 +176,12 @@ export const ProductListPage = () =>  {
                     }
                 }
             )
-            const dealerSet = new Set(tmpProducts.flatMap(x => x.latestPrices).map(x => x.dealer));
+            const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
+            const dealerSet = new Set(latestPrices.map(x => x.dealer));
+            const availabilitySet = new Set(latestPrices.map(x => x.availability).filter(x => x !== null));
             setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
             setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
+            setFilterAvailability(Array.from(availabilitySet).map((value, index) => ({id: index, value: value, checked: true})));
             setMaxPrice(tmpMaxPrice);
             setProducts(tmpProducts);
             setLoading(false);
@@ -174,7 +200,7 @@ export const ProductListPage = () =>  {
         setProductsControlled(
             filterProducts()
         );
-    }, [products, minPrice, maxPrice, filterForms, filterDealers, excludeUnavailable])
+    }, [products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable])
 
     return (
         <Box sx={{width: 1}}>
@@ -273,6 +299,30 @@ export const ProductListPage = () =>  {
                                         <Checkbox
                                             checked={dealer.checked}
                                             onChange={() => handleFilterDealerChecked(dealer.id)}
+                                        />
+                                    }
+                                />
+                            ))
+                        }
+                    </Collapse>
+                </List>
+
+                <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
+                    <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterAvailability(!openFilterAvailability)}>
+                        <ListItemText primary="Availability" />
+                        {openFilterAvailability ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={openFilterAvailability} timeout="auto" unmountOnExit>
+                        {
+                            filterAvailability.map((filter: FilterAvailability) => (
+                                <FormControlLabel
+                                    sx={{ml: "2rem"}}
+                                    key={filter.id}
+                                    label={getAvailabilityChipComponent(filter.value)}
+                                    control={
+                                        <Checkbox
+                                            checked={filter.checked}
+                                            onChange={() => handleFilterAvailabilityChecked(filter.id)}
                                         />
                                     }
                                 />

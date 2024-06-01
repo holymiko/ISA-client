@@ -3,6 +3,7 @@ import {PersonAccountDto} from "../types/PersonAccountDto";
 import {NavigateFunction} from "react-router-dom";
 import {Availability} from "../types/enums/availability";
 import {ChipISA} from "../components/ChipISA";
+import {t} from "i18next";
 
 export function getTextYield(params: number): string {
     return params >= 1 ?
@@ -24,14 +25,14 @@ export function priceWithSpaces(x: number): string {
 
 export function getAvailabilityChipComponent(x: Availability): any {
     switch (x) {
-        case Availability.STOCK:
-            return <ChipISA label="in stock" color="success" />
+        case Availability.IN_STOCK:
+            return <ChipISA label={t(x.toLowerCase())} color="success" />
         case Availability.ON_DEMAND:
         case Availability.ON_ORDER:
-            return <ChipISA label="backorder" color="warning" />
+            return <ChipISA label={t(x.toLowerCase())} color="warning" />
         case Availability.SOLD_OUT:
         case Availability.UNAVAILABLE:
-            return <ChipISA label="unavailable" color="error" />
+            return <ChipISA label={t(x.toLowerCase())} color="error" />
         default:
             return undefined
     }
