@@ -1,4 +1,5 @@
 import {Dealer} from "./enums/dealer";
+import {Availability} from "./enums/availability";
 
 export interface Price {
   id: number,
@@ -9,4 +10,6 @@ export interface Price {
   dealer: Dealer,
   spread: number,
   pricePerGram: number,
+  availability: Availability,
+  availabilityMessage: string,
 }

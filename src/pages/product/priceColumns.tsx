@@ -2,7 +2,7 @@ import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {compareStringAsDate, compareByPrice1} from "../../util/compare";
 import {Price} from "../../types/Price";
 import {getDealerImage} from "../../util/getImage";
-import {priceWithSpaces} from "../../util/utils";
+import {getAvailabilityChipComponent, priceWithSpaces} from "../../util/utils";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 import {format} from "date-fns";
 
@@ -63,6 +63,21 @@ export const priceColumns: GridColDef[] = [
     flex: 1,
     renderCell: (params: GridRenderCellParams<Price>) => (
       <b>{priceWithSpaces(Math.round(params.row.redemption!))} Kč</b>
+    )
+  },
+  {
+    field: 'availability',
+    headerName: 'Availability',
+    headerClassName: 'isa-app--header',
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
+    width: 140,
+    flex: 1,
+    renderCell: (params: GridRenderCellParams<Price>) => (
+        <>
+          {getAvailabilityChipComponent(params.row.availability!)}
+        </>
     )
   },
   {

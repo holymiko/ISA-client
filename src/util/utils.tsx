@@ -1,6 +1,8 @@
 import {Role} from "../types/enums/role";
 import {PersonAccountDto} from "../types/PersonAccountDto";
 import {NavigateFunction} from "react-router-dom";
+import {Availability} from "../types/enums/availability";
+import {ChipISA} from "../components/ChipISA";
 
 export function getTextYield(params: number): string {
     return params >= 1 ?
@@ -18,6 +20,21 @@ export function priceWithSpaces(x: number): string {
     const parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return parts.join(".");
+}
+
+export function getAvailabilityChipComponent(x: Availability): any {
+    switch (x) {
+        case Availability.STOCK:
+            return <ChipISA label="in stock" color="success" />
+        case Availability.ON_DEMAND:
+        case Availability.ON_ORDER:
+            return <ChipISA label="backorder" color="warning" />
+        case Availability.SOLD_OUT:
+        case Availability.UNAVAILABLE:
+            return <ChipISA label="unavailable" color="error" />
+        default:
+            return undefined
+    }
 }
 
 export function capitalizeFirstLetter(string: string|undefined): string{
