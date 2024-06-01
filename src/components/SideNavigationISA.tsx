@@ -9,14 +9,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {useNavigate} from "react-router-dom";
 import helmet from "../img/icon/helmetIcon2.png";
-import stockIcon from "../img/icon/stockIcon.png";
-import portfolioIcon from "../img/icon/portfolioIcon.png";
+import analytic from "../img/icon/analytic.png";
+import stockIcon from "../img/icon/stock.png";
+import pyramid from "../img/icon/pyramid.png";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 const drawerWidth = 190;
 
-export const SidebarISA = (props: any) => {
+export const SideNavigationISA = (props: any) => {
   const navigate = useNavigate();
 
   return (
@@ -32,6 +33,14 @@ export const SidebarISA = (props: any) => {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
+            <ListItem key={'Analytics'} disablePadding>
+              <ListItemButton onClick={() => navigate('/analytic')}>
+                <ListItemIcon>
+                  <img src={analytic} alt="" width="40"/>
+                </ListItemIcon>
+                <ListItemText primary={'Analytics'}/>
+              </ListItemButton>
+            </ListItem>
             <ListItem key={'Gold'} disablePadding>
               <ListItemButton onClick={() => navigate('/product/gold')}>
                 <ListItemIcon>
@@ -64,6 +73,14 @@ export const SidebarISA = (props: any) => {
                 <ListItemText primary={'Palladium'} />
               </ListItemButton>
             </ListItem>
+            <ListItem key={'Portfolios'} disablePadding>
+              <ListItemButton onClick={() => {navigate('/portfolio')}}>
+                <ListItemIcon>
+                  <img src={pyramid} alt="" width="35"/>
+                </ListItemIcon>
+                <ListItemText primary={'Portfolio'} />
+              </ListItemButton>
+            </ListItem>
             <ListItem key={'Add user'} disablePadding>
               <ListItemButton onClick={() => {navigate('/user/add')}}>
                 <ListItemIcon>
@@ -75,25 +92,17 @@ export const SidebarISA = (props: any) => {
             <ListItem key={'Users'} disablePadding>
               <ListItemButton onClick={() => {navigate('/user')}}>
                 <ListItemIcon>
-                  <PeopleAltIcon fontSize="large" sx={{pr:0.0, mr:0}}/>
+                  <PeopleAltIcon fontSize="large" sx={{ml:0.4}}/>
                 </ListItemIcon>
                 <ListItemText primary={'Users'} sx={{pl:0.0, ml:0}} />
               </ListItemButton>
             </ListItem>
-            <ListItem key={'Portfolios'} disablePadding>
-              <ListItemButton onClick={() => {navigate('/portfolio')}}>
-                <ListItemIcon>
-                  <img src={portfolioIcon} alt="" width="35"/>
-                </ListItemIcon>
-                <ListItemText primary={'Portfolio'} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem key={'Stock'} disablePadding>
+            <ListItem key={'Stocks'} disablePadding>
               <ListItemButton onClick={() => navigate('/stock')}>
                 <ListItemIcon>
-                  <img src={stockIcon} alt="" width="35"/>
+                  <img src={stockIcon} alt="" width="35"  sx={{ml:0.4}}/>
                 </ListItemIcon>
-                <ListItemText primary={'Stock'}/>
+                <ListItemText primary={'Stocks'}/>
               </ListItemButton>
             </ListItem>
           </List>

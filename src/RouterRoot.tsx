@@ -13,8 +13,9 @@ import {AddUser} from "./pages/user_add/AddUser";
 import {UserTablePage} from "./pages/user_table/UserTablePage";
 import {isEmpty, logOutMemClean} from "./util/utils";
 import Login from "./pages/Login";
-import {SidebarISA} from "./components/SidebarISA";
+import {SideNavigationISA} from "./components/SideNavigationISA";
 import {HeaderISA} from "./components/HeaderISA";
+import {AnalyticPage} from "./pages/AnalyticPage";
 
 
 const ProtectedRoute = ({ children }: any) => {
@@ -26,9 +27,9 @@ const ProtectedRoute = ({ children }: any) => {
     return (
         <>
             <HeaderISA/>
-            <SidebarISA>
+            <SideNavigationISA>
                 {children}
-            </SidebarISA>
+            </SideNavigationISA>
         </>
     );
 };
@@ -92,6 +93,13 @@ export const RouterRoot = () => {
                     <Route index element={
                         <ProtectedRoute>
                             <StockPage/>
+                        </ProtectedRoute>
+                    }/>
+                </Route>
+                <Route path = "analytic">
+                    <Route index element={
+                        <ProtectedRoute>
+                            <AnalyticPage/>
                         </ProtectedRoute>
                     }/>
                 </Route>
