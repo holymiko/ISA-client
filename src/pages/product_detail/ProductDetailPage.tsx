@@ -15,7 +15,7 @@ import {Dealer} from "../../types/enums/dealer";
 import {BoxChart} from "../../components/BoxChart";
 import {SubTitle} from "../../components/SubTitle";
 import {BoxRow} from "../../components/BoxRow";
-import {Button, Checkbox, FormControlLabel, Modal, TextField, Typography} from "@mui/material";
+import {Modal, TextField, Typography} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {scrapProductById} from "../../services/scrapService";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
@@ -28,6 +28,7 @@ import {Role} from "../../types/enums/role";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 import {compareAsc, format} from "date-fns";
 import {LinkPrices} from "../../types/LinkPrices";
+import {CallMerge, CallSplit} from "@mui/icons-material";
 
 
 interface chartDealer {
@@ -261,21 +262,21 @@ export const ProductDetailPage = () => {
             <PageTitle>{product?.name}</PageTitle>
 
             <BoxRow sx={{justifyContent: 'flex-end', mb: "0.5rem"}}>
-                <Button
+                <ButtonISA
                     onClick = {getProduct}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"
                 >
                     Refresh prices
-                </Button>
-                <Button
+                </ButtonISA>
+                <ButtonISA
                     onClick = {() => scrapProductById(productId)}
                     startIcon={<PlayCircleOutlineIcon/>}
                     variant="contained"
                 >
                     Scrap product prices
-                </Button>
+                </ButtonISA>
             </BoxRow>
 
             <SubTitle>Price chart</SubTitle>
@@ -418,14 +419,20 @@ export const ProductDetailPage = () => {
                                 sortable: false,
                                 renderCell: (params: GridRenderCellParams<LinkPrice>) => (
                                     <Box sx={{gap: 2, width: 1.0, my: 2, display: 'flex', justifyContent: 'center'}}>
-                                        <ButtonISA disabled={!isAdmin(sessionUserRole)} onClick={() => saveProductSeparatelyFce(params.row.id)}>
+                                        <ButtonISA
+                                            startIcon={<CallSplit/>}
+                                            disabled={!isAdmin(sessionUserRole)} onClick={() => saveProductSeparatelyFce(params.row.id)}
+                                        >
                                             save separately
                                         </ButtonISA>
-                                        <ButtonISA disabled={!isAdmin(sessionUserRole)}
+                                        <ButtonISA
+                                            startIcon={<CallMerge/>}
+                                            disabled={!isAdmin(sessionUserRole)}
                                             onClick={() => {
                                                 setSelectedLink(params.row)
                                                 setModalIsOpen(true)
-                                            }}>
+                                            }}
+                                        >
                                             connect URL to different product
                                         </ButtonISA>
                                     </Box>

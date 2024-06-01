@@ -13,7 +13,6 @@ import {capitalizeFirstLetter, getAvailabilityChipComponent} from "../../util/ut
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
 import {
-    Button,
     Checkbox,
     Collapse,
     FormControlLabel,
@@ -30,6 +29,7 @@ import {Dealer} from "../../types/enums/dealer";
 import {useTranslation} from "react-i18next";
 import {Availability} from "../../types/enums/availability";
 import {Price} from "../../types/Price";
+import {ButtonISA} from "../../components/ButtonISA";
 
 
 interface FilterDealer {
@@ -210,21 +210,21 @@ export const ProductTablePage = () =>  {
 
             {/* BUTTONS */}
             <BoxRow sx={{justifyContent: 'flex-end', mt: "1rem", mb: "0.5rem"}}>
-                <Button
+                <ButtonISA
                     onClick = {() => getProducts()}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"
                 >
                     Refresh products
-                </Button>
-                <Button
+                </ButtonISA>
+                <ButtonISA
                     onClick = {() => scrapByMetalInSync(metal)}
                     startIcon={<PlayCircleOutlineIcon/>}
                     variant="contained"
                 >
                     Scrap {metal} prices
-                </Button>
+                </ButtonISA>
             </BoxRow>
 
             {/* FILTER */}
