@@ -9,7 +9,7 @@ import {ButtonISA} from "./ButtonISA";
 import {PersonAccountDto} from "../types/PersonAccountDto";
 
 
-export const ProfileComponent = () => {
+export const UserProfile = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [visible, setVisible] = useState<boolean>(false)

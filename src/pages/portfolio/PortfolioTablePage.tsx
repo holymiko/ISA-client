@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import {getPortfolios, } from '../../services/portfolioService';
 import {scrapByPortfolio} from '../../services/scrapService'
 import { getTextYield } from '../../util/utils';
-import {PageTitle} from '../../components/PageTitle';
+import {TypographyPageTitle} from '../../components/TypographyPageTitle';
 import {Link, useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {PieChart} from "@mui/x-charts/PieChart";
@@ -26,7 +26,7 @@ export const PortfolioTablePage = () =>  {
 
   return (
       <Box>
-          <PageTitle>Portfolios</PageTitle>
+          <TypographyPageTitle>Portfolios</TypographyPageTitle>
           <Box sx={{ height: 1, width: 1, gap: 3, display: 'flex', flexDirection: 'column'}}>
               <Box sx={{ height: 1, width: 1, display: 'flex', gap: 1.8, flexDirection: 'inline-flex'}}>
                   <PortfolioBox name={"Portfolio 1"} data={[

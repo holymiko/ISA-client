@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {createPortfolio} from '../../services/portfolioService';
-import {PageTitle} from "../../components/PageTitle";
+import {TypographyPageTitle} from "../../components/TypographyPageTitle";
 import {getProductsAsDTO} from "../../services/productService";
 
 class AddPortfolioPage extends Component {
@@ -65,7 +65,7 @@ class AddPortfolioPage extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">
-                            <PageTitle>Add Portfolio</PageTitle>
+                            <TypographyPageTitle>Add Portfolio</TypographyPageTitle>
                             <div className="card-body">
                                 <form>
                                     <div className="form-group">

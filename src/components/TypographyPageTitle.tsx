@@ -5,7 +5,7 @@ export interface TitleProps extends BoxProps{
     children: any;
 }
 
-export const PageTitle = (props: TitleProps) => {
+export const TypographyPageTitle = (props: TitleProps) => {
     return (
         <Box sx={{mb: '3rem', ...props.sx,}} >
             <Typography

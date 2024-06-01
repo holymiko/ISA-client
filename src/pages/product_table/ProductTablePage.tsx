@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {BoxRow} from "../../components/BoxRow";
-import {PageTitle} from "../../components/PageTitle";
+import {TypographyPageTitle} from "../../components/TypographyPageTitle";
 import {getProductsAsDTO} from "../../services/productService";
 import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
@@ -14,22 +14,18 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
 import {
     Checkbox,
-    Collapse,
     FormControlLabel,
-    List,
-    ListItemButton,
     TextField
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import {ExpandLess, ExpandMore} from "@mui/icons-material";
-import ListItemText from "@mui/material/ListItemText";
 import {Form} from "../../types/enums/form";
 import {Dealer} from "../../types/enums/dealer";
 import {useTranslation} from "react-i18next";
 import {Availability} from "../../types/enums/availability";
 import {Price} from "../../types/Price";
 import {ButtonISA} from "../../components/ButtonISA";
+import {FilterCollapseItem} from "../../components/FilterCollapseItem";
 
 
 interface FilterDealer {
@@ -65,6 +61,7 @@ export const ProductTablePage = () =>  {
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
     const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
 
+    const [openFilterPrice, setOpenFilterPrice] = useState<boolean>(true);
     const [openFilterForm, setOpenFilterForm] = useState<boolean>(true);
     const [openFilterDealer, setOpenFilterDealer] = useState<boolean>(true);
     const [openFilterAvailability, setOpenFilterAvailability] = useState<boolean>(true);
@@ -204,9 +201,9 @@ export const ProductTablePage = () =>  {
 
     return (
         <Box sx={{width: 1}}>
-            <PageTitle sx={{mb: '2rem'}}>
+            <TypographyPageTitle sx={{mb: '2rem'}}>
                 {capitalizeFirstLetter(metal)} products
-            </PageTitle>
+            </TypographyPageTitle>
 
             {/* BUTTONS */}
             <BoxRow sx={{justifyContent: 'flex-end', mt: "1rem", mb: "0.5rem"}}>
@@ -229,107 +226,91 @@ export const ProductTablePage = () =>  {
 
             {/* FILTER */}
             <BoxChart sx={{ width: '1', gap: 0, mb: 2, display: 'flex', flexDirection: 'column' }}>
-                <BoxRow sx={{gap: "1rem", display: 'inline-flex', width: '1', mb: "1rem"}}>
-                    <TextField
-                        label="Min. price"
-                        type="number"
-                        inputProps={{
-                            step: '10'
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="standard"
-                        value={minPrice}
-                        onChange={handleMinPriceChange}
-                    />
-                    <Typography sx={{pt: "1rem"}}>-</Typography>
-                    <TextField
-                        label="Max. price"
-                        type="number"
-                        inputProps={{
-                            step: '10'
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="standard"
-                        value={Math.round(maxPrice)}
-                        onChange={handleMaxPriceChange}
-                    />
-                </BoxRow>
+                <FilterCollapseItem title="Price" openFilter={openFilterPrice} setOpenFilter={setOpenFilterPrice}>
+                    <BoxRow sx={{gap: "1rem", display: 'inline-flex', width: '1', mb: "1rem", ml: "3rem"}}>
+                            <TextField
+                                label="Min. price"
+                                type="number"
+                                inputProps={{
+                                    step: '10'
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="standard"
+                                value={minPrice}
+                                onChange={handleMinPriceChange}
+                            />
+                            <Typography sx={{pt: "1rem"}}>-</Typography>
+                            <TextField
+                                label="Max. price"
+                                type="number"
+                                inputProps={{
+                                    step: '10'
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="standard"
+                                value={Math.round(maxPrice)}
+                                onChange={handleMaxPriceChange}
+                            />
+                        </BoxRow>
+                </FilterCollapseItem>
 
-                <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
-                    <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterForm(!openFilterForm)}>
-                        <ListItemText primary="Form" />
-                        {openFilterForm ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={openFilterForm} timeout="auto" unmountOnExit>
-                        {
-                            filterForms.map((form: FilterForm) => (
-                                <FormControlLabel
-                                    sx={{ml: "2rem"}}
-                                    key={form.id}
-                                    label={form.value.toLowerCase()}
-                                    control={
-                                        <Checkbox
-                                            checked={form.checked}
-                                            onChange={() => handleFilterFormChecked(form.id)}
-                                        />
-                                    }
-                                />
-                            ))
-                        }
-                    </Collapse>
-                </List>
+                <FilterCollapseItem title="Form" openFilter={openFilterForm} setOpenFilter={setOpenFilterForm}>
+                    {
+                        filterForms.map((form: FilterForm) => (
+                            <FormControlLabel
+                                sx={{ml: "2rem"}}
+                                key={form.id}
+                                label={form.value.toLowerCase()}
+                                control={
+                                    <Checkbox
+                                        checked={form.checked}
+                                        onChange={() => handleFilterFormChecked(form.id)}
+                                    />
+                                }
+                            />
+                        ))
+                    }
+                </FilterCollapseItem>
 
-                <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
-                    <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterDealer(!openFilterDealer)}>
-                        <ListItemText primary="Dealer" />
-                        {openFilterDealer ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={openFilterDealer} timeout="auto" unmountOnExit>
-                        {
-                            filterDealers.map((dealer: FilterDealer) => (
-                                <FormControlLabel
-                                    sx={{ml: "2rem"}}
-                                    key={dealer.id}
-                                    label={t(dealer.value.toLowerCase())}
-                                    control={
-                                        <Checkbox
-                                            checked={dealer.checked}
-                                            onChange={() => handleFilterDealerChecked(dealer.id)}
-                                        />
-                                    }
-                                />
-                            ))
-                        }
-                    </Collapse>
-                </List>
+                <FilterCollapseItem title="Dealer" openFilter={openFilterDealer} setOpenFilter={setOpenFilterDealer}>
+                    {
+                        filterDealers.map((dealer: FilterDealer) => (
+                            <FormControlLabel
+                                sx={{ml: "2rem"}}
+                                key={dealer.id}
+                                label={t(dealer.value.toLowerCase())}
+                                control={
+                                    <Checkbox
+                                        checked={dealer.checked}
+                                        onChange={() => handleFilterDealerChecked(dealer.id)}
+                                    />
+                                }
+                            />
+                        ))
+                    }
+                </FilterCollapseItem>
 
-                <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
-                    <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilterAvailability(!openFilterAvailability)}>
-                        <ListItemText primary="Availability" />
-                        {openFilterAvailability ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={openFilterAvailability} timeout="auto" unmountOnExit>
-                        {
-                            filterAvailability.map((filter: FilterAvailability) => (
-                                <FormControlLabel
-                                    sx={{ml: "2rem"}}
-                                    key={filter.id}
-                                    label={getAvailabilityChipComponent(filter.value)}
-                                    control={
-                                        <Checkbox
-                                            checked={filter.checked}
-                                            onChange={() => handleFilterAvailabilityChecked(filter.id)}
-                                        />
-                                    }
-                                />
-                            ))
-                        }
-                    </Collapse>
-                </List>
+                <FilterCollapseItem title="Availability" openFilter={openFilterAvailability} setOpenFilter={setOpenFilterAvailability}>
+                    {
+                        filterAvailability.map((filter: FilterAvailability) => (
+                            <FormControlLabel
+                                sx={{ml: "2rem"}}
+                                key={filter.id}
+                                label={getAvailabilityChipComponent(filter.value)}
+                                control={
+                                    <Checkbox
+                                        checked={filter.checked}
+                                        onChange={() => handleFilterAvailabilityChecked(filter.id)}
+                                    />
+                                }
+                            />
+                        ))
+                    }
+                </FilterCollapseItem>
 
                 <FormControlLabel
                     sx={{ml: "2rem", mt: "1rem"}}

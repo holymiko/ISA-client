@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {BoxRow} from "../../components/BoxRow";
-import {PageTitle} from "../../components/PageTitle";
+import {TypographyPageTitle} from "../../components/TypographyPageTitle";
 import {DataGrid} from "@mui/x-data-grid";
 import {userColumns} from "./userColumns";
 import Box from "@mui/material/Box";
@@ -27,9 +27,9 @@ export const UserTablePage = () =>  {
 
     return (
         <Box sx={{width: 1}}>
-            <PageTitle sx={{mb: '2rem'}}>
+            <TypographyPageTitle sx={{mb: '2rem'}}>
                 Users
-            </PageTitle>
+            </TypographyPageTitle>
 
             <BoxRow sx={{justifyContent: 'flex-end', mt: "1rem", mb: "0.5rem"}}>
                 <Button

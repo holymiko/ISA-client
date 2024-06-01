@@ -17,7 +17,7 @@ import {useNavigate} from "react-router-dom";
 import {SnackbarISA} from "../../components/SnackbarISA";
 import {ButtonISA} from "../../components/ButtonISA";
 import {PersonAccountCreateDto} from "../../types/PersonAccountCreateDto";
-import {PageTitle} from "../../components/PageTitle";
+import {TypographyPageTitle} from "../../components/TypographyPageTitle";
 import {createAccount, createUser} from "../../services/userService";
 import {FormControlRoles} from "../../components/FormControlRoles";
 import {PersonAccountDto} from "../../types/PersonAccountDto";
@@ -259,9 +259,9 @@ export const AddUser = () => {
 
   return(
     <Box sx={{width: 1}}>
-      <PageTitle sx={{mb: '2rem'}}>
+      <TypographyPageTitle sx={{mb: '2rem'}}>
         Add user
-      </PageTitle>
+      </TypographyPageTitle>
 
 
       <Box sx={{ width: '1', gap: 1, mb: 0, display: 'flex', flexDirection: 'column' }}>

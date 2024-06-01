@@ -6,14 +6,14 @@ import {
     saveProductSeparately,
     updateLinkReference
 } from "../../services/productService";
-import {PageTitle} from "../../components/PageTitle";
+import {TypographyPageTitle} from "../../components/TypographyPageTitle";
 import Box from "@mui/material/Box";
 import {priceHistoryColumns} from "./priceHistoryColumns";
 import {Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import {Price} from "../../types/Price";
 import {Dealer} from "../../types/enums/dealer";
 import {BoxChart} from "../../components/BoxChart";
-import {SubTitle} from "../../components/SubTitle";
+import {TypographyH5BoldChart} from "../../components/TypographyH5BoldChart";
 import {BoxRow} from "../../components/BoxRow";
 import {Modal, TextField, Typography} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -259,7 +259,7 @@ export const ProductDetailPage = () => {
 
     return (
         <Box>
-            <PageTitle>{product?.name}</PageTitle>
+            <TypographyPageTitle>{product?.name}</TypographyPageTitle>
 
             <BoxRow sx={{justifyContent: 'flex-end', mb: "0.5rem"}}>
                 <ButtonISA
@@ -279,7 +279,7 @@ export const ProductDetailPage = () => {
                 </ButtonISA>
             </BoxRow>
 
-            <SubTitle>Price chart</SubTitle>
+            <TypographyH5BoldChart>Price chart</TypographyH5BoldChart>
             <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
                 <LineChart width={1450} height={500} data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -303,7 +303,7 @@ export const ProductDetailPage = () => {
                 </LineChart>
             </BoxChart>
 
-            <SubTitle>Price & Buyout chart</SubTitle>
+            <TypographyH5BoldChart>Price & Buyout chart</TypographyH5BoldChart>
             <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
                 <AreaChart width={1450} height={500} data={areaChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -326,7 +326,7 @@ export const ProductDetailPage = () => {
                 </AreaChart>
             </BoxChart>
 
-            <SubTitle>History table</SubTitle>
+            <TypographyH5BoldChart>History table</TypographyH5BoldChart>
             <BoxChart sx={{mb: "4rem"}}>
                 <Box sx={{
                     height: 527,
@@ -369,7 +369,7 @@ export const ProductDetailPage = () => {
                 </Box>
             </BoxChart>
 
-            <SubTitle>Sources</SubTitle>
+            <TypographyH5BoldChart>Sources</TypographyH5BoldChart>
             <BoxChart sx={{mb: "4rem"}}>
                 <Box sx={{
                     height: 527,

@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import {useNavigate} from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import {ProfileComponent} from "./ProfileComponent";
+import {UserProfile} from "./UserProfile";
 
 
 export const HeaderISA = () => {
@@ -25,7 +25,7 @@ export const HeaderISA = () => {
                         </Typography>
                     </Toolbar>
                     <Box sx={{display: 'inline-flex', width: '0.5', justifyContent: 'flex-end', mr: 2}}>
-                        <ProfileComponent/>
+                        <UserProfile/>
                     </Box>
                 </Box>
             </AppBar>

@@ -1,9 +1,9 @@
-import {PageTitle} from "../../components/PageTitle";
+import {TypographyPageTitle} from "../../components/TypographyPageTitle";
 
 export const PortfolioPage = () => {
     return (
         <>
-            <PageTitle>Portfolio</PageTitle>
+            <TypographyPageTitle>Portfolio</TypographyPageTitle>
             <div>Development is ongoing...</div>
         </>
     );
@@ -45,7 +45,7 @@ class PortfolioPage extends Component {
     render() {
         return (
             <div>
-                <PageTitle>Portfolio</PageTitle>
+                <TypographyPageTitle>Portfolio</TypographyPageTitle>
                 <div>Id: {this.state.id}</div>
                 <div>Owner: {this.state.owner}</div>
                 <div className="row">
