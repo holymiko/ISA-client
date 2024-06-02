@@ -13,11 +13,11 @@ import ErrorIcon from '@mui/icons-material/Error';
 import {Price} from "../../types/Price";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 
-const freshnessMinuteLimit = 180; // VPS is using UTC (-1h)
+const freshnessMinuteLimit = 120;
 
 const getPriceFreshness = (prices: Price[]|undefined, isRedemptionPrice: boolean) => {
   const d = new Date();
-  d.setMinutes(d.getMinutes()-freshnessMinuteLimit);
+  d.setMinutes(d.getMinutes() - freshnessMinuteLimit);
 
   if(prices === undefined || prices.length === 0) {
     return <ErrorIcon/>
@@ -70,7 +70,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'shortName',
-    headerName: 'Short Name',
+    headerName: 'Short name',
     description: "",
     minWidth: 330,
     maxWidth: 330,
@@ -106,7 +106,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'price',
-    headerName: 'Best Price',
+    headerName: 'Best buy',
     headerAlign: 'right',
     align: 'right',
     minWidth: 150,
@@ -122,7 +122,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'priceFreshness',
-    headerName: 'Freshness',
+    headerName: '',
     description: 'Price freshness indicator',
     headerAlign: 'center',
     align: 'center',
@@ -139,7 +139,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'dealerPrice',
-    headerName: 'Best Price Dealer',
+    headerName: 'Best buy dealer',
     description: "",
     minWidth: 160,
     maxWidth: 160,
@@ -154,7 +154,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'redemption',
-    headerName: 'Best Buyout',
+    headerName: 'Best sell',
     headerAlign: 'right',
     description: "",
     minWidth: 140,
@@ -171,8 +171,8 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'redemptionFreshness',
-    headerName: 'Freshness',
-    description: 'Buyout freshness indicator',
+    headerName: '',
+    description: 'Sell price freshness indicator',
     headerAlign: 'center',
     align: 'center',
     minWidth: 50,
@@ -188,7 +188,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'dealerRedemption',
-    headerName: 'Best Buyout dealer',
+    headerName: 'Best sell dealer',
     description: "",
     minWidth: 170,
     maxWidth: 170,
@@ -203,7 +203,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'Best spread',
-    headerName: 'Best Spread',
+    headerName: 'Best spread',
     headerAlign: 'right',
     description: "",
     minWidth: 120,

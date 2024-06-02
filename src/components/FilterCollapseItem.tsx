@@ -3,7 +3,7 @@ import {Collapse, List, ListItemButton} from "@mui/material";
 import ListItemText from "@mui/material/ListItemText";
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import React from "react";
-import {TypographyH5Bold} from "./TypographyH5Bold";
+import {TypographyH6Bold} from "./TypographyH6Bold";
 
 export interface TitleProps extends TypographyProps {
     title: string;
@@ -17,7 +17,7 @@ export const FilterCollapseItem = ({title, children, openFilter, setOpenFilter}:
         <List sx={{ width: 1, bgcolor: 'whitesmoke', p: 0}}>
             <ListItemButton sx={{borderRadius: 3}} onClick={() => setOpenFilter(!openFilter)}>
                 <ListItemText primary={
-                    <TypographyH5Bold>{title}</TypographyH5Bold>
+                    <TypographyH6Bold>{title}</TypographyH6Bold>
                 } />
                 {openFilter ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
