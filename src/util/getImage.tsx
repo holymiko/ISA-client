@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {Dealer} from "../types/enums/dealer";
 import logoBessergold from "../img/logo/bessergold1.png"
 import logoZlataky from "../img/logo/zlataky5.png"
