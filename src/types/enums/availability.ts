@@ -4,5 +4,6 @@ export enum Availability {
   SOLD_OUT = "SOLD_OUT",
   ON_DEMAND = "ON_DEMAND",
   ON_ORDER = "ON_ORDER",
-  UNAVAILABLE = "UNAVAILABLE"
+  UNAVAILABLE = "UNAVAILABLE",
+  IN_STORE = "IN_STORE",
 }

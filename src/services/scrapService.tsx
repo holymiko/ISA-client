@@ -10,6 +10,14 @@ export const scrapByMetalInSync = (
     });
 }
 
+export const scrapAllLinksFromProductList = () => {
+    return api.post("scrap/links");
+}
+
+export const scrapMissingProducts = () => {
+    return api.post("scrap/products/missing");
+}
+
 export const scrapProductById = (productId: number) => {
     return api.post("scrap/product/" + productId);
 }

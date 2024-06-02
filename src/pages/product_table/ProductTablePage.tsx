@@ -8,7 +8,7 @@ import {productColumns} from "./productColumns";
 import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
-import {scrapByMetalInSync} from "../../services/scrapService";
+import {scrapAllLinksFromProductList, scrapByMetalInSync, scrapMissingProducts} from "../../services/scrapService";
 import {capitalizeFirstLetter, getAvailabilityChipComponent} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
@@ -208,12 +208,20 @@ export const ProductTablePage = () =>  {
             {/* BUTTONS */}
             <BoxRow sx={{justifyContent: 'flex-end', mt: "1rem", mb: "0.5rem"}}>
                 <ButtonISA
-                    onClick = {() => getProducts()}
-                    startIcon={<RefreshIcon/>}
+                    onClick = {() => scrapAllLinksFromProductList()}
+                    startIcon={<PlayCircleOutlineIcon/>}
                     disabled={loading}
                     variant="contained"
                 >
-                    Refresh products
+                    Scrap new URL
+                </ButtonISA>
+                <ButtonISA
+                    onClick = {() => scrapMissingProducts()}
+                    startIcon={<PlayCircleOutlineIcon/>}
+                    disabled={loading}
+                    variant="contained"
+                >
+                    Scrap new products
                 </ButtonISA>
                 <ButtonISA
                     onClick = {() => scrapByMetalInSync(metal)}
@@ -221,6 +229,14 @@ export const ProductTablePage = () =>  {
                     variant="contained"
                 >
                     Scrap {metal} prices
+                </ButtonISA>
+                <ButtonISA
+                    onClick = {() => getProducts()}
+                    startIcon={<RefreshIcon/>}
+                    disabled={loading}
+                    variant="contained"
+                >
+                    Refresh products
                 </ButtonISA>
             </BoxRow>
 

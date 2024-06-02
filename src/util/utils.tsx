@@ -25,6 +25,7 @@ export function priceWithSpaces(x: number): string {
 
 export function getAvailabilityChipComponent(x: Availability): any {
     switch (x) {
+        case Availability.IN_STORE:
         case Availability.IN_STOCK:
             return <ChipISA label={t(x.toLowerCase())} color="success" />
         case Availability.ON_DEMAND:

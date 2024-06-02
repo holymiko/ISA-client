@@ -59,6 +59,21 @@ const chartDealersPre = {
         dealerString: "Zlataky",
         color: "orange"
     },
+    CESKA_MINCOVNA: {
+        dealer: Dealer.CESKA_MINCOVNA,
+        dealerString: "Ceska Mincovna",
+        color: "yellow"
+    },
+    GOLD_A_SILVER: {
+        dealer: Dealer.GOLD_A_SILVER,
+        dealerString: "Gold a Silver",
+        color: "purple"
+    },
+    AURUM_PRO: {
+        dealer: Dealer.AURUM_PRO,
+        dealerString: "Aurum Pro",
+        color: "black"
+    },
 }
 
 const modalStyle = {
