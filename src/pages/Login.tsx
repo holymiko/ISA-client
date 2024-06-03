@@ -72,11 +72,11 @@ export const Login = () => {
       authorization({username: username, password: password})
           .then((res) => {
             const {token} = res;
-            sessionStorage.setItem("accessToken", token);
-            // sessionStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("accessToken", token);
+            // localStorage.setItem("refreshToken", refreshToken);
             getCurrentUser().then((user: PersonAccountDto) => {
-              sessionStorage.setItem('user', JSON.stringify(user));
-            }).catch(() => sessionStorage.setItem('user', JSON.stringify("dummy")))
+              localStorage.setItem('user', JSON.stringify(user));
+            }).catch(() => localStorage.setItem('user', JSON.stringify("dummy")))
             navigate('/');
           }).catch(handleRequestError)
     }

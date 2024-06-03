@@ -19,7 +19,7 @@ import {AnalyticPage} from "./pages/AnalyticPage";
 
 
 const ProtectedRoute = ({ children }: any) => {
-    const token = sessionStorage.getItem('accessToken')
+    const token = localStorage.getItem('accessToken')
     if (isEmpty(token)) {
         logOutMemClean();
         return <Navigate to="/login" replace />

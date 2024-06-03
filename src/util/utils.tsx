@@ -110,13 +110,13 @@ export const isAdmin = (role: Role|undefined): boolean => {
 }
 
 export const logOutMemClean = () => {
-    sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("refreshToken");
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
 }
 
 export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|undefined => {
-    const stringUser = sessionStorage.getItem('user');
+    const stringUser = localStorage.getItem('user');
 
     if(isEmpty(stringUser)) {
         logOutMemClean();

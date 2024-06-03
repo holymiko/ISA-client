@@ -33,7 +33,7 @@ export const UserProfile = () => {
     }, [location])
 
     useEffect(() => {
-        const userString = sessionStorage.getItem('user');
+        const userString = localStorage.getItem('user');
         if(!isEmpty(userString)) {
             const x: PersonAccountDto = JSON.parse(userString!);
             setUser(x);

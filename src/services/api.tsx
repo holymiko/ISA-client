@@ -25,26 +25,26 @@ const headers: Readonly<Record<string, string | boolean>> = {
 const refreshAuthLogic = (failedRequest: any) =>
     axios.post(
         PREFIX_URL + '/auth/refresh',
-        {refreshToken: sessionStorage.getItem("refreshToken")},
+        {refreshToken: localStorage.getItem("refreshToken")},
         {
           headers: {
-            'Authorization': `Basic ${sessionStorage.getItem("accessToken")}`
+            'Authorization': `Basic ${localStorage.getItem("accessToken")}`
           }
         }
     ).then((tokenRefreshResponse: any) => {
       // alert("Refresh active 1")
       const {accessToken, refreshToken} = tokenRefreshResponse.data;
-      sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       failedRequest.response.config.headers['Authorization'] = 'Bearer ' + accessToken;
       return Promise.resolve();
     }) // .catch doesn't work here. Breaks App's error msg
 
 // We can use the following function to inject the JWT token through an interceptor
-// We get the `accessToken` from the sessionStorage that we set when we authenticate
+// We get the `accessToken` from the localStorage that we set when we authenticate
 const injectToken = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   try {
-    const token = sessionStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
     if (token != null && config.headers != null) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -128,7 +128,7 @@ class Http {
         break;
       }
       case StatusCode.Unauthorized: {
-        // sessionStorage.removeItem('user')
+        // localStorage.removeItem('user')
         // return <Navigate to="/login" replace />
         break;
       }
