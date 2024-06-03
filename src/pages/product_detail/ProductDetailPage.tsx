@@ -62,7 +62,7 @@ const chartDealersPre = {
     CESKA_MINCOVNA: {
         dealer: Dealer.CESKA_MINCOVNA,
         dealerString: "Ceska Mincovna",
-        color: "yellow"
+        color: "pink"
     },
     GOLD_A_SILVER: {
         dealer: Dealer.GOLD_A_SILVER,
