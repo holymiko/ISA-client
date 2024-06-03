@@ -278,19 +278,19 @@ export const ProductDetailPage = () => {
 
             <BoxRow sx={{justifyContent: 'flex-end', mb: "0.5rem"}}>
                 <ButtonISA
+                    onClick = {() => scrapProductById(productId)}
+                    startIcon={<PlayCircleOutlineIcon/>}
+                    variant="contained"
+                >
+                    Scrap product prices
+                </ButtonISA>
+                <ButtonISA
                     onClick = {getProduct}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"
                 >
                     Refresh prices
-                </ButtonISA>
-                <ButtonISA
-                    onClick = {() => scrapProductById(productId)}
-                    startIcon={<PlayCircleOutlineIcon/>}
-                    variant="contained"
-                >
-                    Scrap product prices
                 </ButtonISA>
             </BoxRow>
 
