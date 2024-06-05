@@ -5,9 +5,9 @@ import {DataGrid} from "@mui/x-data-grid";
 import {userColumns} from "./userColumns";
 import Box from "@mui/material/Box";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {Button} from "@mui/material";
 import {getUserList} from "../../services/userService";
 import {PersonAccountDto} from "../../types/PersonAccountDto";
+import {ButtonISA} from "../../components/ButtonISA";
 
 export const UserTablePage = () =>  {
     const [users, setUser] = useState<PersonAccountDto[]>([])
@@ -32,14 +32,14 @@ export const UserTablePage = () =>  {
             </TypographyPageTitle>
 
             <BoxRow sx={{justifyContent: 'flex-end', mt: "1rem", mb: "0.5rem"}}>
-                <Button
+                <ButtonISA
                     onClick = {() => getUsers()}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"
                 >
                     Refresh users
-                </Button>
+                </ButtonISA>
             </BoxRow>
 
             <Box sx={{ height: 700, width: '100%', mb: '3rem' }}>
