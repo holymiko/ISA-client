@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -17,6 +16,7 @@ import {BarChart, ScatterChart} from "@mui/x-charts";
 import {TypographyH5BoldChart} from "../components/TypographyH5BoldChart";
 import {useTranslation} from "react-i18next";
 import {chartDealersPre} from "./product_detail/ProductDetailPage";
+import {isEmpty} from "../util/utils";
 
 interface BarChartData {
     dealer: string
@@ -160,6 +160,23 @@ export const AnalyticPage = () => {
         getBackendVersion().then((x) => setVersion(x.data));
     }
 
+    const formatProducts = (metal: Metal, products: Product[]) => {
+        const latestPrices: Price[] = products.flatMap(x => x.latestPrices);
+        const dataBarChart: BarChartData[] = getBarChartData(latestPrices);
+        const dataScatterChart: ScatterChartData[] = getScatterChartData(products);
+
+        if(metal === Metal.GOLD) {
+            setBarChartDataGold(dataBarChart);
+            setScatterChartDataGold(dataScatterChart)
+            setProductsGold(products)
+        }
+        if(metal === Metal.SILVER) {
+            setBarChartDataSilver(dataBarChart);
+            setScatterChartDataSilver(dataScatterChart)
+            setProductsSilver(products);
+        }
+        setLoading(false);
+    }
 
     const getProducts = (metal: Metal) => {
         setLoading(true)
@@ -187,28 +204,21 @@ export const AnalyticPage = () => {
             //         }
             //     }
             // )
-            const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
-            const dataBarChart: BarChartData[] = getBarChartData(latestPrices);
-            const dataScatterChart: ScatterChartData[] = getScatterChartData(tmpProducts);
-
-            if(metal === Metal.GOLD) {
-                setBarChartDataGold(dataBarChart);
-                setScatterChartDataGold(dataScatterChart)
-                setProductsGold(tmpProducts)
-            }
-            if(metal === Metal.SILVER) {
-                setBarChartDataSilver(dataBarChart);
-                setScatterChartDataSilver(dataScatterChart)
-                setProductsSilver(tmpProducts);
-            }
-            setLoading(false);
+            formatProducts(metal, tmpProducts)
         });
     }
 
     useEffect(() => {
+        const list = [Metal.GOLD, Metal.SILVER]
+        for (const tmpMetal of list) {
+            const productCache = localStorage.getItem(tmpMetal.toLowerCase())
+            if (isEmpty(productCache)) {
+                getProducts(tmpMetal);
+            } else {
+                formatProducts(tmpMetal, JSON.parse(productCache!))
+            }
+        }
         update();
-        getProducts(Metal.GOLD);
-        getProducts(Metal.SILVER);
     },[]);
 
     return (

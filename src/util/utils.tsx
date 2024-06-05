@@ -4,6 +4,7 @@ import {NavigateFunction} from "react-router-dom";
 import {Availability} from "../types/enums/availability";
 import {ChipISA} from "../components/ChipISA";
 import {t} from "i18next";
+import {Metal} from "../types/enums/metal";
 
 export function getTextYield(params: number): string {
     return params >= 1 ?
@@ -113,6 +114,10 @@ export const logOutMemClean = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("gold");
+    localStorage.removeItem("silver");
+    localStorage.removeItem("platinum");
+    localStorage.removeItem("palladium");
 }
 
 export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|undefined => {
@@ -124,6 +129,16 @@ export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|und
     } else {
         return JSON.parse(stringUser!);
     }
+}
+
+export const getMetal = (metal: string|undefined): Metal|undefined => {
+    switch (metal) {
+        case 'gold': return Metal.GOLD
+        case 'silver': return Metal.SILVER
+        case 'palladium': return Metal.PALLADIUM
+        case 'platinum': return Metal.PLATINUM
+    }
+    return undefined
 }
 
 export const getSessionUser2 = (): PersonAccountDto|undefined => {

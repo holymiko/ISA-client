@@ -9,7 +9,14 @@ import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
 import {scrapAllLinksFromProductList, scrapByMetalInSync, scrapMissingProducts} from "../../services/scrapService";
-import {capitalizeFirstLetter, getAvailabilityChipComponent, getSessionUser2, isAdmin} from "../../util/utils";
+import {
+    capitalizeFirstLetter,
+    getAvailabilityChipComponent,
+    getMetal,
+    getSessionUser2,
+    isAdmin,
+    isEmpty
+} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
 import {
@@ -147,8 +154,31 @@ export const ProductTablePage = () =>  {
         return tmpProducts;
     }
 
-    const getProducts = () => {
-        setLoading(true)
+    const formatProducts = (metal: string|undefined, tmpProducts: Product[]) => {
+        let formSet = new Set<Form>();
+        let tmpMaxPrice: number = 0;
+        tmpProducts.forEach(
+            product => {
+                formSet.add(product.form);
+                product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
+                product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
+                if(product.bestPrice.price > tmpMaxPrice) {
+                    tmpMaxPrice = product.bestPrice.price;
+                }
+            }
+        )
+        const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
+        const dealerSet = new Set(latestPrices.map(x => x.dealer));
+        const availabilitySet = new Set(latestPrices.map(x => x.availability).filter(x => x !== null));
+        setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
+        setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
+        setFilterAvailability(Array.from(availabilitySet).map((value, index) => ({id: index, value: value, checked: true})));
+        setMaxPrice(tmpMaxPrice);
+        setProducts(tmpProducts);
+        setLoading(false);
+    }
+
+    const getProducts = (metal: string|undefined) => {
         getProductsAsDTO(
             undefined,
             undefined,
@@ -160,34 +190,29 @@ export const ProductTablePage = () =>  {
             undefined,
             undefined
         ).then((page) => {
-            let formSet = new Set<Form>();
             const tmpProducts: Product[] = page.content;
-            let tmpMaxPrice: number = 0;
-            tmpProducts.forEach(
-                product => {
-                    formSet.add(product.form);
-                    product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
-                    product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
-                    if(product.bestPrice.price > tmpMaxPrice) {
-                        tmpMaxPrice = product.bestPrice.price;
-                    }
-                }
-            )
-            const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
-            const dealerSet = new Set(latestPrices.map(x => x.dealer));
-            const availabilitySet = new Set(latestPrices.map(x => x.availability).filter(x => x !== null));
-            setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
-            setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
-            setFilterAvailability(Array.from(availabilitySet).map((value, index) => ({id: index, value: value, checked: true})));
-            setMaxPrice(tmpMaxPrice);
-            setProducts(tmpProducts);
-            setLoading(false);
+            formatProducts(metal, tmpProducts)
+            localStorage.setItem(metal !== undefined ? metal?.toLowerCase() : 'products', JSON.stringify(tmpProducts))
         });
     }
 
 
     useEffect(() => {
-        getProducts();
+        setLoading(true)
+        const tmpMetal = getMetal(metal)
+
+        if(metal === undefined || tmpMetal === undefined) {
+            getProducts(metal);
+            return;
+        }
+
+        const productsCache = localStorage.getItem(tmpMetal.toLowerCase())
+        if(isEmpty(productsCache)) {
+            getProducts(tmpMetal);
+        } else {
+            formatProducts(tmpMetal, JSON.parse(productsCache!))
+        }
+
     }, [metal])
 
     /**
@@ -232,7 +257,7 @@ export const ProductTablePage = () =>  {
                     Scrap {metal} prices
                 </ButtonISA>
                 <ButtonISA
-                    onClick = {() => getProducts()}
+                    onClick = {() => getProducts(metal)}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"
