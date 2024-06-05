@@ -263,6 +263,7 @@ export const AnalyticPage = () => {
                     width: '1'
                 }}
                 onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataGold[d.dataIndex].product_id)}
+                grid={{ vertical: true, horizontal: true }}
             />
 
             <TypographyH5BoldChart>Silver Price distribution</TypographyH5BoldChart>
@@ -283,10 +284,8 @@ export const AnalyticPage = () => {
                     width: '1'
                 }}
                 onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataSilver[d.dataIndex].product_id)}
+                grid={{ vertical: true, horizontal: true }}
             />
-            <Typography>
-                {version}
-            </Typography>
         </Box>
     );
 }
