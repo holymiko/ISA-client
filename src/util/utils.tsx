@@ -126,3 +126,13 @@ export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|und
     }
 }
 
+export const getSessionUser2 = (): PersonAccountDto|undefined => {
+    const stringUser = localStorage.getItem('user');
+
+    if(isEmpty(stringUser)) {
+        return undefined
+    } else {
+        return JSON.parse(stringUser!);
+    }
+}
+

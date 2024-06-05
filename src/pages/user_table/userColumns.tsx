@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {deleteAccount} from "../../services/userService";
 import {IconButton, Tooltip} from "@mui/material";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
+import {getSessionUser2, isAdmin} from "../../util/utils";
 
 export const userColumns: GridColDef[] = [
   {
@@ -83,7 +84,9 @@ export const userColumns: GridColDef[] = [
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete" >
-            <IconButton onClick={() => deleteAccount(params.row.account!.id!)}>
+            <IconButton
+                disabled={!isAdmin(getSessionUser2()?.account?.role)}
+                onClick={() => deleteAccount(params.row.account!.id!)} >
               <DeleteIcon />
             </IconButton>
           </Tooltip>

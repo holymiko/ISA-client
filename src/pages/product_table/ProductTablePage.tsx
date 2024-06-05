@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
 import {compareByPrice, compareByRedemption} from "../../util/compare";
 import {scrapAllLinksFromProductList, scrapByMetalInSync, scrapMissingProducts} from "../../services/scrapService";
-import {capitalizeFirstLetter, getAvailabilityChipComponent} from "../../util/utils";
+import {capitalizeFirstLetter, getAvailabilityChipComponent, getSessionUser2, isAdmin} from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
 import {
@@ -210,7 +210,7 @@ export const ProductTablePage = () =>  {
                 <ButtonISA
                     onClick = {() => scrapAllLinksFromProductList()}
                     startIcon={<PlayCircleOutlineIcon/>}
-                    disabled={loading}
+                    disabled={loading || !isAdmin(getSessionUser2()?.account?.role)}
                     variant="contained"
                 >
                     Scrap new URL
@@ -218,7 +218,7 @@ export const ProductTablePage = () =>  {
                 <ButtonISA
                     onClick = {() => scrapMissingProducts()}
                     startIcon={<PlayCircleOutlineIcon/>}
-                    disabled={loading}
+                    disabled={loading || !isAdmin(getSessionUser2()?.account?.role)}
                     variant="contained"
                 >
                     Scrap new products
@@ -226,6 +226,7 @@ export const ProductTablePage = () =>  {
                 <ButtonISA
                     onClick = {() => scrapByMetalInSync(metal)}
                     startIcon={<PlayCircleOutlineIcon/>}
+                    disabled={loading || !isAdmin(getSessionUser2()?.account?.role)}
                     variant="contained"
                 >
                     Scrap {metal} prices

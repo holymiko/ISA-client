@@ -280,6 +280,7 @@ export const ProductDetailPage = () => {
                 <ButtonISA
                     onClick = {() => scrapProductById(productId)}
                     startIcon={<PlayCircleOutlineIcon/>}
+                    disabled={loading || !isAdmin(sessionUserRole)}
                     variant="contained"
                 >
                     Scrap product prices
