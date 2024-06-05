@@ -38,7 +38,7 @@ interface chartDealer {
     color: string,
 }
 
-const chartDealersPre = {
+export const chartDealersPre = {
     BESSERGOLD_CZ: {
         dealer: Dealer.BESSERGOLD_CZ,
         dealerString: "Bessergold",

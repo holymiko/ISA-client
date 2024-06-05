@@ -9,6 +9,7 @@ export function formatProductName(name: string): string {
   name = name.replaceAll(/\d+\s*Kg/ig, '').trim()
   name = name.replaceAll(/\d+\s*oz/ig, '').trim()
   name = name.replaceAll(/oz\s+/ig, '').trim()
+  name = name.replaceAll(/ Oz/ig, '').trim()
 
   name = name.replaceAll(/\(trojsk[áé] unce\)/ig, '').trim()
   name = name.replaceAll(/\(trojských uncí\)/ig, '').trim()
@@ -24,6 +25,9 @@ export function formatProductName(name: string): string {
   name = name.replaceAll(/slitek/ig, '').trim()
   name = name.replaceAll(/mince/ig, '').trim()
   name = name.replaceAll(/cihla/ig, '').trim()
+
+  name = name.replaceAll(/\| /ig, '').trim()
+  name = name.replaceAll(/- /ig, '').trim()
 
   return name;
 }
