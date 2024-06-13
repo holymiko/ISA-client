@@ -21,10 +21,23 @@ export function formatProductName(name: string): string {
   name = name.replaceAll(/palladiov[ýá]/ig, '').trim()
   name = name.replaceAll(/platinmünze/ig, '').trim()
   name = name.replaceAll(/platinbarren/ig, '').trim()
+  name = name.replaceAll(/goldbarren/ig, '').trim()
 
   name = name.replaceAll(/slitek/ig, '').trim()
   name = name.replaceAll(/mince/ig, '').trim()
   name = name.replaceAll(/cihla/ig, '').trim()
+
+  name = name.replaceAll(/\(Švýcarsko \/ Německo\)/g, '').trim()
+  name = name.replaceAll(/SA Švýcarsko/g, '').trim()
+  name = name.replaceAll(/The Royal Mint/g, '').trim()
+  name = name.replaceAll(/různé roky/g, '').trim()
+  name = name.replaceAll(/\(?německ[oýáé]\)?/ig, '').trim()
+  name = name.replaceAll(/\(?Velká Británie\)?/g, '').trim()
+  name = name.replaceAll(/\(?Švýcarsko\)?/g, '').trim()
+
+
+
+
 
   name = name.replaceAll(/\| /ig, '').trim()
   name = name.replaceAll(/- /ig, '').trim()
