@@ -218,9 +218,9 @@ export const productColumns: GridColDef[] = [
       if (row.bestPrice?.price === 0 || row.bestRedemption?.redemption === 0) {
         return '0';
       }
-      const ratio = Math.round( (row.bestRedemption?.redemption / row.bestPrice?.price - 1)*10_000)/100
+      const ratio = (row.bestRedemption?.redemption / row.bestPrice?.price - 1)*100
 
-      return `${(ratio > 0 ? '+' : '') + ratio} %`;
+      return `${(ratio > 0 ? '+' : '') + ratio.toFixed(2)} %`;
     },
   },
   {
@@ -233,12 +233,15 @@ export const productColumns: GridColDef[] = [
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (value, row: Product) => (
-        `${ row.bestPrice?.price !== undefined
-            ? Math.round((row.bestPrice?.price! / row.grams)*100)/100
-            : '-'
-        } Kč/g`
-    )
+    valueGetter: (value, row: Product) => {
+      if (row.bestPrice?.price === undefined) {
+        return '-';
+      }
+      if (row.bestPrice?.price === 0) {
+        return '0';
+      }
+      return `${(row.bestPrice?.price! / row.grams).toFixed(2)} Kč/g`
+    }
   },
   {
     field: '2',
@@ -250,12 +253,15 @@ export const productColumns: GridColDef[] = [
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
-    valueGetter: (value, row: Product) => (
-        `${ row.bestRedemption?.redemption !== undefined
-            ? Math.round((row.bestRedemption?.redemption! / row.grams)*100)/100
-            : '-'
-        } Kč/g`
-    )
+    valueGetter: (value, row: Product) => {
+      if (row.bestRedemption?.price === undefined) {
+        return '-';
+      }
+      if (row.bestRedemption?.redemption === 0) {
+        return '0';
+      }
+      return `${(row.bestRedemption?.redemption! / row.grams).toFixed(2)} Kč/g`
+    }
   },
 
 
