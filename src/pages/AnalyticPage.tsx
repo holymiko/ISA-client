@@ -17,6 +17,8 @@ import {TypographyH5BoldChart} from "../components/TypographyH5BoldChart";
 import {useTranslation} from "react-i18next";
 import {chartDealersPre} from "./product_detail/ProductDetailPage";
 import {isEmpty} from "../util/utils";
+import {getLinkCountAsDto} from "../services/linkService";
+import {LinkCountDto} from "../types/LinkCountDto";
 
 interface BarChartData {
     dealer: string
@@ -24,6 +26,12 @@ interface BarChartData {
     orange: number
     red: number
     total: number
+}
+
+interface BarChartDataProductCount {
+    dealer: string
+    productCount: number
+    linkWithoutProductCount: number
 }
 
 interface ScatterChartData {
@@ -36,12 +44,6 @@ interface ScatterChartData {
 }
 
 const barChartSetting = {
-    yAxis: [
-        {
-            // label: 'product count',
-            max: 400
-        },
-    ],
     width: 1000,
     height: 340,
     sx: {
@@ -51,6 +53,18 @@ const barChartSetting = {
         },
     },
 };
+
+const getBarChartDataLinkCount = (linkCountDtos: LinkCountDto[]): BarChartDataProductCount[] => {
+    const list: BarChartDataProductCount[] = []
+    linkCountDtos?.forEach((linkCount) =>
+        list.push({
+            dealer: linkCount.dealer.toString(),
+            productCount: linkCount.productCount,
+            linkWithoutProductCount: linkCount.linkCount - linkCount.productCount,
+        })
+    );
+    return list;
+}
 
 const getBarChartData = (latestPrices: Price[]): BarChartData[] => {
     const list: BarChartData[] = []
@@ -139,6 +153,7 @@ export const AnalyticPage = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [barChartDataGold, setBarChartDataGold] = useState<any[]>([])
     const [barChartDataSilver, setBarChartDataSilver] = useState<any[]>([])
+    const [barChartDataProductCount, setBarChartDataProductCount] = useState<any[]>([])
     const [scatterChartDataGold, setScatterChartDataGold] = useState<any[]>([])
     const [scatterChartDataSilver, setScatterChartDataSilver] = useState<any[]>([])
 
@@ -208,6 +223,16 @@ export const AnalyticPage = () => {
         });
     }
 
+    const getLinkCount = () => {
+        setLoading(true)
+        getLinkCountAsDto().then((tmpLinkCount: LinkCountDto[]) => {
+            setBarChartDataProductCount(
+                getBarChartDataLinkCount(tmpLinkCount)
+            )
+            setLoading(false);
+        })
+    }
+
     useEffect(() => {
         const list = [Metal.GOLD, Metal.SILVER]
         for (const tmpMetal of list) {
@@ -218,6 +243,7 @@ export const AnalyticPage = () => {
                 formatProducts(tmpMetal, JSON.parse(productCache!))
             }
         }
+        getLinkCount();
         update();
     },[]);
 
@@ -233,6 +259,7 @@ export const AnalyticPage = () => {
             <BarChart
                 dataset={barChartDataGold}
                 xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
+                yAxis={[{ label: 'Product count', max: 400 }]}
                 series={[
                     { dataKey: 'green', label: 'In stock', color: 'green' },
                     { dataKey: 'orange', label: 'Preorder', color: '#f5a511' },
@@ -245,6 +272,7 @@ export const AnalyticPage = () => {
             <BarChart
                 dataset={barChartDataSilver}
                 xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
+                yAxis={[{ label: 'Product count', max: 400 }]}
                 series={[
                     { dataKey: 'green', label: 'In stock', color: 'green' },
                     { dataKey: 'orange', label: 'Preorder', color: '#f5a511' },
@@ -254,7 +282,19 @@ export const AnalyticPage = () => {
                 {...barChartSetting}
             />
 
-            <TypographyH5BoldChart>Gold Price distribution</TypographyH5BoldChart>
+            <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
+            <BarChart
+                dataset={barChartDataProductCount}
+                xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
+                yAxis={[{ label: 'URL count' }]}
+                series={[
+                    { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
+                    { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#58a6f5' },
+                ]}
+                {...barChartSetting}
+            />
+
+            <TypographyH5BoldChart>Distribution Gold price</TypographyH5BoldChart>
             <ScatterChart
                 height={500}
                 series={
@@ -276,7 +316,7 @@ export const AnalyticPage = () => {
                 grid={{ vertical: true, horizontal: true }}
             />
 
-            <TypographyH5BoldChart>Silver Price distribution</TypographyH5BoldChart>
+            <TypographyH5BoldChart>Distribution Silver price</TypographyH5BoldChart>
             <ScatterChart
                 height={500}
                 series={
