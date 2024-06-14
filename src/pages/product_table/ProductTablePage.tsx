@@ -19,11 +19,7 @@ import {
 } from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {BoxChart} from "../../components/BoxChart";
-import {
-    Checkbox,
-    FormControlLabel,
-    TextField
-} from "@mui/material";
+import {Checkbox, FormControlLabel, TextField} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import {Form} from "../../types/enums/form";
@@ -172,13 +168,18 @@ export const ProductTablePage = () =>  {
         const availabilitySet = new Set(latestPrices.map(x => x.availability).filter(x => x !== null));
         setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
         setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
-        setFilterAvailability(Array.from(availabilitySet).map((value, index) => ({id: index, value: value, checked: true})));
+        setFilterAvailability(Array.from(availabilitySet).map((value, index) => (
+            value === Availability.UNAVAILABLE || value === Availability.SOLD_OUT
+                ? {id: index, value: value, checked: false}
+                : {id: index, value: value, checked: true}
+        )));
         setMaxPrice(tmpMaxPrice);
         setProducts(tmpProducts);
         setLoading(false);
     }
 
     const getProducts = (metal: string|undefined) => {
+        setLoading(true)
         getProductsAsDTO(
             undefined,
             undefined,
@@ -366,8 +367,12 @@ export const ProductTablePage = () =>  {
                 />
             </BoxChart>
 
-            <Box sx={{ height: 700, width: '100%', mb: '3rem' }}>
-                <Box sx={{ display: 'flex', height: '100%' }}>
+            <Box sx={{ height: 700 }}>
+                    <Box
+                        sx={{
+                            display: 'flex', height: '100%', mb: '3rem', width: '100%',
+                        }}
+                    >
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid
                             initialState={{

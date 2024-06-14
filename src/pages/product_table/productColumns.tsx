@@ -109,8 +109,8 @@ export const productColumns: GridColDef[] = [
     headerName: 'Best buy',
     headerAlign: 'right',
     align: 'right',
-    minWidth: 150,
-    maxWidth: 150,
+    minWidth: 140,
+    maxWidth: 140,
     flex: 1,
     sortComparator: compareByPrice1,
     valueGetter: (value, row: Product) => (
@@ -128,8 +128,8 @@ export const productColumns: GridColDef[] = [
     align: 'center',
     sortable: false,
     disableColumnMenu: true,
-    minWidth: 50,
-    maxWidth: 50,
+    minWidth: 54,
+    maxWidth: 54,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
       <BoxColumnCenter sx={{pb: 0.25, pl: 0.8}}>
@@ -157,16 +157,16 @@ export const productColumns: GridColDef[] = [
     headerName: 'Best sell',
     headerAlign: 'right',
     description: "",
-    minWidth: 140,
-    maxWidth: 140,
+    minWidth: 130,
+    maxWidth: 130,
     align: 'right',
     flex: 1,
     sortComparator: compareByPrice1,
     valueGetter: (value, row: Product) => (
-      `${numberWithSpaces(
-        Math.round(
-          row.bestRedemption?.redemption!
-        ))} Kč`
+        `${numberWithSpaces(
+            Math.round(
+                row.bestRedemption?.redemption!
+            ))} Kč`
     )
   },
   {
@@ -175,23 +175,23 @@ export const productColumns: GridColDef[] = [
     description: 'Sell price freshness indicator',
     headerAlign: 'center',
     align: 'center',
-    minWidth: 50,
-    maxWidth: 50,
+    minWidth: 54,
+    maxWidth: 54,
     sortable: false,
     disableColumnMenu: true,
     flex: 1,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <BoxColumnCenter sx={{pb: 0.25, pl: 0.8}}>
-        {getPriceFreshness(params.row.latestPrices, true)}
-      </BoxColumnCenter>
+        <BoxColumnCenter sx={{pb: 0.25, pl: 0.8}}>
+          {getPriceFreshness(params.row.latestPrices, true)}
+        </BoxColumnCenter>
     )
   },
   {
     field: 'dealerRedemption',
     headerName: 'Best sell dealer',
     description: "",
-    minWidth: 170,
-    maxWidth: 170,
+    minWidth: 150,
+    maxWidth: 150,
     // align: 'center',
     sortable: false,
     flex: 1,
@@ -202,25 +202,30 @@ export const productColumns: GridColDef[] = [
     )
   },
   {
-    field: 'Best spread',
-    headerName: 'Best spread',
+    field: '0',
+    headerName: 'Ratio',
     headerAlign: 'right',
     description: "",
-    minWidth: 120,
-    maxWidth: 120,
+    minWidth: 110,
+    maxWidth: 110,
     align: 'right',
     flex: 1,
     sortComparator: compareBySpread,
-    valueGetter: (value, row: Product) => (
-      `${ row.bestRedemption?.price !== undefined && row.bestPrice?.price !== undefined && row.bestPrice?.price !== 0
-            ? Math.round((row.bestRedemption?.redemption / row.bestPrice?.price)*10_000)/100
-            : 0
-      } %`
-    )
+    valueGetter: (value, row) => {
+      if (row.bestRedemption?.price === undefined || row.bestPrice?.price === undefined) {
+        return '-';
+      }
+      if (row.bestPrice?.price === 0 || row.bestRedemption?.redemption === 0) {
+        return '0';
+      }
+      const ratio = Math.round( (row.bestRedemption?.redemption / row.bestPrice?.price - 1)*10_000)/100
+
+      return `${(ratio > 0 ? '+' : '') + ratio} %`;
+    },
   },
   {
-    field: 'pricePerGram',
-    headerName: 'Price / Gram',
+    field: '1',
+    headerName: 'Buy / weight',
     headerAlign: 'right',
     description: "",
     minWidth: 120,
@@ -229,11 +234,29 @@ export const productColumns: GridColDef[] = [
     flex: 1,
     sortComparator: compareByPrice1,
     valueGetter: (value, row: Product) => (
-      `${ row.bestPrice?.price !== undefined
+        `${ row.bestPrice?.price !== undefined
             ? Math.round((row.bestPrice?.price! / row.grams)*100)/100
             : '-'
         } Kč/g`
     )
   },
+  {
+    field: '2',
+    headerName: 'Sell / weight',
+    headerAlign: 'right',
+    description: "",
+    minWidth: 120,
+    maxWidth: 120,
+    align: 'right',
+    flex: 1,
+    sortComparator: compareByPrice1,
+    valueGetter: (value, row: Product) => (
+        `${ row.bestRedemption?.redemption !== undefined
+            ? Math.round((row.bestRedemption?.redemption! / row.grams)*100)/100
+            : '-'
+        } Kč/g`
+    )
+  },
+
 
 ]
