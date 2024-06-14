@@ -83,7 +83,7 @@ export const productColumns: GridColDef[] = [
   },
   {
     field: 'grams',
-    headerName: 'Grams',
+    headerName: 'Weight',
     headerAlign: 'right',
     align: 'right',
     minWidth: 78,
