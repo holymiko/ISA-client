@@ -19,6 +19,18 @@ import {chartDealersPre} from "./product_detail/ProductDetailPage";
 import {isEmpty} from "../util/utils";
 import {getLinkCountAsDto} from "../services/linkService";
 import {LinkCountDto} from "../types/LinkCountDto";
+import {BoxRow} from "../components/BoxRow";
+import {BoxChart} from "../components/BoxChart";
+import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
+
+interface LineChartData {
+    name: string,
+    color: string,
+    data: {
+        price_weight: number,
+        share: number,
+    }[]
+}
 
 interface BarChartData {
     dealer: string
@@ -43,13 +55,17 @@ interface ScatterChartData {
     price_weight: number
 }
 
-const barChartSetting = {
-    width: 1000,
+interface PriceDistriBarChartData {
+    price: string
+    count: number
+}
+
+const xChartsSetting = {
+    // width: 1600,
     height: 340,
     sx: {
-        mb: 2,
         [`.${axisClasses.left} .${axisClasses.label}`]: {
-            transform: 'translate(-20px, 0)',
+            transform: 'translate(-11px, 0)',
         },
     },
 };
@@ -141,6 +157,96 @@ const getScatterChartData = (products: Product[]): ScatterChartData[] => {
     return list;
 }
 
+const sortFce = (a: any, b: any) => {
+    return a-b
+}
+
+const getPriceDistriBarChartData = (batchSize: number, dataScatterChart: ScatterChartData[]): PriceDistriBarChartData[] => {
+    const sortedPriceWeight: number[] = dataScatterChart.map(x => x.price_weight).sort(sortFce);
+
+    const lowestPriceWeight = sortedPriceWeight[0] - sortedPriceWeight[0] % batchSize
+    const highestPriceWeight = sortedPriceWeight[sortedPriceWeight.length-1]
+
+    const result: PriceDistriBarChartData[] = []
+    let firstZero = null;
+    for (let priceBottom = lowestPriceWeight; priceBottom < highestPriceWeight; priceBottom += batchSize) {
+        const priceTop = priceBottom + batchSize;
+        let counter = 0
+        for (let j = 0; j < sortedPriceWeight.length; j++) {
+            const tmpPrice = sortedPriceWeight.at(j)!
+            if(tmpPrice > priceTop) {
+                continue
+            }
+            if(tmpPrice > priceBottom && tmpPrice <= priceTop) {
+                counter++
+            }
+        }
+        if(counter === 0) {
+            if(firstZero === null) {
+                firstZero = priceBottom;
+            }
+        } else {
+            result.push({
+                price: `${firstZero !== null ? firstZero : priceBottom} - ${priceTop} Kč/g`,
+                count: counter
+            })
+            firstZero = null;
+        }
+
+    }
+    return result;
+}
+
+const getPriceDistriLineChartSeries = (dataScatterChart: ScatterChartData[]): LineChartData[] => {
+    const sortedData: ScatterChartData[] = dataScatterChart.sort(sortFce2);
+
+    const dealerStruct: any[] = [];
+    const chartDealers: any[] = [];
+    sortedData.forEach((data: ScatterChartData) => {
+        // @ts-ignore
+        if(dealerStruct[data.dealer] === undefined) {
+            // @ts-ignore
+            dealerStruct[data.dealer] = {
+                share: 0,
+                singleShare: 1 / sortedData.map((y) => y.dealer).filter((y) => y === data.dealer).length
+            }
+            // @ts-ignore
+            chartDealers[data.dealer] = {
+                name: data.dealer,
+                // @ts-ignore
+                color: chartDealersPre[data.dealer].color,
+                data: []
+            }
+        }
+        // @ts-ignore
+        const tmp = dealerStruct[data.dealer]
+
+        // @ts-ignore
+        dealerStruct[data.dealer] = {
+            share: tmp.share + tmp.singleShare,
+            singleShare: tmp.singleShare
+        }
+
+        // @ts-ignore
+        chartDealers[data.dealer].data = [
+            // @ts-ignore
+            ...chartDealers[data.dealer].data,
+            {
+                price_weight: data.price_weight,
+                // @ts-ignore
+                share: Math.min(dealerStruct[data.dealer].share, 1),
+            }
+        ]
+
+    });
+
+    // @ts-ignore
+    return Object.keys(Dealer).map(dealer => chartDealers[dealer])
+}
+
+const sortFce2 = (a: ScatterChartData, b: ScatterChartData) => {
+    return a.price_weight - b.price_weight
+}
 
 
 export const AnalyticPage = () => {
@@ -151,6 +257,10 @@ export const AnalyticPage = () => {
     const [productsGold, setProductsGold] = useState<Product[]>([])
     const [productsSilver, setProductsSilver] = useState<Product[]>([])
     const [loading, setLoading] = useState<boolean>(true);
+    const [priceDistriBarChartDataGold, setPriceDistriBarChartDataGold] = useState<any[]>([])
+    const [priceDistriLineChartDataGold, setPriceDistriLineChartDataGold] = useState<any[]>([])
+    const [priceDistriBarChartDataSilver, setPriceDistriBarChartDataSilver] = useState<any[]>([])
+    const [priceDistriLineChartDataSilver, setPriceDistriLineChartDataSilver] = useState<any[]>([])
     const [barChartDataGold, setBarChartDataGold] = useState<any[]>([])
     const [barChartDataSilver, setBarChartDataSilver] = useState<any[]>([])
     const [barChartDataProductCount, setBarChartDataProductCount] = useState<any[]>([])
@@ -177,17 +287,26 @@ export const AnalyticPage = () => {
 
     const formatProducts = (metal: Metal, products: Product[]) => {
         const latestPrices: Price[] = products.flatMap(x => x.latestPrices);
-        const dataBarChart: BarChartData[] = getBarChartData(latestPrices);
+        const dataAvailaChart: BarChartData[] = getBarChartData(latestPrices);
         const dataScatterChart: ScatterChartData[] = getScatterChartData(products);
+        const dataPriceDistriLineChart: LineChartData[] = getPriceDistriLineChartSeries(dataScatterChart);
+        const dataPriceDistriBarChart: PriceDistriBarChartData[] = getPriceDistriBarChartData(
+            metal === Metal.GOLD ? 25 : 1,
+            dataScatterChart
+        );
 
         if(metal === Metal.GOLD) {
-            setBarChartDataGold(dataBarChart);
+            setBarChartDataGold(dataAvailaChart);
             setScatterChartDataGold(dataScatterChart)
+            setPriceDistriBarChartDataGold(dataPriceDistriBarChart)
+            setPriceDistriLineChartDataGold(dataPriceDistriLineChart)
             setProductsGold(products)
         }
         if(metal === Metal.SILVER) {
-            setBarChartDataSilver(dataBarChart);
+            setBarChartDataSilver(dataAvailaChart);
             setScatterChartDataSilver(dataScatterChart)
+            setPriceDistriBarChartDataSilver(dataPriceDistriBarChart)
+            setPriceDistriLineChartDataSilver(dataPriceDistriLineChart)
             setProductsSilver(products);
         }
         setLoading(false);
@@ -220,6 +339,7 @@ export const AnalyticPage = () => {
             //     }
             // )
             formatProducts(metal, tmpProducts)
+            localStorage.setItem(metal !== undefined ? metal?.toLowerCase() : 'products', JSON.stringify(tmpProducts))
         });
     }
 
@@ -266,7 +386,7 @@ export const AnalyticPage = () => {
                     { dataKey: 'red', label: 'Unavailable', color: 'red' },
                     { dataKey: 'total', label: 'Total', color: 'black' },
                 ]}
-                {...barChartSetting}
+                {...xChartsSetting}
             />
             <TypographyH5BoldChart>Availability Silver products</TypographyH5BoldChart>
             <BarChart
@@ -279,8 +399,117 @@ export const AnalyticPage = () => {
                     { dataKey: 'red', label: 'Unavailable', color: 'red' },
                     { dataKey: 'total', label: 'Total', color: 'black' },
                 ]}
-                {...barChartSetting}
+                {...xChartsSetting}
             />
+
+            <TypographyH5BoldChart>Gold product distribution</TypographyH5BoldChart>
+            <BarChart
+                dataset={priceDistriBarChartDataGold}
+                xAxis={[{ scaleType: 'band', dataKey: 'price' }]}
+                yAxis={[{ label: 'Product count' }]}
+                series={[{ dataKey: 'count', label: 'Number of products in range', color: '#e8b923'}]}
+                {...xChartsSetting}
+            />
+
+            <TypographyH5BoldChart>Gold price/weight distribution function</TypographyH5BoldChart>
+            <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
+                <LineChart width={1450} height={800}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="price_weight" type="number"
+                           tickCount={47} domain={[1580, 2500]} allowDataOverflow={true}  />
+                    <YAxis dataKey="share" type="number" tickCount={11} domain={[0, 1]}/>
+                    {/*<Tooltip />*/}
+                    <Legend />
+                    {
+                        // @ts-ignore
+                        priceDistriLineChartDataGold.map((s) => (
+                            <Line
+                                connectNulls
+                                strokeWidth={3}
+                                type="monotone"
+                                dot={false}
+                                stroke={s.color}
+                                dataKey="share" data={s.data} name={t(s.name.toLowerCase())} key={t(s.name.toLowerCase())}/>
+                        ))
+                    }
+                </LineChart>
+            </BoxChart>
+
+            <TypographyH5BoldChart>Silver product distribution</TypographyH5BoldChart>
+            <BarChart
+                dataset={priceDistriBarChartDataSilver}
+                xAxis={[{ scaleType: 'band', dataKey: 'price' }]}
+                yAxis={[{ label: 'Product count' }]}
+                series={[{ dataKey: 'count', label: 'Number of products in range', color: '#b3b3b3'}]}
+                {...xChartsSetting}
+            />
+
+            <TypographyH5BoldChart>Silver price/weight distribution function</TypographyH5BoldChart>
+            <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
+                <LineChart width={1450} height={800}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="price_weight" type="number"
+                           tickCount={64} domain={[8, 110]} allowDataOverflow={true} />
+                    <YAxis dataKey="share" type="number"
+                           tickCount={11} domain={[0, 1]}/>
+                    {/*<Tooltip />*/}
+                    <Legend />
+                    {
+                        // @ts-ignore
+                        priceDistriLineChartDataSilver.map((s) => (
+                            <Line
+                                connectNulls
+                                strokeWidth={3}
+                                type="monotone"
+                                dot={false}
+                                stroke={s.color}
+                                dataKey="share" data={s.data} name={t(s.name.toLowerCase())} key={t(s.name.toLowerCase())}/>
+                        ))
+                    }
+                </LineChart>
+            </BoxChart>
+
+            {/*<ScatterChart*/}
+            {/*    height={500}*/}
+            {/*    series={*/}
+            {/*        Object.values(Dealer).map(dealer => {*/}
+            {/*                return {*/}
+            {/*                    dataKey: dealer,*/}
+            {/*                    label: t(dealer.toLowerCase()),*/}
+            {/*                    color: chartDealersPre[dealer].color,*/}
+            {/*                    data: scatterChartDataGold.map((v: ScatterChartData) => ({ y: v.weight, x: v.price_weight, id: v.id})),*/}
+            {/*                }*/}
+            {/*            },*/}
+            {/*        )*/}
+            {/*    }*/}
+            {/*    sx={{*/}
+            {/*        mb: 2,*/}
+            {/*        width: '1'*/}
+            {/*    }}*/}
+            {/*    onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataGold[d.dataIndex].product_id)}*/}
+            {/*    grid={{ vertical: true, horizontal: true }}*/}
+            {/*/>*/}
+
+            {/*<TypographyH5BoldChart>Distribution Silver price</TypographyH5BoldChart>*/}
+            {/*<ScatterChart*/}
+            {/*    height={500}*/}
+            {/*    series={*/}
+            {/*        Object.values(Dealer).map(dealer => {*/}
+            {/*                return {*/}
+            {/*                    label: t(dealer.toLowerCase()),*/}
+            {/*                    color: chartDealersPre[Dealer[dealer]].color,*/}
+            {/*                    data: scatterChartDataSilver.map((v: ScatterChartData) => ({ y: v.weight, x: v.price_weight, id: v.id})),*/}
+            {/*                }*/}
+            {/*            },*/}
+            {/*        )*/}
+            {/*    }*/}
+            {/*    sx={{*/}
+            {/*        mb: 2,*/}
+            {/*        width: '1'*/}
+            {/*    }}*/}
+            {/*    onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataSilver[d.dataIndex].product_id)}*/}
+            {/*    grid={{ vertical: true, horizontal: true }}*/}
+            {/*/>*/}
 
             <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
             <BarChart
@@ -291,51 +520,12 @@ export const AnalyticPage = () => {
                     { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
                     { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#58a6f5' },
                 ]}
-                {...barChartSetting}
+                {...xChartsSetting}
             />
-
-            <TypographyH5BoldChart>Distribution Gold price</TypographyH5BoldChart>
-            <ScatterChart
-                height={500}
-                series={
-                    Object.values(Dealer).map(dealer => {
-                            return {
-                                label: t(dealer.toLowerCase()),
-                                color: chartDealersPre[Dealer[dealer]].color,
-                                data: scatterChartDataGold.map((v: ScatterChartData) => ({ y: v.weight, x: v.price_weight, id: v.id})),
-                            }
-                        },
-                    )
-
-                }
-                sx={{
-                    mb: 2,
-                    width: '1'
-                }}
-                onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataGold[d.dataIndex].product_id)}
-                grid={{ vertical: true, horizontal: true }}
-            />
-
-            <TypographyH5BoldChart>Distribution Silver price</TypographyH5BoldChart>
-            <ScatterChart
-                height={500}
-                series={
-                    Object.values(Dealer).map(dealer => {
-                            return {
-                                label: t(dealer.toLowerCase()),
-                                color: chartDealersPre[Dealer[dealer]].color,
-                                data: scatterChartDataSilver.map((v: ScatterChartData) => ({ y: v.weight, x: v.price_weight, id: v.id})),
-                            }
-                        },
-                    )
-                }
-                sx={{
-                    mb: 2,
-                    width: '1'
-                }}
-                onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataSilver[d.dataIndex].product_id)}
-                grid={{ vertical: true, horizontal: true }}
-            />
+            <BoxRow sx={{mb: 3}}>
+                <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>
+                <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>
+            </BoxRow>
         </Box>
     );
 }
