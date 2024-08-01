@@ -343,7 +343,7 @@ export const AnalyticPage = () => {
         });
     }
 
-    const getLinkCount = () => {
+    const getLinkCountForBarChart = () => {
         setLoading(true)
         getLinkCountAsDto().then((tmpLinkCount: LinkCountDto[]) => {
             setBarChartDataProductCount(
@@ -363,7 +363,7 @@ export const AnalyticPage = () => {
                 formatProducts(tmpMetal, JSON.parse(productCache!))
             }
         }
-        getLinkCount();
+        getLinkCountForBarChart();
         update();
     },[]);
 
