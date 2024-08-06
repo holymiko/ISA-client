@@ -522,10 +522,10 @@ export const AnalyticPage = () => {
                 ]}
                 {...xChartsSetting}
             />
-            <BoxRow sx={{mb: 3}}>
-                <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>
-                <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>
-            </BoxRow>
+            {/*<BoxRow sx={{mb: 3}}>*/}
+            {/*    <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>*/}
+            {/*    <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>*/}
+            {/*</BoxRow>*/}
         </Box>
     );
 }
