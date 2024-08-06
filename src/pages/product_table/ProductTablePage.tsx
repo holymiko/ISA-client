@@ -158,7 +158,7 @@ export const ProductTablePage = () =>  {
                 formSet.add(product.form);
                 product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
                 product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
-                if(product.bestPrice.price > tmpMaxPrice) {
+                if(product.bestPrice?.price > tmpMaxPrice) {
                     tmpMaxPrice = product.bestPrice.price;
                 }
             }
