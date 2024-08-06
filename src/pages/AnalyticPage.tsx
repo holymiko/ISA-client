@@ -241,7 +241,7 @@ const getPriceDistriLineChartSeries = (dataScatterChart: ScatterChartData[]): Li
     });
 
     // @ts-ignore
-    return Object.keys(Dealer).map(dealer => chartDealers[dealer])
+    return Object.keys(Dealer).map(dealer => chartDealers[dealer]).filter(x => x !== undefined)
 }
 
 const sortFce2 = (a: ScatterChartData, b: ScatterChartData) => {

@@ -47,12 +47,12 @@ export const chartDealersPre = {
     BESSERGOLD_DE: {
         dealer: Dealer.BESSERGOLD_DE,
         dealerString: "Bessergold.de",
-        color: "green"
+        color: "#1f9c1f"
     },
     SILVERUM: {
         dealer: Dealer.SILVERUM,
         dealerString: "Silverum",
-        color: "blue"
+        color: "#4242f5"
     },
     ZLATAKY: {
         dealer: Dealer.ZLATAKY,
@@ -62,18 +62,43 @@ export const chartDealersPre = {
     CESKA_MINCOVNA: {
         dealer: Dealer.CESKA_MINCOVNA,
         dealerString: "Ceska Mincovna",
-        color: "pink"
+        color: "#da42f5"
     },
     GOLD_A_SILVER: {
         dealer: Dealer.GOLD_A_SILVER,
         dealerString: "Gold a Silver",
-        color: "purple"
+        color: "#a142f5"
     },
     AURUM_PRO: {
         dealer: Dealer.AURUM_PRO,
         dealerString: "Aurum Pro",
-        color: "black"
+        color: "#42bff5"
     },
+    AURUM_BOHEMICA: {
+        dealer: Dealer.AURUM_BOHEMICA,
+        dealerString: "Aurum Bohemica",
+        color: "#81b074"
+    },
+    EKKA_GOLD: {
+        dealer: Dealer.EKKA_GOLD,
+        dealerString: "Ekka gold",
+        color: "#f542d1"
+    },
+    JEDNA_UNCE: {
+        dealer: Dealer.JEDNA_UNCE,
+        dealerString: "Jedna unce",
+        color: "#42f5d7"
+    },
+    GOLD_SAFE: {
+        dealer: Dealer.GOLD_SAFE,
+        dealerString: "Gold safe",
+        color: "#84f542"
+    },
+    GOLDEN_HOUSE: {
+        dealer: Dealer.GOLDEN_HOUSE,
+        dealerString: "Golden house",
+        color: "#f57542"
+    }
 }
 
 const modalStyle = {
