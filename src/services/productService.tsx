@@ -19,6 +19,7 @@ export const getProductsByPages = async (metal: Metal|undefined): Promise<any> =
             undefined,
             undefined,
             undefined,
+            false,
             p,
             PAGE_SIZE
         ).then((page) => {
@@ -42,6 +43,7 @@ const getProductsAsDTO = async (
     grams: number|undefined,
     year: number|undefined,
     savedAlone: boolean|undefined,
+    hidden: boolean|undefined,
     page: number|undefined,
     size: number|undefined
 ) => {
@@ -57,6 +59,7 @@ const getProductsAsDTO = async (
             grams: grams !== undefined ? grams : null,
             year: year !== undefined ? year : null,
             savedAlone: savedAlone !== undefined ? savedAlone : null,
+            hidden: hidden !== undefined ? hidden : null,
             page: page !== undefined ? page : null,
             size: size !== undefined ? size : null
         }
