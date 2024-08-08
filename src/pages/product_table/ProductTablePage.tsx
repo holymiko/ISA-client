@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {BoxRow} from "../../components/BoxRow";
 import {TypographyPageTitle} from "../../components/TypographyPageTitle";
-import {getProductsAsDTO} from "../../services/productService";
+import {getProductsByPages} from "../../services/productService";
 import {Product} from "../../types/Product";
 import {DataGrid} from "@mui/x-data-grid";
 import {productColumns} from "./productColumns";
@@ -29,6 +29,7 @@ import {Availability} from "../../types/enums/availability";
 import {Price} from "../../types/Price";
 import {ButtonISA} from "../../components/ButtonISA";
 import {FilterCollapseItem} from "../../components/FilterCollapseItem";
+import {Metal} from "../../types/enums/metal";
 
 
 interface FilterDealer {
@@ -150,7 +151,7 @@ export const ProductTablePage = () =>  {
         return tmpProducts;
     }
 
-    const formatProducts = (metal: string|undefined, tmpProducts: Product[]) => {
+    const formatProducts = (tmpProducts: Product[]) => {
         let formSet = new Set<Form>();
         let tmpMaxPrice: number = 0;
         tmpProducts.forEach(
@@ -178,40 +179,27 @@ export const ProductTablePage = () =>  {
         setLoading(false);
     }
 
-    const getProducts = (metal: string|undefined) => {
-        setLoading(true)
-        getProductsAsDTO(
-            undefined,
-            undefined,
-            metal,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined
-        ).then((page) => {
-            const tmpProducts: Product[] = page.content;
-            formatProducts(metal, tmpProducts)
-            localStorage.setItem(metal !== undefined ? metal?.toLowerCase() : 'products', JSON.stringify(tmpProducts))
-        });
-    }
-
 
     useEffect(() => {
         setLoading(true)
         const tmpMetal = getMetal(metal)
 
         if(metal === undefined || tmpMetal === undefined) {
-            getProducts(metal);
-            return;
+            setLoading(true)
+            getProductsByPages(undefined).then((x: Product[]) =>
+                formatProducts(x)
+            );
         }
 
+        // @ts-ignore
         const productsCache = localStorage.getItem(tmpMetal.toLowerCase())
         if(isEmpty(productsCache)) {
-            getProducts(tmpMetal);
+            setLoading(true)
+            getProductsByPages(tmpMetal).then((x: Product[]) =>
+                formatProducts(x)
+            );
         } else {
-            formatProducts(tmpMetal, JSON.parse(productsCache!))
+            formatProducts(JSON.parse(productsCache!))
         }
 
     }, [metal])
@@ -258,7 +246,13 @@ export const ProductTablePage = () =>  {
                     Scrap {metal} prices
                 </ButtonISA>
                 <ButtonISA
-                    onClick = {() => getProducts(metal)}
+                    onClick = {() => {
+                        setLoading(true)
+                        // @ts-ignore
+                        getProductsByPages(metal === undefined ? undefined : Metal[metal.toUpperCase()]).then((x: Product[]) =>
+                            formatProducts(x)
+                        );
+                    }}
                     startIcon={<RefreshIcon/>}
                     disabled={loading}
                     variant="contained"

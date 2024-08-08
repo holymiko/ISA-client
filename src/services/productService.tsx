@@ -1,9 +1,40 @@
 import {Product} from "../types/Product";
 import {api} from "./api";
 import {ProductDetail} from "../types/ProductDetail";
+import {Metal} from "../types/enums/metal";
+
+const PAGE_SIZE = 500;
+
+export const getProductsByPages = async (metal: Metal|undefined): Promise<any> => {
+    let tmpProducts: Product[] = [];
+    let b = true;
+    let p = 0
+
+    while (b) {
+        await getProductsAsDTO(
+            undefined,
+            undefined,
+            metal,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            p,
+            PAGE_SIZE
+        ).then((page) => {
+            tmpProducts = [...tmpProducts, ...page.content];
+            if(page.last) {
+                b = false;
+            }
+            p += 1;
+        });
+    }
+    localStorage.setItem(metal !== undefined ? metal?.toLowerCase() : 'products', JSON.stringify(tmpProducts))
+    return tmpProducts;
+}
 
 
-export const getProductsAsDTO = async (
+const getProductsAsDTO = async (
     dealer: string|undefined,
     producer: string|undefined,
     metal: string|undefined,

@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {TypographyPageTitle} from "../components/TypographyPageTitle";
 import {getBackendVersion, getDbStats} from "../services/appInfoService";
-import {getProductsAsDTO} from "../services/productService";
+import {getProductsByPages} from "../services/productService";
 import {Form} from "../types/enums/form";
 import {Product} from "../types/Product";
 import {Price} from "../types/Price";
@@ -273,19 +273,17 @@ export const AnalyticPage = () => {
     const update = () => {
         getDbStats().then((x) => {
             setDbStats(x.data)
-            setRow([
-                {
-                    name: "Silverum",
-                    linkWithProduct: x.data.linksWithProductSilverum,
-                    totalLinks: x.data.linksSilverum,
-                    share: x.data.linksWithProductSilverum / x.data.linksSilverum
-                }
-            ])
+            setRow([{
+                name: "Silverum",
+                linkWithProduct: x.data.linksWithProductSilverum,
+                totalLinks: x.data.linksSilverum,
+                share: x.data.linksWithProductSilverum / x.data.linksSilverum
+            }])
         });
         getBackendVersion().then((x) => setVersion(x.data));
     }
 
-    const formatProducts = (metal: Metal, products: Product[]) => {
+    const formatProducts = (metal: Metal|undefined, products: Product[]) => {
         const latestPrices: Price[] = products.flatMap(x => x.latestPrices);
         const dataAvailaChart: BarChartData[] = getBarChartData(latestPrices);
         const dataScatterChart: ScatterChartData[] = getScatterChartData(products);
@@ -312,36 +310,6 @@ export const AnalyticPage = () => {
         setLoading(false);
     }
 
-    const getProducts = (metal: Metal) => {
-        setLoading(true)
-        getProductsAsDTO(
-            undefined,
-            undefined,
-            metal,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined
-        ).then((page) => {
-            let formSet = new Set<Form>();
-            const tmpProducts: Product[] = page.content;
-            // let tmpMaxPrice: number = 0;
-            // tmpProducts.forEach(
-            //     product => {
-            //         formSet.add(product.form);
-            //         product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
-            //         product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
-            //         if(product.bestPrice.price > tmpMaxPrice) {
-            //             tmpMaxPrice = product.bestPrice.price;
-            //         }
-            //     }
-            // )
-            formatProducts(metal, tmpProducts)
-            localStorage.setItem(metal !== undefined ? metal?.toLowerCase() : 'products', JSON.stringify(tmpProducts))
-        });
-    }
 
     const getLinkCountForBarChart = () => {
         setLoading(true)
@@ -358,7 +326,10 @@ export const AnalyticPage = () => {
         for (const tmpMetal of list) {
             const productCache = localStorage.getItem(tmpMetal.toLowerCase())
             if (isEmpty(productCache)) {
-                getProducts(tmpMetal);
+                setLoading(true)
+                getProductsByPages(tmpMetal).then((x: Product[]) =>
+                    formatProducts(tmpMetal, x)
+                );
             } else {
                 formatProducts(tmpMetal, JSON.parse(productCache!))
             }

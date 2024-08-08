@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {createPortfolio} from '../../services/portfolioService';
 import {TypographyPageTitle} from "../../components/TypographyPageTitle";
-import {getProductsAsDTO} from "../../services/productService";
+import {getProductsByPages} from "../../services/productService";
 
 class AddPortfolioPage extends Component {
     constructor(props) {
@@ -44,15 +44,7 @@ class AddPortfolioPage extends Component {
     }
 
     componentDidMount() {
-        getProductsAsDTO(
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
+        getProductsByPages(
             undefined
         ).then((res) => {
             this.setState({products: res.data.content});
