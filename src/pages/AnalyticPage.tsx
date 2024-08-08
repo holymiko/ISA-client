@@ -8,29 +8,25 @@ import {getProductsByPages} from "../services/productService";
 import {Product} from "../types/Product";
 import {Price} from "../types/Price";
 import {Metal} from "../types/enums/metal";
-import {Availability} from "../types/enums/availability";
-import {Dealer} from "../types/enums/dealer";
 import {axisClasses} from '@mui/x-charts/ChartsAxis';
 import {BarChart, ScatterChart} from "@mui/x-charts";
 import {TypographyH5BoldChart} from "../components/TypographyH5BoldChart";
 import {useTranslation} from "react-i18next";
-import {chartDealersPre} from "./product_detail/ProductDetailPage";
 import {isEmpty} from "../util/utils";
 import {getLinkCountAsDto} from "../services/linkService";
 import {LinkCountDto} from "../types/LinkCountDto";
-import {BoxChart} from "../components/BoxChart";
-import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
-import {BarChartAvailability, BarChartData} from "../components/BarChartAvailability";
-import {BarChartPriceDistribution, BarChartPriceDistriData} from "../components/BarChartPriceDistribution";
+import {BarChartAvailability, BarChartData, getBarChartData} from "../components/BarChartAvailability";
+import {
+    BarChartPriceDistribution,
+    BarChartPriceDistriData,
+    getPriceDistriBarChartData
+} from "../components/BarChartPriceDistribution";
+import {
+    getPriceDistriLineChartSeries,
+    LineChartData,
+    LineChartPriceDistribution
+} from "../components/LineChartPriceDistribution";
 
-interface LineChartData {
-    name: string,
-    color: string,
-    data: {
-        price_weight: number,
-        share: number,
-    }[]
-}
 
 interface BarChartDataProductCount {
     dealer: string
@@ -38,7 +34,7 @@ interface BarChartDataProductCount {
     linkWithoutProductCount: number
 }
 
-interface ScatterChartData {
+export interface ScatterChartData {
     id: number
     product_id: number
     dealer: string
@@ -69,49 +65,6 @@ const getBarChartDataLinkCount = (linkCountDtos: LinkCountDto[]): BarChartDataPr
     return list;
 }
 
-const getBarChartData = (latestPrices: Price[]): BarChartData[] => {
-    const list: BarChartData[] = []
-    for (const dealer in Dealer) {
-        list.push(
-            {
-                dealer: dealer,
-                green: 0,
-                orange: 0,
-                red: 0,
-                total: 0
-            },
-        )
-    }
-
-    latestPrices.forEach(price => {
-        if(price.availability === Availability.IN_STOCK || price.availability === Availability.IN_STORE) {
-            list.filter(value => value.dealer === price.dealer).forEach(
-                value => {
-                    value.green++;
-                    value.total++;
-                }
-            )
-        }
-        if(price.availability === Availability.ON_ORDER || price.availability === Availability.ON_DEMAND) {
-            list.filter(value => value.dealer === price.dealer).forEach(
-                value => {
-                    value.orange++;
-                    value.total++;
-                }
-            )
-        }
-        if(price.availability === Availability.SOLD_OUT || price.availability === Availability.UNAVAILABLE) {
-            list.filter(value => value.dealer === price.dealer).forEach(
-                value => {
-                    value.red++;
-                    value.total++;
-                }
-            )
-        }
-    })
-
-    return list;
-}
 
 const getScatterChartData = (products: Product[]): ScatterChartData[] => {
     const list: ScatterChartData[] = []
@@ -142,97 +95,6 @@ const getScatterChartData = (products: Product[]): ScatterChartData[] => {
     )
 
     return list;
-}
-
-const sortFce = (a: any, b: any) => {
-    return a-b
-}
-
-const getPriceDistriBarChartData = (batchSize: number, dataScatterChart: ScatterChartData[]): BarChartPriceDistriData[] => {
-    const sortedPriceWeight: number[] = dataScatterChart.map(x => x.price_weight).sort(sortFce);
-
-    const lowestPriceWeight = sortedPriceWeight[0] - sortedPriceWeight[0] % batchSize
-    const highestPriceWeight = sortedPriceWeight[sortedPriceWeight.length-1]
-
-    const result: BarChartPriceDistriData[] = []
-    let firstZero = null;
-    for (let priceBottom = lowestPriceWeight; priceBottom < highestPriceWeight; priceBottom += batchSize) {
-        const priceTop = priceBottom + batchSize;
-        let counter = 0
-        for (let j = 0; j < sortedPriceWeight.length; j++) {
-            const tmpPrice = sortedPriceWeight.at(j)!
-            if(tmpPrice > priceTop) {
-                continue
-            }
-            if(tmpPrice > priceBottom && tmpPrice <= priceTop) {
-                counter++
-            }
-        }
-        if(counter === 0) {
-            if(firstZero === null) {
-                firstZero = priceBottom;
-            }
-        } else {
-            result.push({
-                price: `${firstZero !== null ? firstZero : priceBottom} - ${priceTop} Kč/g`,
-                count: counter
-            })
-            firstZero = null;
-        }
-
-    }
-    return result;
-}
-
-const getPriceDistriLineChartSeries = (dataScatterChart: ScatterChartData[]): LineChartData[] => {
-    const sortedData: ScatterChartData[] = dataScatterChart.sort(sortFce2);
-
-    const dealerStruct: any[] = [];
-    const chartDealers: any[] = [];
-    sortedData.forEach((data: ScatterChartData) => {
-        // @ts-ignore
-        if(dealerStruct[data.dealer] === undefined) {
-            // @ts-ignore
-            dealerStruct[data.dealer] = {
-                share: 0,
-                singleShare: 1 / sortedData.map((y) => y.dealer).filter((y) => y === data.dealer).length
-            }
-            // @ts-ignore
-            chartDealers[data.dealer] = {
-                name: data.dealer,
-                // @ts-ignore
-                color: chartDealersPre[data.dealer].color,
-                data: []
-            }
-        }
-        // @ts-ignore
-        const tmp = dealerStruct[data.dealer]
-
-        // @ts-ignore
-        dealerStruct[data.dealer] = {
-            share: tmp.share + tmp.singleShare,
-            singleShare: tmp.singleShare
-        }
-
-        // @ts-ignore
-        chartDealers[data.dealer].data = [
-            // @ts-ignore
-            ...chartDealers[data.dealer].data,
-            {
-                price_weight: data.price_weight,
-                // @ts-ignore
-                share: Math.min(dealerStruct[data.dealer].share, 1),
-            }
-        ]
-
-    });
-
-    // @ts-ignore
-    return Object.keys(Dealer).map(dealer => chartDealers[dealer]).filter(x => x !== undefined)
-}
-
-const sortFce2 = (a: ScatterChartData, b: ScatterChartData) => {
-    return a.price_weight - b.price_weight
 }
 
 
@@ -328,6 +190,7 @@ export const AnalyticPage = () => {
             <TypographyPageTitle sx={{mb: '2rem'}}>
                 Analytics
             </TypographyPageTitle>
+
             {/*<Typography>*/}
             {/*    {JSON.stringify(dbStats)}*/}
             {/*</Typography>*/}
@@ -339,59 +202,16 @@ export const AnalyticPage = () => {
             <BarChartAvailability data={barChartDataSilver}/>
 
             <TypographyH5BoldChart>Gold product distribution</TypographyH5BoldChart>
-            <BarChartPriceDistribution data={priceDistriBarChartDataGold}/>
+            <BarChartPriceDistribution data={priceDistriBarChartDataGold} color='#e8b923'/>
 
             <TypographyH5BoldChart>Gold price/weight distribution function</TypographyH5BoldChart>
-            <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
-                <LineChart width={1450} height={800}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="price_weight" type="number"
-                           tickCount={47} domain={[1580, 2500]} allowDataOverflow={true}  />
-                    <YAxis dataKey="share" type="number" tickCount={11} domain={[0, 1]}/>
-                    {/*<Tooltip />*/}
-                    <Legend />
-                    {
-                        // @ts-ignore
-                        priceDistriLineChartDataGold.map((s) => (
-                            <Line
-                                connectNulls
-                                strokeWidth={3}
-                                type="monotone"
-                                dot={false}
-                                stroke={s.color}
-                                dataKey="share" data={s.data} name={t(s.name.toLowerCase())} key={t(s.name.toLowerCase())}/>
-                        ))
-                    }
-                </LineChart>
-            </BoxChart>
+            <LineChartPriceDistribution tickCount={47} domain={[1580, 2500]} data={priceDistriLineChartDataGold}/>
 
             <TypographyH5BoldChart>Silver product distribution</TypographyH5BoldChart>
-            <BarChartPriceDistribution data={priceDistriBarChartDataSilver}/>
+            <BarChartPriceDistribution data={priceDistriBarChartDataSilver} color='#b3b3b3'/>
 
             <TypographyH5BoldChart>Silver price/weight distribution function</TypographyH5BoldChart>
-            <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
-                <LineChart width={1450} height={800}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="price_weight" type="number"
-                           tickCount={64} domain={[8, 110]} allowDataOverflow={true} />
-                    <YAxis dataKey="share" type="number"
-                           tickCount={11} domain={[0, 1]}/>
-                    {/*<Tooltip />*/}
-                    <Legend />
-                    {
-                        // @ts-ignore
-                        priceDistriLineChartDataSilver.map((s) => (
-                            <Line
-                                connectNulls
-                                strokeWidth={3}
-                                type="monotone"
-                                dot={false}
-                                stroke={s.color}
-                                dataKey="share" data={s.data} name={t(s.name.toLowerCase())} key={t(s.name.toLowerCase())}/>
-                        ))
-                    }
-                </LineChart>
-            </BoxChart>
+            <LineChartPriceDistribution tickCount={64} domain={[8, 110]} data={priceDistriLineChartDataSilver}/>
 
             {/*<ScatterChart*/}
             {/*    height={500}*/}

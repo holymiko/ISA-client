@@ -1,7 +1,9 @@
-import {BarChart, BarChartProps} from "@mui/x-charts";
+import {BarChart} from "@mui/x-charts";
 import * as React from "react";
 import {xChartsSetting} from "../pages/AnalyticPage";
-import {BoxProps} from "@mui/material/Box";
+import {Price} from "../types/Price";
+import {Dealer} from "../types/enums/dealer";
+import {Availability} from "../types/enums/availability";
 
 export interface BarChartData {
     dealer: string
@@ -10,6 +12,51 @@ export interface BarChartData {
     red: number
     total: number
 }
+
+export const getBarChartData = (latestPrices: Price[]): BarChartData[] => {
+    const list: BarChartData[] = []
+    for (const dealer in Dealer) {
+        list.push(
+            {
+                dealer: dealer,
+                green: 0,
+                orange: 0,
+                red: 0,
+                total: 0
+            },
+        )
+    }
+
+    latestPrices.forEach(price => {
+        if(price.availability === Availability.IN_STOCK || price.availability === Availability.IN_STORE) {
+            list.filter(value => value.dealer === price.dealer).forEach(
+                value => {
+                    value.green++;
+                    value.total++;
+                }
+            )
+        }
+        if(price.availability === Availability.ON_ORDER || price.availability === Availability.ON_DEMAND) {
+            list.filter(value => value.dealer === price.dealer).forEach(
+                value => {
+                    value.orange++;
+                    value.total++;
+                }
+            )
+        }
+        if(price.availability === Availability.SOLD_OUT || price.availability === Availability.UNAVAILABLE) {
+            list.filter(value => value.dealer === price.dealer).forEach(
+                value => {
+                    value.red++;
+                    value.total++;
+                }
+            )
+        }
+    })
+
+    return list;
+}
+
 
 export const BarChartAvailability = (props: any) => {
     return (
