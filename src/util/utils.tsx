@@ -34,7 +34,8 @@ export function getAvailabilityChipComponent(x: Availability): any {
             return <ChipISA label={t(x.toLowerCase())} color="warning" />
         case Availability.SOLD_OUT:
         case Availability.UNAVAILABLE:
-            return <ChipISA label={t(x.toLowerCase())} color="error" />
+        case Availability.UNKNOWN:
+            return <ChipISA label={t(x.toLowerCase())} color="error"/>
         default:
             return undefined
     }

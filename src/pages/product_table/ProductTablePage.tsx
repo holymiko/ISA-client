@@ -165,12 +165,16 @@ export const ProductTablePage = () =>  {
             }
         )
         const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
+        latestPrices.forEach(x => {
+            if(x.availability === null) {
+            x.availability = Availability.UNKNOWN
+        }});
         const dealerSet = new Set(latestPrices.map(x => x.dealer));
-        const availabilitySet = new Set(latestPrices.map(x => x.availability).filter(x => x !== null));
+        const availabilitySet = new Set(latestPrices.map(x => x.availability));
         setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
         setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
-        setFilterAvailability(Array.from(availabilitySet).map((value, index) => (
-            value === Availability.UNAVAILABLE || value === Availability.SOLD_OUT
+        setFilterAvailability(Array.from(availabilitySet).sort().map((value, index) => (
+            value === Availability.UNAVAILABLE || value === Availability.SOLD_OUT || value === Availability.UNKNOWN
                 ? {id: index, value: value, checked: false}
                 : {id: index, value: value, checked: true}
         )));

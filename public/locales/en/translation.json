@@ -17,5 +17,6 @@
   "sold_out": "sold out",
   "on_demand": "on demand",
   "on_order": "on order",
-  "unavailable": "unavailable"
+  "unavailable": "unavailable",
+  "unknown": "unknown"
 }
