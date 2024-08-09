@@ -28,13 +28,6 @@ import {
 } from "../components/LineChartPriceDistribution";
 
 
-interface BarChartDataProductCount {
-    dealer: string
-    productCount: number
-    linkWithoutProductCount: number,
-    hiddenProductCount: number
-}
-
 export interface ScatterChartData {
     id: number
     product_id: number
@@ -54,19 +47,6 @@ export const xChartsSetting = {
     },
 };
 
-const getBarChartDataLinkCount = (linkCountDtos: LinkCountDto[]): BarChartDataProductCount[] => {
-    const list: BarChartDataProductCount[] = []
-    linkCountDtos?.forEach((linkCount) =>
-        list.push({
-            dealer: linkCount.dealer.toString(),
-            productCount: linkCount.productCount,
-            linkWithoutProductCount: linkCount.linkWithoutProductCount,
-            hiddenProductCount: linkCount.hiddenProductCount
-        })
-    );
-    return list;
-}
-
 
 const getScatterChartData = (products: Product[]): ScatterChartData[] => {
     const list: ScatterChartData[] = []
@@ -83,18 +63,15 @@ const getScatterChartData = (products: Product[]): ScatterChartData[] => {
             if(product.metal === Metal.SILVER && product.grams >= 20000) {
                 return;
             }
-            list.push(
-                {
-                    id: price.id,
-                    product_id: product.id,
-                    dealer: price.dealer,
-                    weight: product.grams,
-                    price: price.price,
-                    price_weight: price.pricePerGram
-                }
-            )
+            list.push({
+                id: price.id,
+                product_id: product.id,
+                dealer: price.dealer,
+                weight: product.grams,
+                price: price.price,
+                price_weight: price.pricePerGram
             })
-    )
+    }))
 
     return list;
 }
@@ -215,6 +192,19 @@ export const AnalyticPage = () => {
             <TypographyH5BoldChart>Silver price/weight distribution function</TypographyH5BoldChart>
             <LineChartPriceDistribution tickCount={64} domain={[8, 110]} data={priceDistriLineChartDataSilver}/>
 
+            <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
+            <BarChart
+                dataset={barChartDataProductCount}
+                xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
+                yAxis={[{ label: 'URL count' }]}
+                series={[
+                    { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
+                    { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#ffcd29' },
+                    { dataKey: 'hiddenProductCount', label: 'Hidden products', color: '#58a6f5' },
+                ]}
+                {...xChartsSetting}
+            />
+
             {/*<ScatterChart*/}
             {/*    height={500}*/}
             {/*    series={*/}
@@ -236,18 +226,6 @@ export const AnalyticPage = () => {
             {/*    grid={{ vertical: true, horizontal: true }}*/}
             {/*/>*/}
 
-            <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
-            <BarChart
-                dataset={barChartDataProductCount}
-                xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
-                yAxis={[{ label: 'URL count' }]}
-                series={[
-                    { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
-                    { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#ffcd29' },
-                    { dataKey: 'hiddenProductCount', label: 'Hidden products', color: '#58a6f5' },
-                ]}
-                {...xChartsSetting}
-            />
             {/*<BoxRow sx={{mb: 3}}>*/}
             {/*    <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>*/}
             {/*    <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>*/}
