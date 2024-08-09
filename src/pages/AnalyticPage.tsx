@@ -190,7 +190,7 @@ export const AnalyticPage = () => {
             <BarChartPriceDistribution data={priceDistriBarChartDataSilver} color='#b3b3b3'/>
 
             <TypographyH5BoldChart>Silver price/weight distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution tickCount={64} domain={[8, 110]} data={priceDistriLineChartDataSilver}/>
+            <LineChartPriceDistribution tickCount={64} domain={[22, 100]} data={priceDistriLineChartDataSilver}/>
 
             <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
             <BarChart
