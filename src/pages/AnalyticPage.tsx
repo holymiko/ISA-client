@@ -31,7 +31,8 @@ import {
 interface BarChartDataProductCount {
     dealer: string
     productCount: number
-    linkWithoutProductCount: number
+    linkWithoutProductCount: number,
+    hiddenProductCount: number
 }
 
 export interface ScatterChartData {
@@ -59,7 +60,8 @@ const getBarChartDataLinkCount = (linkCountDtos: LinkCountDto[]): BarChartDataPr
         list.push({
             dealer: linkCount.dealer.toString(),
             productCount: linkCount.productCount,
-            linkWithoutProductCount: linkCount.linkCount - linkCount.productCount,
+            linkWithoutProductCount: linkCount.linkWithoutProductCount,
+            hiddenProductCount: linkCount.hiddenProductCount
         })
     );
     return list;
@@ -162,7 +164,7 @@ export const AnalyticPage = () => {
         setLoading(true)
         getLinkCountAsDto().then((tmpLinkCount: LinkCountDto[]) => {
             setBarChartDataProductCount(
-                getBarChartDataLinkCount(tmpLinkCount)
+                tmpLinkCount
             )
             setLoading(false);
         })
@@ -241,7 +243,8 @@ export const AnalyticPage = () => {
                 yAxis={[{ label: 'URL count' }]}
                 series={[
                     { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
-                    { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#58a6f5' },
+                    { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#ffcd29' },
+                    { dataKey: 'hiddenProductCount', label: 'Hidden products', color: '#58a6f5' },
                 ]}
                 {...xChartsSetting}
             />
