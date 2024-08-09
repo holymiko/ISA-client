@@ -3,7 +3,7 @@ import {api} from "./api";
 import {ProductDetail} from "../types/ProductDetail";
 import {Metal} from "../types/enums/metal";
 
-const PAGE_SIZE = 500;
+const PAGE_SIZE = 400;
 
 export const getProductsByPages = async (metal: Metal|undefined): Promise<any> => {
     let tmpProducts: Product[] = [];
