@@ -11,101 +11,35 @@ import {compareByPrice, compareByRedemption} from "../../util/compare";
 import {scrapAllLinksFromProductList, scrapByMetalInSync, scrapMissingProducts} from "../../services/scrapService";
 import {
     capitalizeFirstLetter,
-    getAvailabilityChipComponent,
     getMetal,
     getSessionUser2,
     isAdmin,
     isEmpty
 } from "../../util/utils";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {BoxChart} from "../../components/BoxChart";
-import {Checkbox, FormControlLabel, TextField} from "@mui/material";
-import Typography from "@mui/material/Typography";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import {Form} from "../../types/enums/form";
 import {Dealer} from "../../types/enums/dealer";
-import {useTranslation} from "react-i18next";
 import {Availability} from "../../types/enums/availability";
 import {Price} from "../../types/Price";
 import {ButtonISA} from "../../components/ButtonISA";
-import {FilterCollapseItem} from "../../components/FilterCollapseItem";
 import {Metal} from "../../types/enums/metal";
+import {Filter, FilterAvailability, FilterDealer, FilterForm} from "../../components/Filter";
 
-
-interface FilterDealer {
-    id: number;
-    value: Dealer;
-    checked: boolean;
-}
-
-interface FilterForm {
-    id: number;
-    value: Form;
-    checked: boolean;
-}
-
-interface FilterAvailability {
-    id: number;
-    value: Availability;
-    checked: boolean;
-}
 
 export const ProductTablePage = () =>  {
-    const { t } = useTranslation();
     const { metal } = useParams();
     const [products, setProducts] = useState<Product[]>([])
     const [productsControlled, setProductsControlled] = useState<Product[]>([])
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
 
     const [minPrice, setMinPrice] = useState<number>(0);
-    const [maxPrice, setMaxPrice] = useState<number>(100);
+    const [maxPrice, setMaxPrice] = useState<number>(500000);
     const [filterForms, setFilterForms] = useState<FilterForm[]>([])
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
     const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
-
-    const [openFilterPrice, setOpenFilterPrice] = useState<boolean>(true);
-    const [openFilterForm, setOpenFilterForm] = useState<boolean>(true);
-    const [openFilterDealer, setOpenFilterDealer] = useState<boolean>(true);
-    const [openFilterAvailability, setOpenFilterAvailability] = useState<boolean>(true);
-
-
-
-    const handleFilterFormChecked = (id: number) => {
-        setFilterForms(filterForms.map(item =>
-            item.id === id ? { ...item, checked: !item.checked } : item
-        ));
-    };
-
-    const handleFilterDealerChecked = (id: number) => {
-        setFilterDealers(filterDealers.map(item =>
-            item.id === id ? { ...item, checked: !item.checked } : item
-        ));
-    };
-
-    const handleFilterAvailabilityChecked = (id: number) => {
-        setFilterAvailability(filterAvailability.map(item =>
-            item.id === id ? { ...item, checked: !item.checked } : item
-        ));
-    };
-
-    const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const min = Number(event.target.value)
-        if(min < maxPrice) {
-            setMinPrice(min);
-        }
-        // if(min < 0) {
-        //     setMinPrice(0);
-        // }
-    };
-
-    const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const max = Number(event.target.value);
-        if(minPrice < max) {
-            setMaxPrice(max);
-        }
-    };
+    const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
 
     const filterProducts = () => {
         const filterFormValues: Form[] = filterForms.filter(x => x.checked).map(x => x.value);
@@ -169,18 +103,68 @@ export const ProductTablePage = () =>  {
             if(x.availability === null) {
             x.availability = Availability.UNKNOWN
         }});
-        const dealerSet = new Set(latestPrices.map(x => x.dealer));
-        const availabilitySet = new Set(latestPrices.map(x => x.availability));
-        setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
-        setFilterForms(Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true})));
-        setFilterAvailability(Array.from(availabilitySet).sort().map((value, index) => (
-            value === Availability.UNAVAILABLE || value === Availability.SOLD_OUT || value === Availability.UNKNOWN
-                ? {id: index, value: value, checked: false}
-                : {id: index, value: value, checked: true}
-        )));
-        setMaxPrice(tmpMaxPrice);
+        formatFilter(tmpProducts, formSet, tmpMaxPrice)
         setProducts(tmpProducts);
         setLoading(false);
+    }
+
+    const formatFilter = (tmpProducts: Product[], formSet: Set<Form>, tmpMaxPrice: number) => {
+        const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
+        const dealerSet = new Set(latestPrices.map(x => x.dealer));
+
+        let tmp = localStorage.getItem('filterMinPrice')
+        if(isEmpty(tmp)) {
+            setMinPrice(0)
+            localStorage.setItem('filterMinPrice', JSON.stringify(minPrice))
+        } else {
+            setMinPrice(JSON.parse(tmp!))
+        }
+
+        tmp = localStorage.getItem('filterMaxPrice')
+        if(isEmpty(tmp)) {
+            setMaxPrice(tmpMaxPrice);
+            localStorage.setItem('filterMaxPrice', JSON.stringify(tmpMaxPrice))
+        } else {
+            setMaxPrice(JSON.parse(tmp!))
+        }
+
+        tmp = localStorage.getItem('filterForms')
+        if(isEmpty(tmp) || tmp === '[]' ) {
+            const forms = Array.from(formSet).map((value, index) => ({id: index, value: value, checked: true}));
+            setFilterForms(forms);
+            localStorage.setItem('filterForms', JSON.stringify(forms))
+        } else {
+            setFilterForms(JSON.parse(tmp!))
+        }
+
+        tmp = localStorage.getItem('filterDealers')
+        if((isEmpty(tmp) || tmp === '[]')) {
+            setFilterDealers(Array.from(dealerSet).map((value, index) => ({id: index, value: value, checked: true})));
+            localStorage.setItem('filterDealers', JSON.stringify(filterDealers))
+        } else {
+            setFilterDealers(JSON.parse(tmp!))
+        }
+
+        tmp = localStorage.getItem('filterAvailability')
+        if(isEmpty(tmp) || tmp === '[]') {
+            const availabilitySet = new Set(latestPrices.map(x => x.availability));
+            setFilterAvailability(Array.from(availabilitySet).sort().map((value, index) => (
+                value === Availability.UNAVAILABLE || value === Availability.SOLD_OUT || value === Availability.UNKNOWN
+                    ? {id: index, value: value, checked: false}
+                    : {id: index, value: value, checked: true}
+            )));
+            localStorage.setItem('filterAvailability', JSON.stringify(filterAvailability))
+        } else {
+            setFilterAvailability(JSON.parse(tmp!))
+        }
+
+        tmp = localStorage.getItem('filterExcludeUnavailable')
+        if(isEmpty(tmp)) {
+            setExcludeUnavailable(true);
+            localStorage.setItem('filterExcludeUnavailable', JSON.stringify(excludeUnavailable))
+        } else {
+            setExcludeUnavailable(JSON.parse(tmp!))
+        }
     }
 
 
@@ -216,6 +200,30 @@ export const ProductTablePage = () =>  {
             filterProducts()
         );
     }, [products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable])
+
+    useEffect(() => {
+        localStorage.setItem('filterMinPrice', JSON.stringify(minPrice));
+    }, [minPrice])
+
+    useEffect(() => {
+        localStorage.setItem('filterMaxPrice', JSON.stringify(maxPrice));
+    }, [maxPrice])
+
+    useEffect(() => {
+        localStorage.setItem('filterForms', JSON.stringify(filterForms));
+    }, [filterForms])
+
+    useEffect(() => {
+        localStorage.setItem('filterDealers', JSON.stringify(filterDealers));
+    }, [filterDealers])
+
+    useEffect(() => {
+        localStorage.setItem('filterAvailability', JSON.stringify(filterAvailability));
+    }, [filterAvailability])
+
+    useEffect(() => {
+        localStorage.setItem('filterExcludeUnavailable', JSON.stringify(excludeUnavailable));
+    }, [excludeUnavailable])
 
     return (
         <Box sx={{width: 1}}>
@@ -265,105 +273,14 @@ export const ProductTablePage = () =>  {
                 </ButtonISA>
             </BoxRow>
 
-            {/* FILTER */}
-            <BoxChart sx={{ width: '1', gap: 0, mb: 2, display: 'flex', flexDirection: 'column' }}>
-                <FilterCollapseItem title="Price" openFilter={openFilterPrice} setOpenFilter={setOpenFilterPrice}>
-                    <BoxRow sx={{gap: "1rem", display: 'inline-flex', width: '1', mb: "1rem", ml: "3rem"}}>
-                            <TextField
-                                label="Min. price"
-                                type="number"
-                                inputProps={{
-                                    step: '10'
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="standard"
-                                value={minPrice}
-                                onChange={handleMinPriceChange}
-                            />
-                            <Typography sx={{pt: "1rem"}}>-</Typography>
-                            <TextField
-                                label="Max. price"
-                                type="number"
-                                inputProps={{
-                                    step: '10'
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="standard"
-                                value={Math.round(maxPrice)}
-                                onChange={handleMaxPriceChange}
-                            />
-                        </BoxRow>
-                </FilterCollapseItem>
-
-                <FilterCollapseItem title="Form" openFilter={openFilterForm} setOpenFilter={setOpenFilterForm}>
-                    {
-                        filterForms.map((form: FilterForm) => (
-                            <FormControlLabel
-                                sx={{ml: "2rem"}}
-                                key={form.id}
-                                label={form.value.toLowerCase()}
-                                control={
-                                    <Checkbox
-                                        checked={form.checked}
-                                        onChange={() => handleFilterFormChecked(form.id)}
-                                    />
-                                }
-                            />
-                        ))
-                    }
-                </FilterCollapseItem>
-
-                <FilterCollapseItem title="Dealer" openFilter={openFilterDealer} setOpenFilter={setOpenFilterDealer}>
-                    {
-                        filterDealers.map((dealer: FilterDealer) => (
-                            <FormControlLabel
-                                sx={{ml: "2rem"}}
-                                key={dealer.id}
-                                label={t(dealer.value.toLowerCase())}
-                                control={
-                                    <Checkbox
-                                        checked={dealer.checked}
-                                        onChange={() => handleFilterDealerChecked(dealer.id)}
-                                    />
-                                }
-                            />
-                        ))
-                    }
-                </FilterCollapseItem>
-
-                <FilterCollapseItem title="Availability" openFilter={openFilterAvailability} setOpenFilter={setOpenFilterAvailability}>
-                    {
-                        filterAvailability.map((filter: FilterAvailability) => (
-                            <FormControlLabel
-                                sx={{ml: "2rem"}}
-                                key={filter.id}
-                                label={getAvailabilityChipComponent(filter.value)}
-                                control={
-                                    <Checkbox
-                                        checked={filter.checked}
-                                        onChange={() => handleFilterAvailabilityChecked(filter.id)}
-                                    />
-                                }
-                            />
-                        ))
-                    }
-                </FilterCollapseItem>
-
-                <FormControlLabel
-                    sx={{ml: "2rem", mt: "1rem"}}
-                    label={"exclude unavailable products"}
-                    control={
-                        <Checkbox
-                            checked={excludeUnavailable}
-                            onChange={(e) => setExcludeUnavailable(e.target.checked)}
-                        />
-                    }
-                />
-            </BoxChart>
+            <Filter
+                minPrice={minPrice} setMinPrice={setMinPrice}
+                maxPrice={maxPrice} setMaxPrice={setMaxPrice}
+                filterForms={filterForms} setFilterForms={setFilterForms}
+                filterDealers={filterDealers} setFilterDealers={setFilterDealers}
+                filterAvailability={filterAvailability} setFilterAvailability={setFilterAvailability}
+                excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
+            />
 
             <Box sx={{ height: 700 }}>
                     <Box
