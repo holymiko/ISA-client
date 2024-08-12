@@ -9,7 +9,7 @@ const getLabel = (value: number) => {
 
 const minDistance = 10;
 
-export const SliderISA = ({min, max, domain, setDomain, stepLabel, stepMark}: any) => {
+export const SliderISA = ({min, max, domain, setDomain, step, stepLabel}: any) => {
 
     const handleChange1 = (
         event: Event,
@@ -44,7 +44,7 @@ export const SliderISA = ({min, max, domain, setDomain, stepLabel, stepMark}: an
                 )}
                 min={min}
                 max={max}
-                step={stepMark}
+                step={step}
                 disableSwap
             />
         </Box>

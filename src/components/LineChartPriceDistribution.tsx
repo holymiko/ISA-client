@@ -95,7 +95,7 @@ export const LineChartPriceDistribution = (props: any) => {
                     ))
                 }
             </LineChart>
-            <SliderISA domain={domain} setDomain={setDomain} min={props.min} max={props.max} stepLabel={props.stepSliderLabel} stepMark={props.stepSliderMark}/>
+            <SliderISA domain={domain} setDomain={setDomain} min={props.min} max={props.max} stepLabel={props.stepSliderLabel} step={props.stepSlider}/>
         </BoxChart>
   );
 };
