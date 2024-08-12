@@ -4,12 +4,15 @@ import {FilterCollapseItem} from "./FilterCollapseItem";
 import {BoxRow} from "./BoxRow";
 import {Checkbox, FormControlLabel, TextField} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {getAvailabilityChipComponent} from "../util/utils";
+import {getAvailabilityChipComponent, isEmpty} from "../util/utils";
 import {useState} from "react";
 import {Form} from "../types/enums/form";
 import {Availability} from "../types/enums/availability";
 import {Dealer} from "../types/enums/dealer";
 import {useTranslation} from "react-i18next";
+import {Product} from "../types/Product";
+import {Price} from "../types/Price";
+import {compareByPrice, compareByRedemption} from "../util/compare";
 
 
 export interface FilterDealer {
@@ -43,6 +46,137 @@ export interface FilterProps {
     setFilterAvailability: any,
     excludeUnavailable: boolean,
     setExcludeUnavailable: any,
+}
+
+
+export const initFilter = (tmpProducts: Product[], {setMinPrice, setMaxPrice, setFilterForms,
+    setFilterDealers, setFilterAvailability, setExcludeUnavailable}: any
+) => {
+    const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
+    latestPrices.forEach(x => {
+        if(x.availability === null) {
+            x.availability = Availability.UNKNOWN
+        }
+    });
+    let tmpMaxPrice: number = 0;
+    tmpProducts.forEach(
+        product => {
+            product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
+            product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
+            if (product.bestPrice?.price > tmpMaxPrice) {
+                tmpMaxPrice = product.bestPrice.price;
+            }
+        })
+
+    let tmp = localStorage.getItem('filterMinPrice')
+    if(isEmpty(tmp)) {
+        setMinPrice(0)
+        localStorage.setItem('filterMinPrice', JSON.stringify(0))
+    } else {
+        setMinPrice(JSON.parse(tmp!))
+    }
+
+    tmp = localStorage.getItem('filterMaxPrice')
+    if(isEmpty(tmp)) {
+        setMaxPrice(tmpMaxPrice);
+        localStorage.setItem('filterMaxPrice', JSON.stringify(tmpMaxPrice))
+    } else {
+        setMaxPrice(JSON.parse(tmp!))
+    }
+
+    tmp = localStorage.getItem('filterForms')
+    if(isEmpty(tmp) || tmp === '[]' ) {
+        const forms = Object.values(Form).map((value, index) => ({id: index, value: value, checked: true}));
+        setFilterForms(forms);
+        localStorage.setItem('filterForms', JSON.stringify(forms))
+    } else {
+        setFilterForms(JSON.parse(tmp!))
+    }
+
+    tmp = localStorage.getItem('filterDealers')
+    if((isEmpty(tmp) || tmp === '[]')) {
+        const tmpDealers = Object.values(Dealer).map((value, index) => ({id: index, value: value, checked: true}))
+        setFilterDealers(tmpDealers);
+        localStorage.setItem('filterDealers', JSON.stringify(tmpDealers))
+    } else {
+        setFilterDealers(JSON.parse(tmp!))
+    }
+
+    tmp = localStorage.getItem('filterAvailability')
+    if(isEmpty(tmp) || tmp === '[]') {
+        const tmpAvailability = Object.values(Availability).sort().map((value, index) => (
+            value === Availability.UNAVAILABLE || value === Availability.SOLD_OUT || value === Availability.UNKNOWN
+                ? {id: index, value: value, checked: false}
+                : {id: index, value: value, checked: true}
+        ))
+        setFilterAvailability(tmpAvailability);
+        localStorage.setItem('filterAvailability', JSON.stringify(tmpAvailability))
+    } else {
+        setFilterAvailability(JSON.parse(tmp!))
+    }
+
+    tmp = localStorage.getItem('filterExcludeUnavailable')
+    if(isEmpty(tmp)) {
+        setExcludeUnavailable(true);
+        localStorage.setItem('filterExcludeUnavailable', JSON.stringify(true))
+    } else {
+        setExcludeUnavailable(JSON.parse(tmp!))
+    }
+}
+
+export const filterProducts = (
+    products: Product[],
+    minPrice: number,
+    maxPrice: number,
+    filterForms: FilterForm[],
+    filterDealers: FilterDealer[],
+    filterAvailability: FilterAvailability[],
+    excludeUnavailable: boolean
+): Product[] => {
+    if(products.length === 0 || filterForms.length === 0 || filterDealers.length === 0 || filterAvailability.length === 0) {
+        return products;
+    }
+    const filterFormValues: Form[] = filterForms.filter(x => x.checked).map(x => x.value);
+    const filterDealerValues: Dealer[] = filterDealers.filter(x => x.checked).map(x => x.value);
+    const filterAvailabilityValues: Availability[] = filterAvailability.filter(x => x.checked).map(x => x.value);
+    let tmpProducts: Product[] = structuredClone(products);
+    if(excludeUnavailable) {
+        tmpProducts = tmpProducts.filter(x => x.bestPrice?.price !== 0 || x.bestRedemption?.redemption !== 0)
+    }
+    tmpProducts = tmpProducts.filter(x => {
+        // For moment of initialization
+        if(x.bestPrice === undefined) {
+            return true;
+        }
+        // Form
+        if(!filterFormValues.includes(x.form)) {
+            return false;
+        }
+        // Price
+        return x.bestPrice!.price >= minPrice && x.bestPrice!.price <= maxPrice
+    })
+    // Availability - filter prices
+    tmpProducts.forEach(
+        product => {
+            product.latestPrices = product.latestPrices.filter(x => filterAvailabilityValues.includes(x.availability))
+        }
+    )
+    // Dealer - filter prices
+    tmpProducts.forEach(
+        product => {
+            product.latestPrices = product.latestPrices.filter(x => filterDealerValues.includes(x.dealer))
+        }
+    )
+    // Filter products without Price
+    tmpProducts = tmpProducts.filter(x => x.latestPrices.length !== 0)
+    // Dealer - set best
+    tmpProducts.forEach(
+        product => {
+            product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
+            product.bestRedemption = product.latestPrices.sort(compareByRedemption)[0];
+        }
+    )
+    return tmpProducts;
 }
 
 

@@ -9,7 +9,7 @@ import {Product} from "../types/Product";
 import {Price} from "../types/Price";
 import {Metal} from "../types/enums/metal";
 import {axisClasses} from '@mui/x-charts/ChartsAxis';
-import {BarChart, ScatterChart} from "@mui/x-charts";
+import {BarChart} from "@mui/x-charts";
 import {TypographyH5BoldChart} from "../components/TypographyH5BoldChart";
 import {useTranslation} from "react-i18next";
 import {isEmpty} from "../util/utils";
@@ -26,6 +26,7 @@ import {
     LineChartData,
     LineChartPriceDistribution
 } from "../components/LineChartPriceDistribution";
+import {Filter, FilterAvailability, FilterDealer, FilterForm, filterProducts, initFilter} from "../components/Filter";
 
 
 export interface ScatterChartData {
@@ -94,6 +95,13 @@ export const AnalyticPage = () => {
     const [barChartDataProductCount, setBarChartDataProductCount] = useState<any[]>([])
     const [scatterChartDataGold, setScatterChartDataGold] = useState<any[]>([])
 
+    const [minPrice, setMinPrice] = useState<number>(0);
+    const [maxPrice, setMaxPrice] = useState<number>(500000);
+    const [filterForms, setFilterForms] = useState<FilterForm[]>([])
+    const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
+    const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
+    const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
+
     const [dbStats, setDbStats] = useState<any>();
     const [version, setVersion] = useState<string>("");
 
@@ -111,9 +119,14 @@ export const AnalyticPage = () => {
     }
 
     const formatProducts = (metal: Metal|undefined, products: Product[]) => {
-        const latestPrices: Price[] = products.flatMap(x => x.latestPrices);
+        const tmpProducts = filterProducts(products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable)
+        if(tmpProducts.length === 0) {
+            return;
+        }
+
+        const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
         const dataAvailaChart: BarChartData[] = getBarChartData(latestPrices);
-        const dataScatterChart: ScatterChartData[] = getScatterChartData(products);
+        const dataScatterChart: ScatterChartData[] = getScatterChartData(tmpProducts);
         const dataPriceDistriLineChart: LineChartData[] = getPriceDistriLineChartSeries(dataScatterChart);
         const dataPriceDistriBarChart: BarChartPriceDistriData[] = getPriceDistriBarChartData(
             metal === Metal.GOLD ? 25 : 1,
@@ -149,20 +162,57 @@ export const AnalyticPage = () => {
 
     useEffect(() => {
         const list = [Metal.GOLD, Metal.SILVER]
+        const tmpProducts = [];
         for (const tmpMetal of list) {
             const productCache = localStorage.getItem(tmpMetal.toLowerCase())
             if (isEmpty(productCache)) {
                 setLoading(true)
-                getProductsByPages(tmpMetal).then((x: Product[]) =>
-                    formatProducts(tmpMetal, x)
-                );
+                getProductsByPages(tmpMetal).then((x: Product[]) => {
+                    formatProducts(tmpMetal, x);
+                    tmpProducts.push(...x)
+                });
             } else {
-                formatProducts(tmpMetal, JSON.parse(productCache!))
+                const x = JSON.parse(productCache!);
+                formatProducts(tmpMetal, x)
+                tmpProducts.push(...x)
             }
         }
+        initFilter(tmpProducts, {
+            setMinPrice, setMaxPrice, setFilterForms, setFilterDealers,
+            setFilterAvailability, setExcludeUnavailable
+        })
         getLinkCountForBarChart();
         update();
     },[]);
+
+    useEffect(() => {
+        formatProducts(Metal.GOLD, productsGold);
+        formatProducts(Metal.SILVER, productsSilver);
+    }, [minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable])
+
+    useEffect(() => {
+        localStorage.setItem('filterMinPrice', JSON.stringify(minPrice));
+    }, [minPrice])
+
+    useEffect(() => {
+        localStorage.setItem('filterMaxPrice', JSON.stringify(maxPrice));
+    }, [maxPrice])
+
+    useEffect(() => {
+        localStorage.setItem('filterForms', JSON.stringify(filterForms));
+    }, [filterForms])
+
+    useEffect(() => {
+        localStorage.setItem('filterDealers', JSON.stringify(filterDealers));
+    }, [filterDealers])
+
+    useEffect(() => {
+        localStorage.setItem('filterAvailability', JSON.stringify(filterAvailability));
+    }, [filterAvailability])
+
+    useEffect(() => {
+        localStorage.setItem('filterExcludeUnavailable', JSON.stringify(excludeUnavailable));
+    }, [excludeUnavailable])
 
     return (
         <Box sx={{width: 1}}>
@@ -173,6 +223,15 @@ export const AnalyticPage = () => {
             {/*<Typography>*/}
             {/*    {JSON.stringify(dbStats)}*/}
             {/*</Typography>*/}
+
+            <Filter
+                minPrice={minPrice} setMinPrice={setMinPrice}
+                maxPrice={maxPrice} setMaxPrice={setMaxPrice}
+                filterForms={filterForms} setFilterForms={setFilterForms}
+                filterDealers={filterDealers} setFilterDealers={setFilterDealers}
+                filterAvailability={filterAvailability} setFilterAvailability={setFilterAvailability}
+                excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
+            />
 
             <TypographyH5BoldChart>Availability Gold products</TypographyH5BoldChart>
             <BarChartAvailability data={barChartDataGold}/>
