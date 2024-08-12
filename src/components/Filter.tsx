@@ -317,11 +317,11 @@ export const Filter = ({
 
             <FormControlLabel
                 sx={{ml: "2rem", mt: "1rem"}}
-                label={"exclude products without price"}
+                label={"include products without price"}
                 control={
                     <Checkbox
-                        checked={excludeUnavailable}
-                        onChange={(e) => setExcludeUnavailable(e.target.checked)}
+                        checked={!excludeUnavailable}
+                        onChange={(e) => setExcludeUnavailable(!e.target.checked)}
                     />
                 }
             />

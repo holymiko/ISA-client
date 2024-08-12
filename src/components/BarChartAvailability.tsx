@@ -82,6 +82,7 @@ export const BarChartAvailability = (props: any) => {
                 { dataKey: 'blue', label: 'Unknown', color: '#58a6f5' },
                 { dataKey: 'total', label: 'Total', color: 'black' },
               ]}
+              grid={{ horizontal: true }}
               {...xChartsSetting}
           />
   );
