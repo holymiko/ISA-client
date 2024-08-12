@@ -10,6 +10,7 @@ export interface BarChartData {
     green: number
     orange: number
     red: number
+    blue: number
     total: number
 }
 
@@ -22,6 +23,7 @@ export const getBarChartData = (latestPrices: Price[]): BarChartData[] => {
                 green: 0,
                 orange: 0,
                 red: 0,
+                blue: 0,
                 total: 0
             },
         )
@@ -52,6 +54,14 @@ export const getBarChartData = (latestPrices: Price[]): BarChartData[] => {
                 }
             )
         }
+        if(price.availability === Availability.UNKNOWN) {
+            list.filter(value => value.dealer === price.dealer).forEach(
+                value => {
+                    value.blue++;
+                    value.total++;
+                }
+            )
+        }
     })
 
     return list;
@@ -60,18 +70,19 @@ export const getBarChartData = (latestPrices: Price[]): BarChartData[] => {
 
 export const BarChartAvailability = (props: any) => {
     return (
-      <BarChart
-          // @ts-ignore
-          dataset={props.data}
-          xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
-          yAxis={[{ label: 'Product count', max: 400 }]}
-          series={[
-            { dataKey: 'green', label: 'In stock', color: 'green' },
-            { dataKey: 'orange', label: 'Preorder', color: '#f5a511' },
-            { dataKey: 'red', label: 'Unavailable', color: 'red' },
-            { dataKey: 'total', label: 'Total', color: 'black' },
-          ]}
-          {...xChartsSetting}
-      />
+          <BarChart
+              // @ts-ignore
+              dataset={props.data}
+              xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
+              yAxis={[{ label: 'Product count', max: 400 }]}
+              series={[
+                { dataKey: 'green', label: 'In stock', color: 'green' },
+                { dataKey: 'orange', label: 'Preorder', color: '#f5a511' },
+                { dataKey: 'red', label: 'Unavailable', color: 'red' },
+                { dataKey: 'blue', label: 'Unknown', color: '#58a6f5' },
+                { dataKey: 'total', label: 'Total', color: 'black' },
+              ]}
+              {...xChartsSetting}
+          />
   );
 };
