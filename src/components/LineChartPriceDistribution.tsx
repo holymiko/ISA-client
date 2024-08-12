@@ -5,6 +5,8 @@ import {useTranslation} from "react-i18next";
 import {chartDealersPre} from "../pages/product_detail/ProductDetailPage";
 import {Dealer} from "../types/enums/dealer";
 import {ScatterChartData} from "../pages/AnalyticPage";
+import {SliderISA} from "./SliderISA";
+import {useState} from "react";
 
 export interface LineChartData {
     name: string,
@@ -68,13 +70,15 @@ export const getPriceDistriLineChartSeries = (dataScatterChart: ScatterChartData
 
 export const LineChartPriceDistribution = (props: any) => {
     const { t } = useTranslation();
+    // @ts-ignore
+    const [domain, setDomain] = useState<[]>([props.min, props.max])
 
     return (
         <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
             <LineChart width={1450} height={800}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="price_weight" type="number"
-                       tickCount={props.tickCount} domain={props.domain} allowDataOverflow={true}  />
+                       tickCount={Math.floor((domain.at(1)! - domain.at(0)!)/props.stepChart + 1)} domain={domain} allowDataOverflow={true}  />
                 <YAxis dataKey="share" type="number" tickCount={11} domain={[0, 1]}/>
                 {/*<Tooltip />*/}
                 <Legend />
@@ -91,6 +95,7 @@ export const LineChartPriceDistribution = (props: any) => {
                     ))
                 }
             </LineChart>
+            <SliderISA domain={domain} setDomain={setDomain} min={props.min} max={props.max} stepLabel={props.stepSliderLabel} stepMark={props.stepSliderMark}/>
         </BoxChart>
   );
 };

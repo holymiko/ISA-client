@@ -243,13 +243,13 @@ export const AnalyticPage = () => {
             <BarChartPriceDistribution data={priceDistriBarChartDataGold} color='#e8b923'/>
 
             <TypographyH5BoldChart>Gold price per gram distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution tickCount={47} domain={[1580, 2500]} data={priceDistriLineChartDataGold}/>
+            <LineChartPriceDistribution min={1500} max={2500} stepSliderLabel={100} stepSliderMark={25} stepChart={50} data={priceDistriLineChartDataGold}/>
 
             <TypographyH5BoldChart>Silver product distribution</TypographyH5BoldChart>
             <BarChartPriceDistribution data={priceDistriBarChartDataSilver} color='#b3b3b3'/>
 
             <TypographyH5BoldChart>Silver price per gram distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution tickCount={64} domain={[22, 100]} data={priceDistriLineChartDataSilver}/>
+            <LineChartPriceDistribution min={22} max={100} stepSliderLabel={4} stepSliderMark={2} stepChart={2} data={priceDistriLineChartDataSilver}/>
 
             <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
             <BarChart
