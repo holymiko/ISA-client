@@ -58,7 +58,7 @@ export const initFilter = (tmpProducts: Product[], {setMinPrice, setMaxPrice, se
             x.availability = Availability.UNKNOWN
         }
     });
-    let tmpMaxPrice: number = 0;
+    let tmpMaxPrice: number = 10_000_000;
     tmpProducts.forEach(
         product => {
             product.bestPrice = product.latestPrices.sort(compareByPrice)[0];
