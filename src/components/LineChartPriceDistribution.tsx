@@ -75,7 +75,7 @@ export const LineChartPriceDistribution = (props: any) => {
 
     return (
         <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
-            <LineChart width={1450} height={800}>
+            <LineChart width={props.width} height={props.height}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="price_weight" type="number"
                        tickCount={Math.floor((domain.at(1)! - domain.at(0)!)/props.stepChart + 1)} domain={domain} allowDataOverflow={true}  />

@@ -49,33 +49,9 @@ export const xChartsSetting = {
 };
 
 
-const getScatterChartData = (products: Product[]): ScatterChartData[] => {
-    const list: ScatterChartData[] = []
 
-    products.forEach(product => product.latestPrices.forEach((price: Price) => {
-            if(price.price === 0) {
-                return
-            }
-            // Remove outliers
-            if(product.metal === Metal.GOLD && product.grams >= 2000) {
-                return;
-            }
-            // Remove outliers
-            if(product.metal === Metal.SILVER && product.grams >= 20000) {
-                return;
-            }
-            list.push({
-                id: price.id,
-                product_id: product.id,
-                dealer: price.dealer,
-                weight: product.grams,
-                price: price.price,
-                price_weight: price.pricePerGram
-            })
-    }))
-
-    return list;
-}
+const COEF_WINDOW_WIDTH = 380
+const COEF_WINDOW_HEIGHT = 270
 
 
 export const AnalyticPage = () => {
@@ -233,23 +209,36 @@ export const AnalyticPage = () => {
                 excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
             />
 
-            <TypographyH5BoldChart>Availability Gold products</TypographyH5BoldChart>
-            <BarChartAvailability data={barChartDataGold}/>
 
-            <TypographyH5BoldChart>Availability Silver products</TypographyH5BoldChart>
-            <BarChartAvailability data={barChartDataSilver}/>
+            <TypographyH5BoldChart>Gold price per gram distribution function</TypographyH5BoldChart>
+            <LineChartPriceDistribution
+                height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
+                min={1500} max={2500}
+                stepSlider={25} stepSliderLabel={100}
+                stepChart={50}
+                data={priceDistriLineChartDataGold}
+            />
 
             <TypographyH5BoldChart>Gold product distribution</TypographyH5BoldChart>
             <BarChartPriceDistribution data={priceDistriBarChartDataGold} color='#e8b923'/>
-
-            <TypographyH5BoldChart>Gold price per gram distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution min={1500} max={2500} stepSlider={25} stepSliderLabel={100} stepChart={50} data={priceDistriLineChartDataGold}/>
 
             <TypographyH5BoldChart>Silver product distribution</TypographyH5BoldChart>
             <BarChartPriceDistribution data={priceDistriBarChartDataSilver} color='#b3b3b3'/>
 
             <TypographyH5BoldChart>Silver price per gram distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution min={22} max={100} stepSlider={2} stepSliderLabel={4} stepChart={2} data={priceDistriLineChartDataSilver}/>
+            <LineChartPriceDistribution
+                height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
+                min={22} max={100}
+                stepSlider={2} stepSliderLabel={4}
+                stepChart={2}
+                data={priceDistriLineChartDataSilver}
+            />
+
+            <TypographyH5BoldChart>Availability Gold products</TypographyH5BoldChart>
+            <BarChartAvailability data={barChartDataGold}/>
+
+            <TypographyH5BoldChart>Availability Silver products</TypographyH5BoldChart>
+            <BarChartAvailability data={barChartDataSilver}/>
 
             <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
             <BarChart
@@ -291,4 +280,32 @@ export const AnalyticPage = () => {
             {/*</BoxRow>*/}
         </Box>
     );
+}
+
+const getScatterChartData = (products: Product[]): ScatterChartData[] => {
+    const list: ScatterChartData[] = []
+
+    products.forEach(product => product.latestPrices.forEach((price: Price) => {
+        if(price.price === 0) {
+            return
+        }
+        // Remove outliers
+        if(product.metal === Metal.GOLD && product.grams >= 2000) {
+            return;
+        }
+        // Remove outliers
+        if(product.metal === Metal.SILVER && product.grams >= 20000) {
+            return;
+        }
+        list.push({
+            id: price.id,
+            product_id: product.id,
+            dealer: price.dealer,
+            weight: product.grams,
+            price: price.price,
+            price_weight: price.pricePerGram
+        })
+    }))
+
+    return list;
 }
