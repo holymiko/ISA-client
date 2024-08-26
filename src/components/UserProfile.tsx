@@ -7,6 +7,9 @@ import {AccountCircle} from "@mui/icons-material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ButtonISA} from "./ButtonISA";
 import {PersonAccountDto} from "../types/PersonAccountDto";
+import packageJson from '../../package.json';
+import {getBackendVersion} from "../services/appInfoService";
+
 
 
 export const UserProfile = () => {
@@ -14,6 +17,7 @@ export const UserProfile = () => {
     const location = useLocation();
     const [visible, setVisible] = useState<boolean>(false)
     const [user, setUser] = useState<PersonAccountDto>({})
+    const [beVersion, setBeVersion] = useState<string>('')
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -22,6 +26,10 @@ export const UserProfile = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    useEffect(() => {
+        getBackendVersion().then(r => setBeVersion(r.data));
+    },[])
 
     useEffect(() => {
         if(location.pathname === "/login") {
@@ -83,6 +91,8 @@ export const UserProfile = () => {
                               <Typography>Role</Typography>
                               <Typography>Phone</Typography>
                               <Typography>Email</Typography>
+                              <Typography>FE v.</Typography>
+                              <Typography>BE v.</Typography>
                           </Box>
                           <Box sx={{display: 'flex', flexDirection: 'column'}}>
                               <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
@@ -93,6 +103,12 @@ export const UserProfile = () => {
                               </Typography>
                               <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
                                   {user.email ? user.email : '-'}
+                              </Typography>
+                              <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
+                                  {packageJson.version}
+                              </Typography>
+                              <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
+                                  {beVersion}
                               </Typography>
                           </Box>
                       </Box>
