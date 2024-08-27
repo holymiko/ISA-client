@@ -42,7 +42,9 @@ export const DealerStats = ({dealer, latestPrices}: DealerStatsProps) => {
     const iqr = Math.round((q3 - q1)*100)/100;
     return (
         <BoxChart sx={{pb: "1rem", pl: "1rem", p: '1rem'}}>
-            <img src={getDealerImage(dealer)} alt=''/>
+            <Box sx={{display: 'flex', justifyContent: 'center', pb: '0.5rem'}}>
+                <img src={getDealerImage(dealer)} alt='' height={36}/>
+            </Box>
             <Box sx={{display: 'flex', flexDirection: 'inline-flex', m: 1, gap: '0.5rem'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column'}}>
                     <Typography>{t('math.count')}</Typography>
@@ -82,13 +84,13 @@ export const DealerStats = ({dealer, latestPrices}: DealerStatsProps) => {
                     <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
                         {iqr}  Kč/g
                     </Typography>
-                    <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
+                    <Typography sx={{display: 'flex', justifyContent: 'flex-end'}}>
                         {min}  Kč/g
                     </Typography>
-                    <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
+                    <Typography sx={{display: 'flex', justifyContent: 'flex-end'}}>
                         {max}  Kč/g
                     </Typography>
-                    <Typography sx={{display: 'flex', justifyContent: 'flex-end', fontWeight: "bold"}}>
+                    <Typography sx={{display: 'flex', justifyContent: 'flex-end'}}>
                         {range}  Kč/g
                     </Typography>
                 </Box>
