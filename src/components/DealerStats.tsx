@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {Price} from "../types/Price";
 
+const FRACTION_DIGITS = 1;
+
 export interface DealerStatsProps {
     dealer: Dealer,
     latestPrices: Price[]
@@ -26,20 +28,20 @@ export const DealerStats = ({dealer, latestPrices}: DealerStatsProps) => {
     const latestPricePerGram: number[] = latestPrices.filter((x) => x.dealer === dealer).map((x) => x.pricePerGram).sort()
     const sum = latestPricePerGram.reduce((partialSum, a) => partialSum + a, 0);
 
-    const mean = Math.round(sum / latestPricePerGram.length*100)/100;
+    const mean = (sum/latestPricePerGram.length).toFixed(FRACTION_DIGITS);
     // @ts-ignore
-    const median = Math.round(getMedian(latestPricePerGram)*100)/100;
+    const median = getMedian(latestPricePerGram).toFixed(FRACTION_DIGITS);
     const mode = 0;
-    const min = Math.round(Math.min(...latestPricePerGram)*100)/100;
-    const max = Math.round(Math.max(...latestPricePerGram)*100)/100;
-    const range = Math.round((max - min)*100)/100;
+    const min = Math.min(...latestPricePerGram).toFixed(FRACTION_DIGITS);
+    const max = Math.max(...latestPricePerGram).toFixed(FRACTION_DIGITS);
+    const range = (Number(max) - Number(min)).toFixed(FRACTION_DIGITS);
     const count = latestPricePerGram.length;
     // @ts-ignore
-    const q1 = Math.round(getMedian(latestPricePerGram.slice(undefined, getMedianIndex(latestPricePerGram)-1))*100)/100;
+    const q1 = getMedian(latestPricePerGram.slice(undefined, getMedianIndex(latestPricePerGram)-1)).toFixed(FRACTION_DIGITS);
     const q2 = median;
     // @ts-ignore
-    const q3 = Math.round(getMedian(latestPricePerGram.slice(getMedianIndex(latestPricePerGram)+1, undefined))*100)/100;
-    const iqr = Math.round((q3 - q1)*100)/100;
+    const q3 = getMedian(latestPricePerGram.slice(getMedianIndex(latestPricePerGram)+1, undefined)).toFixed(FRACTION_DIGITS);
+    const iqr = (Number(q3) - Number(q1)).toFixed(FRACTION_DIGITS);
     return (
         <BoxChart sx={{pb: "1rem", pl: "1rem", p: '1rem'}}>
             <Box sx={{display: 'flex', justifyContent: 'center', pb: '0.5rem'}}>
