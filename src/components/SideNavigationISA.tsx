@@ -111,17 +111,16 @@ export const SideNavigationISA = (props: any) => {
                         <ListItemText primary={'Users'} sx={{pl:0.0, ml:0}} />
                       </ListItemButton>
                     </ListItem>
+                    <ListItem key={'Stocks'} disablePadding>
+                      <ListItemButton onClick={() => navigate('/stock')}>
+                        <ListItemIcon>
+                          <img src={stockIcon} alt="" width="35"  sx={{ml:0.4}}/>
+                        </ListItemIcon>
+                        <ListItemText primary={'Stocks'}/>
+                      </ListItemButton>
+                    </ListItem>
                   </> : <></>)
             }
-
-            <ListItem key={'Stocks'} disablePadding>
-              <ListItemButton onClick={() => navigate('/stock')}>
-                <ListItemIcon>
-                  <img src={stockIcon} alt="" width="35"  sx={{ml:0.4}}/>
-                </ListItemIcon>
-                <ListItemText primary={'Stocks'}/>
-              </ListItemButton>
-            </ListItem>
           </List>
         </Box>
       </Drawer>

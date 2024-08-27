@@ -106,9 +106,11 @@ export const RouterRoot = () => {
                 </Route>
                 <Route path = "stock">
                     <Route index element={
-                        <ProtectedRoute>
-                            <StockPage/>
-                        </ProtectedRoute>
+                        <AdminRoute>
+                            <ProtectedRoute>
+                                <StockPage/>
+                            </ProtectedRoute>
+                        </AdminRoute>
                     }/>
                 </Route>
                 <Route path = "analytic">
