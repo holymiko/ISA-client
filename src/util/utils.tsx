@@ -117,13 +117,20 @@ export const isAdminOrDealer = (role: Role|undefined): boolean => {
 }
 
 export const logOutMemClean = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-    localStorage.removeItem("gold");
-    localStorage.removeItem("silver");
-    localStorage.removeItem("platinum");
-    localStorage.removeItem("palladium");
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('gold');
+    localStorage.removeItem('silver');
+    localStorage.removeItem('platinum');
+    localStorage.removeItem('palladium');
+    localStorage.removeItem('filterAvailability');
+    localStorage.removeItem('filterDealers');
+    localStorage.removeItem('filterExcludeUnavailable');
+    localStorage.removeItem('filterForms');
+    localStorage.removeItem('filterMaxPrice');
+    localStorage.removeItem('filterMinPrice');
+
 }
 
 export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|undefined => {
