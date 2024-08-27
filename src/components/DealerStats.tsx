@@ -10,13 +10,11 @@ import {Price} from "../types/Price";
 const FRACTION_DIGITS = 1;
 const DELIMITER = '--'
 
-export interface DealerStatsProps {
-    dealer: Dealer,
-    latestPrices: Price[]
-}
 
-
-const getRootMeanSquare = (arr: number[]) => {
+const getRootMeanSquare = (arr: number[]): number => {
+    if(arr.length === 0) {
+        return 0;
+    }
 
     // Map will return another array with each
     // element corresponding to the elements of
@@ -92,6 +90,7 @@ export const DealerStats = ({dealer, latestPricePerGram}: any) => {
     // @ts-ignore
     const q3 = getMedian(latestPricePerGram.slice(getMedianIndex(latestPricePerGram)+1, undefined)).toFixed(FRACTION_DIGITS);
     const iqr = (Number(q3) - Number(q1)).toFixed(FRACTION_DIGITS);
+
     return (
         <BoxChart sx={{pb: "1rem", pl: "1rem", p: '1rem'}}>
             <Box sx={{display: 'flex', justifyContent: 'center', pb: '0.5rem'}}>
