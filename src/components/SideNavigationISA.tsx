@@ -15,11 +15,21 @@ import stockIcon from "../img/icon/stock.png";
 import pyramid from "../img/icon/pyramid.png";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import {useEffect, useState} from "react";
+import {getSessionUser, isAdmin} from "../util/utils";
+import {Role} from "../types/enums/role";
 
 const drawerWidth = 190;
 
 export const SideNavigationISA = (props: any) => {
   const navigate = useNavigate();
+
+  const [sessionUserRole, setSessionUserRole] = useState<Role|undefined>(undefined);
+  useEffect(() => {
+    setSessionUserRole(
+        getSessionUser(navigate)?.account?.role
+    )
+  }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -82,22 +92,28 @@ export const SideNavigationISA = (props: any) => {
                 <ListItemText primary={'Portfolio'} />
               </ListItemButton>
             </ListItem>
-            <ListItem key={'Add user'} disablePadding>
-              <ListItemButton onClick={() => {navigate('/user/add')}}>
-                <ListItemIcon>
-                  <PersonAddIcon fontSize="large"/>
-                </ListItemIcon>
-                <ListItemText primary={'Add user'} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem key={'Users'} disablePadding>
-              <ListItemButton onClick={() => {navigate('/user')}}>
-                <ListItemIcon>
-                  <PeopleAltIcon fontSize="large" sx={{ml:0.4}}/>
-                </ListItemIcon>
-                <ListItemText primary={'Users'} sx={{pl:0.0, ml:0}} />
-              </ListItemButton>
-            </ListItem>
+            {
+              (isAdmin(sessionUserRole) ?
+                  <>
+                    <ListItem key={'Add user'} disablePadding>
+                      <ListItemButton onClick={() => {navigate('/user/add')}}>
+                        <ListItemIcon>
+                          <PersonAddIcon fontSize="large"/>
+                        </ListItemIcon>
+                        <ListItemText primary={'Add user'} />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem key={'Users'} disablePadding>
+                      <ListItemButton onClick={() => {navigate('/user')}}>
+                        <ListItemIcon>
+                          <PeopleAltIcon fontSize="large" sx={{ml:0.4}}/>
+                        </ListItemIcon>
+                        <ListItemText primary={'Users'} sx={{pl:0.0, ml:0}} />
+                      </ListItemButton>
+                    </ListItem>
+                  </> : <></>)
+            }
+
             <ListItem key={'Stocks'} disablePadding>
               <ListItemButton onClick={() => navigate('/stock')}>
                 <ListItemIcon>

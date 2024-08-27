@@ -1,5 +1,5 @@
-import React from "react";
-import {Route, Routes, Navigate} from 'react-router-dom';
+import React, {useEffect, useState} from "react";
+import {Route, Routes, Navigate, useNavigate} from 'react-router-dom';
 import {PortfolioPage} from "./pages/portfolio/PortfolioPage";
 import AddPortfolioPage from "./pages/portfolio/AddPortfolioPage";
 import {ProductDetailPage} from "./pages/product_detail/ProductDetailPage";
@@ -11,11 +11,22 @@ import {PortfolioTablePage} from "./pages/portfolio/PortfolioTablePage";
 import {StockPage} from "./pages/StockPage";
 import {AddUser} from "./pages/user_add/AddUser";
 import {UserTablePage} from "./pages/user_table/UserTablePage";
-import {isEmpty, logOutMemClean} from "./util/utils";
+import {getSessionUser, isAdmin, isEmpty, logOutMemClean} from "./util/utils";
 import Login from "./pages/Login";
 import {SideNavigationISA} from "./components/SideNavigationISA";
 import {HeaderISA} from "./components/HeaderISA";
 import {AnalyticPage} from "./pages/AnalyticPage";
+
+
+const AdminRoute = ({ children }: any) => {
+    const navigate = useNavigate();
+
+    const role = getSessionUser(navigate)?.account?.role
+    if (!isAdmin(role)) {
+        return <Navigate to="/" replace />
+    }
+    return children;
+};
 
 
 const ProtectedRoute = ({ children }: any) => {
@@ -79,14 +90,18 @@ export const RouterRoot = () => {
                 </Route>
                 <Route path = "user">
                     <Route index element={
-                        <ProtectedRoute>
-                            <UserTablePage/>
-                        </ProtectedRoute>
+                        <AdminRoute>
+                            <ProtectedRoute>
+                                <UserTablePage/>
+                            </ProtectedRoute>
+                        </AdminRoute>
                     }/>
                     <Route path="add" element={
-                        <ProtectedRoute>
-                            <AddUser/>
-                        </ProtectedRoute>
+                        <AdminRoute>
+                            <ProtectedRoute>
+                                <AddUser/>
+                            </ProtectedRoute>
+                        </AdminRoute>
                     }/>
                 </Route>
                 <Route path = "stock">
