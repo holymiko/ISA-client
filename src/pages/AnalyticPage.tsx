@@ -27,6 +27,8 @@ import {
     LineChartPriceDistribution
 } from "../components/LineChartPriceDistribution";
 import {Filter, FilterAvailability, FilterDealer, FilterForm, filterProducts, initFilter} from "../components/Filter";
+import {DealerStats} from "../components/DealerStats";
+import {BoxRow} from "../components/BoxRow";
 
 
 export interface ScatterChartData {
@@ -70,6 +72,8 @@ export const AnalyticPage = () => {
     const [barChartDataSilver, setBarChartDataSilver] = useState<any[]>([])
     const [barChartDataProductCount, setBarChartDataProductCount] = useState<any[]>([])
     const [scatterChartDataGold, setScatterChartDataGold] = useState<any[]>([])
+    const [latestPricesGold, setLatestPricesGold] = useState<Price[]>([])
+    const [latestPricesSilver, setLatestPricesSilver] = useState<Price[]>([])
 
     const [minPrice, setMinPrice] = useState<number>(0);
     const [maxPrice, setMaxPrice] = useState<number>(500000);
@@ -115,12 +119,14 @@ export const AnalyticPage = () => {
             setPriceDistriBarChartDataGold(dataPriceDistriBarChart)
             setPriceDistriLineChartDataGold(dataPriceDistriLineChart)
             setProductsGold(products)
+            setLatestPricesGold(latestPrices)
         }
         if(metal === Metal.SILVER) {
             setBarChartDataSilver(dataAvailaChart);
             setPriceDistriBarChartDataSilver(dataPriceDistriBarChart)
             setPriceDistriLineChartDataSilver(dataPriceDistriLineChart)
             setProductsSilver(products);
+            setLatestPricesSilver(latestPrices)
         }
         setLoading(false);
     }
@@ -209,6 +215,13 @@ export const AnalyticPage = () => {
                 excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
             />
 
+            <BoxRow sx={{flexWrap: 'wrap', mb: '2rem'}}>
+                {filterDealers.filter((x) => x.checked).map((x) =>
+                    <DealerStats
+                        dealer={x.value}
+                        latestPrices={latestPricesGold}/>
+                )}
+            </BoxRow>
 
             <TypographyH5BoldChart>Gold price per gram distribution function</TypographyH5BoldChart>
             <LineChartPriceDistribution
