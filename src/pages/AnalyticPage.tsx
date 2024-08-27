@@ -247,7 +247,7 @@ export const AnalyticPage = () => {
                 </BoxRow>
             </FilterCollapseItem>
 
-            <FilterCollapseItem title="Gold - Distribution function price per gram" openFilter={openLineChartGold} setOpenFilter={setOpenLineChartGold}>
+            <FilterCollapseItem title="Gold - Cumulative distribution function price per gram" openFilter={openLineChartGold} setOpenFilter={setOpenLineChartGold}>
                 <LineChartPriceDistribution
                     height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
                     min={1500} max={2500}
@@ -282,7 +282,7 @@ export const AnalyticPage = () => {
                 </BoxRow>
             </FilterCollapseItem>
 
-            <FilterCollapseItem title="Silver - Distribution function price per gram" openFilter={openLineChartSilver} setOpenFilter={setOpenLineChartSilver}>
+            <FilterCollapseItem title="Silver - Cumulative distribution function price per gram" openFilter={openLineChartSilver} setOpenFilter={setOpenLineChartSilver}>
                 <LineChartPriceDistribution
                     height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
                     min={22} max={100}
