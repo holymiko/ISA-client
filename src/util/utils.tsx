@@ -112,6 +112,10 @@ export const isAdmin = (role: Role|undefined): boolean => {
     return role === Role.ADMIN || role === Role.SUPER_ADMIN
 }
 
+export const isAdminOrDealer = (role: Role|undefined): boolean => {
+    return isAdmin(role) || role === Role.DEALER
+}
+
 export const logOutMemClean = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

@@ -23,7 +23,7 @@ import {ProductDetail} from "../../types/ProductDetail";
 import {LinkPrice} from "../../types/LinkPrice";
 import {ButtonISA} from "../../components/ButtonISA";
 import {useLocation, useNavigate} from "react-router-dom";
-import {excludeNonDigits, getSessionUser, isAdmin} from "../../util/utils";
+import {excludeNonDigits, getSessionUser, isAdminOrDealer} from "../../util/utils";
 import {Role} from "../../types/enums/role";
 import {BoxColumnCenter} from "../../components/BoxColumnCenter";
 import {compareAsc, format} from "date-fns";
@@ -305,7 +305,7 @@ export const ProductDetailPage = () => {
                 <ButtonISA
                     onClick = {() => scrapProductById(productId)}
                     startIcon={<PlayCircleOutlineIcon/>}
-                    disabled={loading || !isAdmin(sessionUserRole)}
+                    disabled={loading || !isAdminOrDealer(sessionUserRole)}
                     variant="contained"
                 >
                     Scrap product prices
@@ -462,13 +462,13 @@ export const ProductDetailPage = () => {
                                     <Box sx={{gap: 2, width: 1.0, my: 2, display: 'flex', justifyContent: 'center'}}>
                                         <ButtonISA
                                             startIcon={<CallSplit/>}
-                                            disabled={!isAdmin(sessionUserRole)} onClick={() => saveProductSeparatelyFce(params.row.id)}
+                                            disabled={!isAdminOrDealer(sessionUserRole)} onClick={() => saveProductSeparatelyFce(params.row.id)}
                                         >
                                             save separately
                                         </ButtonISA>
                                         <ButtonISA
                                             startIcon={<CallMerge/>}
-                                            disabled={!isAdmin(sessionUserRole)}
+                                            disabled={!isAdminOrDealer(sessionUserRole)}
                                             onClick={() => {
                                                 setSelectedLink(params.row)
                                                 setModalIsOpen(true)
@@ -513,7 +513,7 @@ export const ProductDetailPage = () => {
                         <ButtonISA variant="outlined" onClick={() => setModalProductIdInput('')}>
                             clear
                         </ButtonISA>
-                        <ButtonISA disabled={!isAdmin(sessionUserRole) || !modalProductExists}
+                        <ButtonISA disabled={!isAdminOrDealer(sessionUserRole) || !modalProductExists}
                             onClick={() => {
                                 const metal = product?.metal
                                 updateLinkReference(productId, selectedLink!.id, Number(modalProductIdInput)).then(
