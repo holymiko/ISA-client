@@ -27,7 +27,7 @@ import {
     LineChartPriceDistribution
 } from "../components/LineChartPriceDistribution";
 import {Filter, FilterAvailability, FilterDealer, FilterForm, filterProducts, initFilter} from "../components/Filter";
-import {DealerStats} from "../components/DealerStats";
+import {DealerStats, formatPrices, getMedian} from "../components/DealerStats";
 import {BoxRow} from "../components/BoxRow";
 
 
@@ -216,10 +216,21 @@ export const AnalyticPage = () => {
             />
 
             <BoxRow sx={{flexWrap: 'wrap', mb: '2rem'}}>
-                {filterDealers.filter((x) => x.checked).map((x) =>
+                {filterDealers.filter(
+                    (x) => x.checked
+                ).map((x) => {
+                    const sortedPricePerGram = formatPrices(x.value, latestPricesGold)
+                    x.median = getMedian(sortedPricePerGram)
+                    x.sortedPricePerGram = sortedPricePerGram
+                    return x
+                }).sort(
+                    // Sort by median
+                    (a, b) => a.median - b.median)
+                .map((x) =>
+                    // Create JSX.Element
                     <DealerStats
                         dealer={x.value}
-                        latestPrices={latestPricesGold}/>
+                        latestPricePerGram={x.sortedPricePerGram}/>
                 )}
             </BoxRow>
 

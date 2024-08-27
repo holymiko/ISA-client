@@ -26,12 +26,14 @@
     "range": "Range",
     "min": "Min",
     "max": "Max",
-    "count": "Count n",
+    "count": "Count",
     "q1": "Quartile 1.",
     "q2": "Quartile 2.",
     "q3": "Quartile 3.",
     "iqr": "Interquartile range",
-    "std": "Standard deviation",
-    "var": "Variance"
+    "std": "Standard dev",
+    "var": "Variation",
+    "cv": "Coef of variation",
+    "rms": "Root mean square"
   }
 }

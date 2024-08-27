@@ -19,6 +19,8 @@ export interface FilterDealer {
     id: number;
     value: Dealer;
     checked: boolean;
+    median: number;
+    sortedPricePerGram: number[]
 }
 
 export interface FilterForm {
