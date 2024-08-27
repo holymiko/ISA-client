@@ -15,7 +15,8 @@ export interface DealerStatsProps {
 }
 
 const getMedian = (list: number[]) => {
-    return list.at(getMedianIndex(list));
+    const tmp = list.at(getMedianIndex(list));
+    return tmp === undefined ? 0 : tmp
 }
 
 const getMedianIndex = (list: number[]) => {
