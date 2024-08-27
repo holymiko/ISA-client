@@ -231,7 +231,7 @@ export const Filter = ({
 
     return (
         <BoxChart sx={{ width: '1', gap: 0, mb: 2, display: 'flex', flexDirection: 'column' }}>
-            <FilterCollapseItem title="Price" openFilter={openFilterPrice} setOpenFilter={setOpenFilterPrice}>
+            <FilterCollapseItem title="Price" openFilter={openFilterPrice} setOpenFilter={setOpenFilterPrice} sx={{bgcolor: 'whitesmoke'}}>
                 <BoxRow sx={{gap: "1rem", display: 'inline-flex', width: '1', mb: "1rem", ml: "3rem"}}>
                     <TextField
                         label="Min. price"
@@ -263,7 +263,7 @@ export const Filter = ({
                 </BoxRow>
             </FilterCollapseItem>
 
-            <FilterCollapseItem title="Form" openFilter={openFilterForm} setOpenFilter={setOpenFilterForm}>
+            <FilterCollapseItem title="Form" openFilter={openFilterForm} setOpenFilter={setOpenFilterForm} sx={{bgcolor: 'whitesmoke'}}>
                 {
                     filterForms.map((form: FilterForm) => (
                         <FormControlLabel
@@ -281,7 +281,7 @@ export const Filter = ({
                 }
             </FilterCollapseItem>
 
-            <FilterCollapseItem title="Dealer" openFilter={openFilterDealer} setOpenFilter={setOpenFilterDealer}>
+            <FilterCollapseItem title="Dealer" openFilter={openFilterDealer} setOpenFilter={setOpenFilterDealer} sx={{bgcolor: 'whitesmoke'}}>
                 {
                     filterDealers.map((dealer: FilterDealer) => (
                         <FormControlLabel
@@ -299,7 +299,7 @@ export const Filter = ({
                 }
             </FilterCollapseItem>
 
-            <FilterCollapseItem title="Availability" openFilter={openFilterAvailability} setOpenFilter={setOpenFilterAvailability}>
+            <FilterCollapseItem title="Availability" openFilter={openFilterAvailability} setOpenFilter={setOpenFilterAvailability} sx={{bgcolor: 'whitesmoke'}}>
                 {
                     filterAvailability.map((filter: FilterAvailability) => (
                         <FormControlLabel

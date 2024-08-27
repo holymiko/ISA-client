@@ -29,6 +29,7 @@ import {
 import {Filter, FilterAvailability, FilterDealer, FilterForm, filterProducts, initFilter} from "../components/Filter";
 import {DealerStats, formatPrices, getMedian} from "../components/DealerStats";
 import {BoxRow} from "../components/BoxRow";
+import {FilterCollapseItem} from "../components/FilterCollapseItem";
 
 
 export interface ScatterChartData {
@@ -81,6 +82,16 @@ export const AnalyticPage = () => {
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
     const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
     const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
+
+    const [openDealerStatsGold, setOpenDealerStatsGold] = useState<boolean>(true);
+    const [openDealerStatsSilver, setOpenDealerStatsSilver] = useState<boolean>(true);
+    const [openLineChartGold, setOpenLineChartGold] = useState<boolean>(true);
+    const [openLineChartSilver, setOpenLineChartSilver] = useState<boolean>(true);
+    const [openAvailGold, setOpenAvailGold] = useState<boolean>(true);
+    const [openAvailSilver, setOpenAvailSilver] = useState<boolean>(true);
+    const [openBarPriceGold, setOpenBarPriceGold] = useState<boolean>(true);
+    const [openBarPriceSilver, setOpenBarPriceSilver] = useState<boolean>(true);
+    const [openScrapingPotential, setOpenScrapingPotential] = useState<boolean>(true);
 
     const [dbStats, setDbStats] = useState<any>();
     const [version, setVersion] = useState<string>("");
@@ -215,67 +226,97 @@ export const AnalyticPage = () => {
                 excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
             />
 
-            <BoxRow sx={{flexWrap: 'wrap', mb: '2rem'}}>
-                {filterDealers.filter(
-                    (x) => x.checked
-                ).map((x) => {
-                    const sortedPricePerGram = formatPrices(x.value, latestPricesGold)
-                    x.median = getMedian(sortedPricePerGram)
-                    x.sortedPricePerGram = sortedPricePerGram
-                    return x
-                }).sort(
-                    // Sort by median
-                    (a, b) => a.median - b.median)
-                .map((x) =>
-                    // Create JSX.Element
-                    <DealerStats
-                        dealer={x.value}
-                        latestPricePerGram={x.sortedPricePerGram}/>
-                )}
-            </BoxRow>
+            <FilterCollapseItem title="Gold - Dealer statistics" openFilter={openDealerStatsGold} setOpenFilter={setOpenDealerStatsGold}>
+                <BoxRow sx={{flexWrap: 'wrap', mb: '2rem'}}>
+                    {filterDealers.filter(
+                        (x) => x.checked
+                    ).map((x) => {
+                        const sortedPricePerGram = formatPrices(x.value, latestPricesGold)
+                        x.median = getMedian(sortedPricePerGram)
+                        x.sortedPricePerGram = sortedPricePerGram
+                        return x
+                    }).sort(
+                        // Sort by median
+                        (a, b) => a.median - b.median)
+                    .map((x) =>
+                        // Create JSX.Element
+                        <DealerStats
+                            dealer={x.value}
+                            latestPricePerGram={x.sortedPricePerGram}/>
+                    )}
+                </BoxRow>
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Gold price per gram distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution
-                height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
-                min={1500} max={2500}
-                stepSlider={25} stepSliderLabel={100}
-                stepChart={50}
-                data={priceDistriLineChartDataGold}
-            />
+            <FilterCollapseItem title="Gold - Distribution function price per gram" openFilter={openLineChartGold} setOpenFilter={setOpenLineChartGold}>
+                <LineChartPriceDistribution
+                    height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
+                    min={1500} max={2500}
+                    stepSlider={25} stepSliderLabel={100}
+                    stepChart={50}
+                    data={priceDistriLineChartDataGold}
+                />
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Gold product distribution</TypographyH5BoldChart>
-            <BarChartPriceDistribution data={priceDistriBarChartDataGold} color='#e8b923'/>
+            <FilterCollapseItem title="Gold - Bar chart price distribution" openFilter={openBarPriceGold} setOpenFilter={setOpenBarPriceGold}>
+                <BarChartPriceDistribution data={priceDistriBarChartDataGold} color='#e8b923'/>
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Silver product distribution</TypographyH5BoldChart>
-            <BarChartPriceDistribution data={priceDistriBarChartDataSilver} color='#b3b3b3'/>
+            <FilterCollapseItem title="Silver - Dealer statistics" openFilter={openDealerStatsSilver} setOpenFilter={setOpenDealerStatsSilver}>
+                <BoxRow sx={{flexWrap: 'wrap', mb: '2rem'}}>
+                    {filterDealers.filter(
+                        (x) => x.checked
+                    ).map((x) => {
+                        const sortedPricePerGram = formatPrices(x.value, latestPricesSilver)
+                        x.median = getMedian(sortedPricePerGram)
+                        x.sortedPricePerGram = sortedPricePerGram
+                        return x
+                    }).sort(
+                        // Sort by median
+                        (a, b) => a.median - b.median)
+                        .map((x) =>
+                            // Create JSX.Element
+                            <DealerStats
+                                dealer={x.value}
+                                latestPricePerGram={x.sortedPricePerGram}/>
+                        )}
+                </BoxRow>
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Silver price per gram distribution function</TypographyH5BoldChart>
-            <LineChartPriceDistribution
-                height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
-                min={22} max={100}
-                stepSlider={2} stepSliderLabel={4}
-                stepChart={2}
-                data={priceDistriLineChartDataSilver}
-            />
+            <FilterCollapseItem title="Silver - Distribution function price per gram" openFilter={openLineChartSilver} setOpenFilter={setOpenLineChartSilver}>
+                <LineChartPriceDistribution
+                    height={window.innerHeight-COEF_WINDOW_HEIGHT} width={window.innerWidth-COEF_WINDOW_WIDTH}
+                    min={22} max={100}
+                    stepSlider={2} stepSliderLabel={4}
+                    stepChart={2}
+                    data={priceDistriLineChartDataSilver}
+                />
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Availability Gold products</TypographyH5BoldChart>
-            <BarChartAvailability data={barChartDataGold}/>
+            <FilterCollapseItem title="Silver - Bar chart price distribution" openFilter={openBarPriceSilver} setOpenFilter={setOpenBarPriceSilver}>
+                <BarChartPriceDistribution data={priceDistriBarChartDataSilver} color='#b3b3b3'/>
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Availability Silver products</TypographyH5BoldChart>
-            <BarChartAvailability data={barChartDataSilver}/>
+            <FilterCollapseItem title="Gold - Availability" openFilter={openAvailGold} setOpenFilter={setOpenAvailGold}>
+                <BarChartAvailability data={barChartDataGold}/>
+            </FilterCollapseItem>
 
-            <TypographyH5BoldChart>Scraping potential</TypographyH5BoldChart>
-            <BarChart
-                dataset={barChartDataProductCount}
-                xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
-                yAxis={[{ label: 'URL count' }]}
-                series={[
-                    { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
-                    { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#ffcd29' },
-                    { dataKey: 'hiddenProductCount', label: 'Hidden products', color: '#58a6f5' },
-                ]}
-                {...xChartsSetting}
-            />
+            <FilterCollapseItem title="Silver - Availability" openFilter={openAvailSilver} setOpenFilter={setOpenAvailSilver}>
+                <BarChartAvailability data={barChartDataSilver}/>
+            </FilterCollapseItem>
+
+            <FilterCollapseItem title="Scraping potential" openFilter={openScrapingPotential} setOpenFilter={setOpenScrapingPotential}>
+                <BarChart
+                    dataset={barChartDataProductCount}
+                    xAxis={[{ scaleType: 'band', dataKey: 'dealer' }]}
+                    yAxis={[{ label: 'URL count' }]}
+                    series={[
+                        { dataKey: 'productCount', label: 'Scraped URL', color: 'black' },
+                        { dataKey: 'linkWithoutProductCount', label: 'Unscraped URL', color: '#ffcd29' },
+                        { dataKey: 'hiddenProductCount', label: 'Hidden products', color: '#58a6f5' },
+                    ]}
+                    {...xChartsSetting}
+                />
+            </FilterCollapseItem>
 
             {/*<ScatterChart*/}
             {/*    height={500}*/}
