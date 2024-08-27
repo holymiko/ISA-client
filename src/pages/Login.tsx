@@ -77,7 +77,10 @@ export const Login = () => {
             getCurrentUser().then((user: PersonAccountDto) => {
               localStorage.setItem('user', JSON.stringify(user));
             }).catch(() => localStorage.setItem('user', JSON.stringify("dummy")))
-            navigate('/');
+            setTimeout(function(){
+              navigate('/');
+            }, 500);
+
           }).catch(handleRequestError)
     }
   };
