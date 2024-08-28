@@ -79,7 +79,7 @@ export const Login = () => {
             }).catch(() => localStorage.setItem('user', JSON.stringify("dummy")))
             setTimeout(function(){
               navigate('/');
-            }, 500);
+            }, 1000);
 
           }).catch(handleRequestError)
     }

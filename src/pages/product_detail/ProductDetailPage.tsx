@@ -344,7 +344,7 @@ export const ProductDetailPage = () => {
                 </LineChart>
             </BoxChart>
 
-            <TypographyH5BoldChart>Price & Buyout chart</TypographyH5BoldChart>
+            <TypographyH5BoldChart>Buy & Sell price chart</TypographyH5BoldChart>
             <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
                 <AreaChart width={1450} height={500} data={areaChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
