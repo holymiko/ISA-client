@@ -34,11 +34,11 @@ export function formatProductName(name: string): string {
   name = name.replaceAll(/\(?německ[oýáé]\)?/ig, '').trim()
   name = name.replaceAll(/\(?Velká Británie\)?/g, '').trim()
   name = name.replaceAll(/\(?Švýcarsko\)?/g, '').trim()
+  name = name.replaceAll(/Limited edition/ig, '').trim()
 
 
-
-
-
+  name = name.replaceAll(/\(/ig, '').trim()
+  name = name.replaceAll(/\)/ig, '').trim()
   name = name.replaceAll(/\| /ig, '').trim()
   name = name.replaceAll(/- /ig, '').trim()
 
