@@ -5,7 +5,7 @@ import {Metal} from "../types/enums/metal";
 
 const PAGE_SIZE = 200;
 
-export const getProductsByPages = async (metal: Metal|undefined): Promise<any> => {
+export const getProductsByPages = async (metal: Metal|undefined, isTopProduct: boolean|undefined): Promise<any> => {
     let tmpProducts: Product[] = [];
     let b = true;
     let p = 0
@@ -20,6 +20,7 @@ export const getProductsByPages = async (metal: Metal|undefined): Promise<any> =
             undefined,
             undefined,
             false,
+            isTopProduct,
             p,
             PAGE_SIZE
         ).then((page) => {
@@ -43,7 +44,8 @@ const getProductsAsDTO = async (
     grams: number|undefined,
     year: number|undefined,
     savedAlone: boolean|undefined,
-    hidden: boolean|undefined,
+    isHidden: boolean|undefined,
+    isTopProduct: boolean|undefined,
     page: number|undefined,
     size: number|undefined
 ) => {
@@ -59,23 +61,13 @@ const getProductsAsDTO = async (
             grams: grams !== undefined ? grams : null,
             year: year !== undefined ? year : null,
             savedAlone: savedAlone !== undefined ? savedAlone : null,
-            hidden: hidden !== undefined ? hidden : null,
+            isHidden: isHidden !== undefined ? isHidden : null,
+            isTopProduct: isTopProduct !== undefined ? isTopProduct : null,
             page: page !== undefined ? page : null,
             size: size !== undefined ? size : null
         }
     });
     return data;
-}
-
-export const getProductsAsDTOOld = (metal: string|undefined) => {
-    if(metal === undefined || metal === 'all') {
-        return api.get("product");
-    }
-    return api.get("product/old", {
-        params: {
-            metal: metal.toUpperCase()
-        }
-    });
 }
 
 export const getProductById = async (productId: number): Promise<Product> => {

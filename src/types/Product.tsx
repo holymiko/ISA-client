@@ -13,4 +13,5 @@ export interface Product {
   bestPrice?: Price,
   bestRedemption?: Price,
   prices?: Price[],
+  topProduct: boolean
 }

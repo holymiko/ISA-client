@@ -1,11 +1,13 @@
 import {api} from "./api";
 
 export const scrapByMetalInSync = (
-  metal: string|undefined
+    metal: string|undefined,
+    isTopProduct: string|undefined
 ) => {
     return api.post("scrap/param", {}, {
         params: {
-            'metal': metal?.toUpperCase()
+            metal: metal?.toUpperCase(),
+            isTopProduct: isTopProduct !== undefined ? isTopProduct : null,
         },
     });
 }

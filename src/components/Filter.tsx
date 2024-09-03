@@ -48,11 +48,13 @@ export interface FilterProps {
     setFilterAvailability: any,
     excludeUnavailable: boolean,
     setExcludeUnavailable: any,
+    isTopProduct: boolean,
+    setIsTopProduct: any
 }
 
 
 export const initFilter = (tmpProducts: Product[], {setMinPrice, setMaxPrice, setFilterForms,
-    setFilterDealers, setFilterAvailability, setExcludeUnavailable}: any
+    setFilterDealers, setFilterAvailability, setExcludeUnavailable, setFilterIsTopProduct}: any
 ) => {
     const latestPrices: Price[] = tmpProducts.flatMap(x => x.latestPrices);
     latestPrices.forEach(x => {
@@ -124,6 +126,14 @@ export const initFilter = (tmpProducts: Product[], {setMinPrice, setMaxPrice, se
     } else {
         setExcludeUnavailable(JSON.parse(tmp!))
     }
+
+    tmp = localStorage.getItem('filterIsTopProduct')
+    if(isEmpty(tmp)) {
+        setFilterIsTopProduct(true);
+        localStorage.setItem('filterIsTopProduct', JSON.stringify(true))
+    } else {
+        setFilterIsTopProduct(JSON.parse(tmp!))
+    }
 }
 
 export const filterProducts = (
@@ -133,7 +143,8 @@ export const filterProducts = (
     filterForms: FilterForm[],
     filterDealers: FilterDealer[],
     filterAvailability: FilterAvailability[],
-    excludeUnavailable: boolean
+    excludeUnavailable: boolean,
+    filterIsTopProduct: boolean
 ): Product[] => {
     if(products.length === 0 || filterForms.length === 0 || filterDealers.length === 0 || filterAvailability.length === 0) {
         return products;
@@ -152,6 +163,10 @@ export const filterProducts = (
         }
         // Form
         if(!filterFormValues.includes(x.form)) {
+            return false;
+        }
+        // Top product
+        if(filterIsTopProduct && !x.topProduct) {
             return false;
         }
         // Price
@@ -185,7 +200,7 @@ export const filterProducts = (
 export const Filter = ({
     minPrice, setMinPrice, maxPrice, setMaxPrice, filterForms, setFilterForms,
     filterDealers, setFilterDealers, filterAvailability, setFilterAvailability,
-    excludeUnavailable, setExcludeUnavailable
+    excludeUnavailable, setExcludeUnavailable, isTopProduct, setIsTopProduct
 }: FilterProps) => {
     const { t } = useTranslation();
 
@@ -317,16 +332,28 @@ export const Filter = ({
                 }
             </FilterCollapseItem>
 
-            <FormControlLabel
-                sx={{ml: "2rem", mt: "1rem"}}
-                label={"include products without price"}
-                control={
-                    <Checkbox
-                        checked={!excludeUnavailable}
-                        onChange={(e) => setExcludeUnavailable(!e.target.checked)}
-                    />
-                }
-            />
+            <BoxRow>
+                <FormControlLabel
+                    sx={{ml: "2rem", mt: "1rem"}}
+                    label={"top products only"}
+                    control={
+                        <Checkbox
+                            checked={isTopProduct}
+                            onChange={(e) => setIsTopProduct(e.target.checked)}
+                        />
+                    }
+                />
+                <FormControlLabel
+                    sx={{ml: "2rem", mt: "1rem"}}
+                    label={"include products without price"}
+                    control={
+                        <Checkbox
+                            checked={!excludeUnavailable}
+                            onChange={(e) => setExcludeUnavailable(!e.target.checked)}
+                        />
+                    }
+                />
+            </BoxRow>
         </BoxChart>
   );
 };

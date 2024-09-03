@@ -15,7 +15,7 @@ export const HomePage = () => {
         for (const tmpMetal of list) {
             const productCache = localStorage.getItem(tmpMetal.toLowerCase())
             if (isEmpty(productCache)) {
-                getProductsByPages(tmpMetal);
+                getProductsByPages(tmpMetal, undefined);
             }
         }
     },[]);

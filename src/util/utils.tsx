@@ -130,7 +130,7 @@ export const logOutMemClean = () => {
     localStorage.removeItem('filterForms');
     localStorage.removeItem('filterMaxPrice');
     localStorage.removeItem('filterMinPrice');
-
+    localStorage.removeItem('filterIsTopProduct');
 }
 
 export const getSessionUser = (navigate: NavigateFunction): PersonAccountDto|undefined => {

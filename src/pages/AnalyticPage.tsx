@@ -82,6 +82,7 @@ export const AnalyticPage = () => {
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
     const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
     const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
+    const [filterIsTopProduct, setFilterIsTopProduct] = useState<boolean>(true);
 
     const [openDealerStatsGold, setOpenDealerStatsGold] = useState<boolean>(true);
     const [openDealerStatsSilver, setOpenDealerStatsSilver] = useState<boolean>(true);
@@ -96,21 +97,8 @@ export const AnalyticPage = () => {
     const [dbStats, setDbStats] = useState<any>();
     const [version, setVersion] = useState<string>("");
 
-    const update = () => {
-        getDbStats().then((x) => {
-            setDbStats(x.data)
-            setRow([{
-                name: "Silverum",
-                linkWithProduct: x.data.linksWithProductSilverum,
-                totalLinks: x.data.linksSilverum,
-                share: x.data.linksWithProductSilverum / x.data.linksSilverum
-            }])
-        });
-        getBackendVersion().then((x) => setVersion(x.data));
-    }
-
     const formatProducts = (metal: Metal|undefined, products: Product[]) => {
-        const tmpProducts = filterProducts(products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable)
+        const tmpProducts = filterProducts(products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable, filterIsTopProduct)
         if(tmpProducts.length === 0) {
             return;
         }
@@ -160,7 +148,7 @@ export const AnalyticPage = () => {
             const productCache = localStorage.getItem(tmpMetal.toLowerCase())
             if (isEmpty(productCache)) {
                 setLoading(true)
-                getProductsByPages(tmpMetal).then((x: Product[]) => {
+                getProductsByPages(tmpMetal, undefined).then((x: Product[]) => {
                     formatProducts(tmpMetal, x);
                     tmpProducts.push(...x)
                 });
@@ -172,10 +160,19 @@ export const AnalyticPage = () => {
         }
         initFilter(tmpProducts, {
             setMinPrice, setMaxPrice, setFilterForms, setFilterDealers,
-            setFilterAvailability, setExcludeUnavailable
+            setFilterAvailability, setExcludeUnavailable, setFilterIsTopProduct
         })
         getLinkCountForBarChart();
-        update();
+        getDbStats().then((x) => {
+            setDbStats(x.data)
+            setRow([{
+                name: "Silverum",
+                linkWithProduct: x.data.linksWithProductSilverum,
+                totalLinks: x.data.linksSilverum,
+                share: x.data.linksWithProductSilverum / x.data.linksSilverum
+            }])
+        });
+        getBackendVersion().then((x) => setVersion(x.data));
     },[]);
 
     useEffect(() => {
@@ -207,6 +204,10 @@ export const AnalyticPage = () => {
         localStorage.setItem('filterExcludeUnavailable', JSON.stringify(excludeUnavailable));
     }, [excludeUnavailable])
 
+    useEffect(() => {
+        localStorage.setItem('filterIsTopProduct', JSON.stringify(filterIsTopProduct));
+    }, [filterIsTopProduct])
+
     return (
         <Box sx={{width: 1}}>
             <TypographyPageTitle sx={{mb: '2rem'}}>
@@ -224,6 +225,7 @@ export const AnalyticPage = () => {
                 filterDealers={filterDealers} setFilterDealers={setFilterDealers}
                 filterAvailability={filterAvailability} setFilterAvailability={setFilterAvailability}
                 excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
+                isTopProduct={filterIsTopProduct} setIsTopProduct={setFilterIsTopProduct}
             />
 
             <FilterCollapseItem title="Gold - Dealer statistics" openFilter={openDealerStatsGold} setOpenFilter={setOpenDealerStatsGold}>

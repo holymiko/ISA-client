@@ -44,6 +44,7 @@ export const ProductTablePage = () =>  {
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
     const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
     const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
+    const [filterIsTopProduct, setFilterIsTopProduct] = useState<boolean>(true);
 
 
     const formatProducts = (tmpProducts: Product[]) => {
@@ -61,7 +62,7 @@ export const ProductTablePage = () =>  {
         )
         initFilter(tmpProducts, {
             setMinPrice, setMaxPrice, setFilterForms, setFilterDealers,
-            setFilterAvailability, setExcludeUnavailable
+            setFilterAvailability, setExcludeUnavailable, setFilterIsTopProduct
         })
         setProducts(tmpProducts);
         setLoading(false);
@@ -74,7 +75,7 @@ export const ProductTablePage = () =>  {
 
         if(metal === undefined || tmpMetal === undefined) {
             setLoading(true)
-            getProductsByPages(undefined).then((x: Product[]) =>
+            getProductsByPages(undefined, undefined).then((x: Product[]) =>
                 formatProducts(x)
             );
         }
@@ -83,7 +84,7 @@ export const ProductTablePage = () =>  {
         const productsCache = localStorage.getItem(tmpMetal.toLowerCase())
         if(isEmpty(productsCache)) {
             setLoading(true)
-            getProductsByPages(tmpMetal).then((x: Product[]) =>
+            getProductsByPages(tmpMetal, undefined).then((x: Product[]) =>
                 formatProducts(x)
             );
         } else {
@@ -97,9 +98,9 @@ export const ProductTablePage = () =>  {
      */
     useEffect(() => {
         setProductsControlled(
-            filterProducts(products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable)
+            filterProducts(products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable, filterIsTopProduct)
         );
-    }, [products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable])
+    }, [products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable, filterIsTopProduct])
 
     useEffect(() => {
         localStorage.setItem('filterMinPrice', JSON.stringify(minPrice));
@@ -124,6 +125,10 @@ export const ProductTablePage = () =>  {
     useEffect(() => {
         localStorage.setItem('filterExcludeUnavailable', JSON.stringify(excludeUnavailable));
     }, [excludeUnavailable])
+
+    useEffect(() => {
+        localStorage.setItem('filterIsTopProduct', JSON.stringify(filterIsTopProduct));
+    }, [filterIsTopProduct])
 
     return (
         <Box sx={{width: 1}}>
@@ -150,7 +155,7 @@ export const ProductTablePage = () =>  {
                     Scrap new products
                 </ButtonISA>
                 <ButtonISA
-                    onClick = {() => scrapByMetalInSync(metal)}
+                    onClick = {() => scrapByMetalInSync(metal, undefined)}
                     startIcon={<PlayCircleOutlineIcon/>}
                     disabled={loading || !isAdmin(getSessionUser2()?.account?.role)}
                     variant="contained"
@@ -180,6 +185,7 @@ export const ProductTablePage = () =>  {
                 filterDealers={filterDealers} setFilterDealers={setFilterDealers}
                 filterAvailability={filterAvailability} setFilterAvailability={setFilterAvailability}
                 excludeUnavailable={excludeUnavailable} setExcludeUnavailable={setExcludeUnavailable}
+                isTopProduct={filterIsTopProduct} setIsTopProduct={setFilterIsTopProduct}
             />
 
             <Box sx={{ height: 700 }}>
