@@ -44,7 +44,7 @@ export const ProductTablePage = () =>  {
     const [filterDealers, setFilterDealers] = useState<FilterDealer[]>([])
     const [filterAvailability, setFilterAvailability] = useState<FilterAvailability[]>([])
     const [excludeUnavailable, setExcludeUnavailable] = useState<boolean>(true);
-    const [filterIsTopProduct, setFilterIsTopProduct] = useState<boolean>(true);
+    const [filterIsTopProduct, setFilterIsTopProduct] = useState<boolean>(false);
 
 
     const formatProducts = (tmpProducts: Product[]) => {

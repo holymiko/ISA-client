@@ -129,7 +129,7 @@ export const initFilter = (tmpProducts: Product[], {setMinPrice, setMaxPrice, se
 
     tmp = localStorage.getItem('filterIsTopProduct')
     if(isEmpty(tmp)) {
-        setFilterIsTopProduct(true);
+        setFilterIsTopProduct(false);
         localStorage.setItem('filterIsTopProduct', JSON.stringify(true))
     } else {
         setFilterIsTopProduct(JSON.parse(tmp!))
