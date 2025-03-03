@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Route, Routes, Navigate, useNavigate} from 'react-router-dom';
-import {PortfolioPage} from "./pages/portfolio/PortfolioPage";
-import AddPortfolioPage from "./pages/portfolio/AddPortfolioPage";
 import {ProductDetailPage} from "./pages/product_detail/ProductDetailPage";
 import Box from "@mui/material/Box";
 import {NotFoundPage} from "./pages/NotFoundPage";
@@ -54,23 +52,11 @@ export const RouterRoot = () => {
                         <HomePage/>
                     </ProtectedRoute>
                 }/>
-                <Route path="portfolio">
-                    <Route index element={
-                        <ProtectedRoute>
-                            <PortfolioTablePage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="add" element={
-                        <ProtectedRoute>
-                            <AddPortfolioPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path=":id" element={
-                        <ProtectedRoute>
-                            <PortfolioPage/>
-                        </ProtectedRoute>
-                    }/>
-                </Route>
+                <Route path="portfolio" element={
+                    <ProtectedRoute>
+                        <PortfolioTablePage/>
+                    </ProtectedRoute>
+                }/>
                 <Route path = "product">
                     <Route index element={
                         <ProtectedRoute>
@@ -104,22 +90,18 @@ export const RouterRoot = () => {
                         </AdminRoute>
                     }/>
                 </Route>
-                <Route path = "stock">
-                    <Route index element={
-                        <AdminRoute>
-                            <ProtectedRoute>
-                                <StockPage/>
-                            </ProtectedRoute>
-                        </AdminRoute>
-                    }/>
-                </Route>
-                <Route path = "analytic">
-                    <Route index element={
+                <Route path = "stock" element={
+                    <AdminRoute>
                         <ProtectedRoute>
-                            <AnalyticPage/>
+                            <StockPage/>
                         </ProtectedRoute>
-                    }/>
-                </Route>
+                    </AdminRoute>
+                }/>
+                <Route path = "analytic" element={
+                    <ProtectedRoute>
+                        <AnalyticPage/>
+                    </ProtectedRoute>
+                }/>
                 <Route path="/login" element={<Login/>} />
                 <Route path="404" element={
                     <ProtectedRoute>

@@ -1,28 +1,9 @@
-import React, { useEffect, useState} from 'react';
-import {getPortfolios, } from '../../services/portfolioService';
-import {scrapByPortfolio} from '../../services/scrapService'
-import { getTextYield } from '../../util/utils';
+import React from 'react';
 import {TypographyPageTitle} from '../../components/TypographyPageTitle';
-import {Link, useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
-import {PieChart} from "@mui/x-charts/PieChart";
-import Typography from "@mui/material/Typography";
 import {PortfolioBox} from "../../components/PortfolioBox";
 
 export const PortfolioTablePage = () =>  {
-
-  const navigate = useNavigate();
-  // TODO Add Portfolio type
-  const [rows, setRows] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // useEffect(() => {
-  //   setLoading(true)
-  //   getPortfolios().then((res) => {
-  //     setRows(res.data);
-  //     setLoading(false)
-  //   });
-  // }, [])
 
   return (
       <Box>
@@ -61,9 +42,6 @@ export const PortfolioTablePage = () =>  {
                   ]} owner={"Jára Cimrman"} createDate={"27.9.2021"} cost={488_000} value={567_120} />
               </Box>
           </Box>
-          {/*<BoxRow>*/}
-          {/*  <ButtonBlue startIcon={<AddIcon />} onClick={() => {navigate('/portfolio/add')}}>add portfolio</ButtonBlue>*/}
-          {/*</BoxRow>*/}
       </Box>
   );
 }

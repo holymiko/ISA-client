@@ -24,8 +24,5 @@ export const scrapProductById = (productId: number) => {
     return api.post("scrap/product/" + productId);
 }
 
-export const scrapByPortfolio = (portfolioId: number) => {
-    return api.get( 'scrap/portfolio/' + portfolioId);
-}
 
 
