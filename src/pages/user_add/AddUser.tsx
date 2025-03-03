@@ -186,10 +186,10 @@ export const AddUser = () => {
       setIsSnackOpen(true);
     }).catch(error => {
       switch (error.response.status) {
-        case 401: {
-          //logOutMemClean();
-          //<Navigate to={}
-          // alert('Log out')
+        case 400: {
+          setSnackSeverity("warning");
+          setSnackMsg(`User hasn't been created. ${error.response.data.replace('IllegalArgumentException: ', '')}`)
+          setIsSnackOpen(true);
           break;
         }
         case 409: {
