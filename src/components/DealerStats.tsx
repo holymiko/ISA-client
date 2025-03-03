@@ -75,7 +75,7 @@ export const DealerStats = ({dealer, latestPricePerGram}: any) => {
     const sum = latestPricePerGram.reduce((partialSum, a) => partialSum + a, 0);
 
     const mean = (sum/latestPricePerGram.length).toFixed(FRACTION_DIGITS);
-    const {std, variance} = getStandardDeviation(latestPricePerGram);
+    const {std} = getStandardDeviation(latestPricePerGram);
     const cv = (Number(std)/Number(mean)).toFixed(4);
     const rms = getRootMeanSquare(latestPricePerGram).toFixed(FRACTION_DIGITS)
     // @ts-ignore

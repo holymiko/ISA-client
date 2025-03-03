@@ -1,17 +1,13 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {TypographyPageTitle} from "../components/TypographyPageTitle";
-import {getBackendVersion, getDbStats} from "../services/appInfoService";
 import {getProductsByPages} from "../services/productService";
 import {Product} from "../types/Product";
 import {Price} from "../types/Price";
 import {Metal} from "../types/enums/metal";
 import {axisClasses} from '@mui/x-charts/ChartsAxis';
 import {BarChart} from "@mui/x-charts";
-import {TypographyH5BoldChart} from "../components/TypographyH5BoldChart";
-import {useTranslation} from "react-i18next";
 import {isEmpty} from "../util/utils";
 import {getLinkCountAsDto} from "../services/linkService";
 import {LinkCountDto} from "../types/LinkCountDto";
@@ -58,13 +54,9 @@ const COEF_WINDOW_HEIGHT = 270
 
 
 export const AnalyticPage = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
 
-    const [row, setRow] = useState<any>([]);
     const [productsGold, setProductsGold] = useState<Product[]>([])
     const [productsSilver, setProductsSilver] = useState<Product[]>([])
-    const [loading, setLoading] = useState<boolean>(true);
     const [priceDistriBarChartDataGold, setPriceDistriBarChartDataGold] = useState<any[]>([])
     const [priceDistriLineChartDataGold, setPriceDistriLineChartDataGold] = useState<any[]>([])
     const [priceDistriBarChartDataSilver, setPriceDistriBarChartDataSilver] = useState<any[]>([])
@@ -72,7 +64,6 @@ export const AnalyticPage = () => {
     const [barChartDataGold, setBarChartDataGold] = useState<BarChartData[]>([])
     const [barChartDataSilver, setBarChartDataSilver] = useState<any[]>([])
     const [barChartDataProductCount, setBarChartDataProductCount] = useState<any[]>([])
-    const [scatterChartDataGold, setScatterChartDataGold] = useState<any[]>([])
     const [latestPricesGold, setLatestPricesGold] = useState<Price[]>([])
     const [latestPricesSilver, setLatestPricesSilver] = useState<Price[]>([])
 
@@ -94,9 +85,6 @@ export const AnalyticPage = () => {
     const [openBarPriceSilver, setOpenBarPriceSilver] = useState<boolean>(true);
     const [openScrapingPotential, setOpenScrapingPotential] = useState<boolean>(true);
 
-    const [dbStats, setDbStats] = useState<any>();
-    const [version, setVersion] = useState<string>("");
-
     const formatProducts = (metal: Metal|undefined, products: Product[]) => {
         const tmpProducts = filterProducts(products, minPrice, maxPrice, filterForms, filterDealers, filterAvailability, excludeUnavailable, filterIsTopProduct)
         if(tmpProducts.length === 0) {
@@ -114,7 +102,6 @@ export const AnalyticPage = () => {
 
         if(metal === Metal.GOLD) {
             setBarChartDataGold(dataAvailaChart);
-            setScatterChartDataGold(dataScatterChart)
             setPriceDistriBarChartDataGold(dataPriceDistriBarChart)
             setPriceDistriLineChartDataGold(dataPriceDistriLineChart)
             setProductsGold(products)
@@ -127,17 +114,14 @@ export const AnalyticPage = () => {
             setProductsSilver(products);
             setLatestPricesSilver(latestPrices)
         }
-        setLoading(false);
     }
 
 
     const getLinkCountForBarChart = () => {
-        setLoading(true)
         getLinkCountAsDto().then((tmpLinkCount: LinkCountDto[]) => {
             setBarChartDataProductCount(
                 tmpLinkCount
             )
-            setLoading(false);
         })
     }
 
@@ -147,7 +131,6 @@ export const AnalyticPage = () => {
         for (const tmpMetal of list) {
             const productCache = localStorage.getItem(tmpMetal.toLowerCase())
             if (isEmpty(productCache)) {
-                setLoading(true)
                 getProductsByPages(tmpMetal, undefined).then((x: Product[]) => {
                     formatProducts(tmpMetal, x);
                     tmpProducts.push(...x)
@@ -163,16 +146,6 @@ export const AnalyticPage = () => {
             setFilterAvailability, setExcludeUnavailable, setFilterIsTopProduct
         })
         getLinkCountForBarChart();
-        getDbStats().then((x) => {
-            setDbStats(x.data)
-            setRow([{
-                name: "Silverum",
-                linkWithProduct: x.data.linksWithProductSilverum,
-                totalLinks: x.data.linksSilverum,
-                share: x.data.linksWithProductSilverum / x.data.linksSilverum
-            }])
-        });
-        getBackendVersion().then((x) => setVersion(x.data));
     },[]);
 
     useEffect(() => {
@@ -213,10 +186,6 @@ export const AnalyticPage = () => {
             <TypographyPageTitle sx={{mb: '2rem'}}>
                 Analytics
             </TypographyPageTitle>
-
-            {/*<Typography>*/}
-            {/*    {JSON.stringify(dbStats)}*/}
-            {/*</Typography>*/}
 
             <Filter
                 minPrice={minPrice} setMinPrice={setMinPrice}
@@ -320,31 +289,6 @@ export const AnalyticPage = () => {
                 />
             </FilterCollapseItem>
 
-            {/*<ScatterChart*/}
-            {/*    height={500}*/}
-            {/*    series={*/}
-            {/*        Object.values(Dealer).map(dealer => {*/}
-            {/*                return {*/}
-            {/*                    dataKey: dealer,*/}
-            {/*                    label: t(dealer.toLowerCase()),*/}
-            {/*                    color: chartDealersPre[dealer].color,*/}
-            {/*                    data: scatterChartDataGold.map((v: ScatterChartData) => ({ y: v.weight, x: v.price_weight, id: v.id})),*/}
-            {/*                }*/}
-            {/*            },*/}
-            {/*        )*/}
-            {/*    }*/}
-            {/*    sx={{*/}
-            {/*        mb: 2,*/}
-            {/*        width: '1'*/}
-            {/*    }}*/}
-            {/*    onItemClick={(event: any, d: any) => navigate('/product/id/' + scatterChartDataGold[d.dataIndex].product_id)}*/}
-            {/*    grid={{ vertical: true, horizontal: true }}*/}
-            {/*/>*/}
-
-            {/*<BoxRow sx={{mb: 3}}>*/}
-            {/*    <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>*/}
-            {/*    <BoxChart sx={{width: 500, mr: 4}}>Some text</BoxChart>*/}
-            {/*</BoxRow>*/}
         </Box>
     );
 }

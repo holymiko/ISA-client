@@ -7,13 +7,6 @@ const PREFIX_URL = process.env.NODE_ENV === 'production'
     : "http://localhost:8080/api/v2/"
 
 
-enum StatusCode {
-  Unauthorized = 401,
-  Forbidden = 403,
-  TooManyRequests = 429,
-  InternalServerError = 500,
-}
-
 const headers: Readonly<Record<string, string | boolean>> = {
   Accept: "application/json; */*",
   "Content-Type": "application/json; charset=utf-8",
@@ -73,14 +66,6 @@ class Http {
 
     http.interceptors.request.use(injectToken, (error) => Promise.reject(error));
 
-    http.interceptors.response.use(
-        (response: any) => response,
-        (error: any) => {
-          const { response } = error;
-          return Http.handleError(response);
-        }
-    );
-
     this.instance = http;
     return http;
   }
@@ -113,33 +98,6 @@ class Http {
     return this.http.post<T, R>(url, data, config);
   }
 
-  // Handle global app errors
-  // We can handle generic app errors depending on the status code
-  private static handleError(error: any) {
-    const { status } = error;
-
-    switch (status) {
-      case StatusCode.InternalServerError: {
-        // Handle InternalServerError
-        break;
-      }
-      case StatusCode.Forbidden: {
-        // Handle Forbidden
-        break;
-      }
-      case StatusCode.Unauthorized: {
-        // localStorage.removeItem('user')
-        // return <Navigate to="/login" replace />
-        break;
-      }
-      case StatusCode.TooManyRequests: {
-        // Handle TooManyRequests
-        break;
-      }
-    }
-
-    return Promise.reject(status);
-  }
 }
 
 export const api = new Http();

@@ -70,11 +70,6 @@ const getProductsAsDTO = async (
     return data;
 }
 
-export const getProductById = async (productId: number): Promise<Product> => {
-    const { data } = await api.get<Product>('product/' + productId);
-    return data;
-};
-
 export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
     const { data } = await api.get<ProductDetail>('product/' + productId, {
         params: {

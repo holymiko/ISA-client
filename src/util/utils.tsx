@@ -104,10 +104,6 @@ export const getIndexOfHighestRole = (roles: Role[]): number => {
     return index;
 }
 
-export const getHighestRole = (roles: Role[]): Role => {
-    return Object.values(Role)[getIndexOfHighestRole(roles)];
-}
-
 export const isAdmin = (role: Role|undefined): boolean => {
     return role === Role.ADMIN || role === Role.SUPER_ADMIN
 }

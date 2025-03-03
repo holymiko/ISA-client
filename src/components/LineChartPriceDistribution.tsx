@@ -75,6 +75,7 @@ export const LineChartPriceDistribution = (props: any) => {
 
     return (
         <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
+            {/*@ts-ignore*/}
             <LineChart width={props.width} height={props.height}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="price_weight" type="number"

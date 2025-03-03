@@ -322,6 +322,7 @@ export const ProductDetailPage = () => {
 
             <TypographyH5BoldChart>Price chart</TypographyH5BoldChart>
             <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
+                {/*@ts-ignore*/}
                 <LineChart width={1450} height={500} data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="dateTime" />
@@ -346,6 +347,7 @@ export const ProductDetailPage = () => {
 
             <TypographyH5BoldChart>Buy & Sell price chart</TypographyH5BoldChart>
             <BoxChart sx={{pb: "1rem", pl: "1rem", mb: "4rem"}}>
+                {/*@ts-ignore*/}
                 <AreaChart width={1450} height={500} data={areaChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="dateTime" />

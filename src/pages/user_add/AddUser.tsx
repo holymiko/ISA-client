@@ -8,7 +8,6 @@ import {
   getIndexOfHighestRole,
   getSubordinateRoles,
   isEmpty,
-  logOutMemClean
 } from "../../util/utils";
 import {MuiTelInput} from 'mui-tel-input';
 import {isValidEmailAddress, nameErrorMsg, passwordErrorMsg} from "../../util/validations";
@@ -33,7 +32,6 @@ export const AddUser = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
-  const [middleName, setMiddleName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('+420');
@@ -44,7 +42,6 @@ export const AddUser = () => {
   const [passwordHelperText, setPasswordHelperText] = useState<string>('');
   const [firstNameHelperText, setFirstNameHelperText] = useState<string>('');
   const [lastNameHelperText, setLastNameHelperText] = useState<string>('');
-  const [phoneHelperText, setPhoneHelperText] = useState<string>('');
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
@@ -68,18 +65,8 @@ export const AddUser = () => {
   const hasConfirmPasswordError: boolean = wasSubmitted && password !== confirmPassword;
   const hasRoleError: boolean = wasSubmitted && isEmpty(role);
   const isSubmitDisabled = wasSubmitted
-      && (hasUsernameError || hasPasswordError || hasConfirmPasswordError || hasRoleError)
-      || (personVisible && (hasFirstNameError || hasLastNameError || hasEmailError));
-
-  // Occasional error of refresh token. Not sure if BE or FE
-  const handleLoadingError = (status: any) => {
-    if(status === 401 || status === '401') {
-      logOutMemClean();
-      navigate( "/login");
-    } else {
-      alert('Error '+status)
-    }
-  }
+      && ((hasUsernameError || hasPasswordError || hasConfirmPasswordError || hasRoleError)
+      || (personVisible && (hasFirstNameError || hasLastNameError || hasEmailError)));
 
   useEffect(() => {
     const user: PersonAccountDto = getSessionUser(navigate)!;
@@ -185,7 +172,6 @@ export const AddUser = () => {
         account: userCreateDto,
         firstName: firstName,
         lastName: lastName,
-        midName: middleName,
         email: email,
         phone: filterPhoneNonDigit(phone)
       }
@@ -233,11 +219,6 @@ export const AddUser = () => {
   }
   const handleFirstName = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFirstName(
-      filterNonLetters(e.target.value)
-    )
-  }
-  const handleMiddleName = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setMiddleName(
       filterNonLetters(e.target.value)
     )
   }
@@ -340,9 +321,6 @@ export const AddUser = () => {
           <Box sx={{ width: '1', gap: 1, mt: 1, display: 'flex', flexDirection: 'inline-flex' }}>
             <MuiTelInput
               value={phone}
-              //defaultCountry={'us'}
-              // error={hasPhoneError}
-              helperText={phoneHelperText}
               onChange={handlePhoneChange}
               variant="outlined"
               sx={{minWidth: 281, width: 0.2}}
