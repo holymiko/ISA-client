@@ -23,7 +23,7 @@ import {PersonAccountDto} from "../../types/PersonAccountDto";
 import {AccountCreateDto} from "../../types/AccountCreateDto";
 
 
-export const AddUser = () => {
+export const UserAddPage = () => {
   const navigate = useNavigate();
 
   const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);

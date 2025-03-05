@@ -7,7 +7,7 @@ import {HomePage} from "./pages/HomePage";
 import {ProductTablePage} from "./pages/product_table/ProductTablePage";
 import {PortfolioTablePage} from "./pages/portfolio/PortfolioTablePage";
 import {StockPage} from "./pages/StockPage";
-import {AddUser} from "./pages/user_add/AddUser";
+import {UserAddPage} from "./pages/user_add/UserAddPage";
 import {UserTablePage} from "./pages/user_table/UserTablePage";
 import {getSessionUser, isAdmin, isEmpty, logOutMemClean} from "./util/utils";
 import Login from "./pages/Login";
@@ -85,7 +85,7 @@ export const RouterRoot = () => {
                     <Route path="add" element={
                         <AdminRoute>
                             <ProtectedRoute>
-                                <AddUser/>
+                                <UserAddPage/>
                             </ProtectedRoute>
                         </AdminRoute>
                     }/>

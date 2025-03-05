@@ -189,11 +189,7 @@ export const ProductTablePage = () =>  {
             />
 
             <Box sx={{ height: 700 }}>
-                    <Box
-                        sx={{
-                            display: 'flex', height: '100%', mb: '3rem', width: '100%',
-                        }}
-                    >
+                <Box sx={{display: 'flex', height: '100%', mb: '3rem', width: '100%'}}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid
                             initialState={{
